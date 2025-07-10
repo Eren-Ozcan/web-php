@@ -16,5 +16,8 @@
   "prettier.tabWidth": 2,
   "prettier.singleQuote": true,
   "prettier.trailingComma": "none",
-  "prettier.semi": true
+  "prettier.semi": true,
+
+  // 👇 Bu satırı ekledik (yalnızca Tailwind uyarılarını susturur)
+  "css.lint.unknownAtRules": "ignore"
 }

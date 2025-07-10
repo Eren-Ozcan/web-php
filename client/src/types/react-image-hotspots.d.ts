@@ -11,6 +11,11 @@ declare module '@jacobsdigitalfactory/react-image-hotspots' {
     src: string;
     hotspots: Hotspot[];
     className?: string;
+
+    // Eklenen props 👇
+    hideFullscreenControl?: boolean;
+    hideZoomControls?: boolean;
+    hideMinimap?: boolean;
   }
 
   const ImageHotspots: React.FC<ImageHotspotsProps>;
