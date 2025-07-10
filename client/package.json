@@ -18,7 +18,9 @@
     "react-i18next": "13.2.0",
     "react-qr-code": "2.0.8",
     "react-router-dom": "6.23.0",
-    "yup": "1.2.0"
+    "yup": "1.2.0",
+    "swiper": "^11.2.10",
+    "@jacobsdigitalfactory/react-image-hotspots": "^1.7.2"
   },
   "devDependencies": {
     "autoprefixer": "10.4.19",
