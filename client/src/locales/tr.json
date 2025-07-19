@@ -1,7 +1,20 @@
 {
-  "home": "Ana Sayfa",
+  "welcome": "Hoş Geldiniz",
+  "blogs": "Bloglar",
+  "projects": "Son Projelerimiz",
+  "reviews": "Ürün İncelemeleri",
+  "readMore": "Devamını Oku",
+  "product_cam": "Cam Ürün İncelemesi",
+  "product_pimapen": "Pimapen Ürün İncelemesi",
+  "product_cam_desc": "Yüksek kaliteli yalıtımlı camlarla evinizi modernleştirin.",
+  "product_pimapen_desc": "Isı yalıtımı sağlayan dayanıklı pimapen pencere sistemleri.",
+  "footer_about": "Yıllardır sektörde güvenilir ve kaliteli hizmet sunuyoruz.",
+  "footer_contact": "İletişim",
+  "footer_menu": "Menü",
+  "home": "Anasayfa",
   "products": "Ürünler",
   "calculator": "Hesaplama",
-  "blogs": "Bloglar",
-  "contact": "İletişim"
+  "contact": "İletişim",
+  "left_section_title": "Tanıtım Yazısı",
+  "left_section_text": "Cam, kapı, balkon gibi ürünlerimiz hakkında bilgi almak için görseldeki numaralara tıklayın."
 }

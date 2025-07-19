@@ -49,11 +49,6 @@ export default function Contact() {
             Gönder (Pasif)
           </button>
         </form>
-
-        <div className="mt-10 border-t pt-6">
-          <h2 className="text-lg font-semibold text-gray-800 mb-2">Gerekli Bilgiler</h2>
-          <p className="text-gray-500 italic">VeriBekleniyor</p>
-        </div>
       </div>
     </section>
   );

@@ -5,92 +5,208 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useNavigate } from 'react-router-dom';
-import ImageHotspots from '@jacobsdigitalfactory/react-image-hotspots';
 import type { Swiper as SwiperClass } from 'swiper/types';
+import { useTranslation } from 'react-i18next';
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const swiperRef = useRef<SwiperClass | null>(null);
 
   const handlePause = () => swiperRef.current?.autoplay?.stop();
   const handleResume = () => swiperRef.current?.autoplay?.start();
 
-  const makeHotspot = (num: number, route: string, tooltip: string): JSX.Element => (
-    <div
-      onClick={() => navigate(route)}
-      onMouseEnter={handlePause}
-      onMouseLeave={handleResume}
-      className="group relative w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold cursor-pointer hover:scale-110 transition"
-    >
-      {num}
-      <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded shadow-md whitespace-nowrap z-10">
-        {tooltip}
-      </div>
-    </div>
-  );
-
   const imageData = [
     {
       image: '/images/house1.jpg',
       hotspots: [
-        { x: 15, y: 20, content: makeHotspot(1, '/urunler/cam', 'Cam Ürünleri') },
-        { x: 30, y: 40, content: makeHotspot(2, '/urunler/kapilar', 'Kapı Ürünleri') },
-        { x: 60, y: 45, content: makeHotspot(3, '/urunler/balkon', 'Balkon Ürünleri') }
+        { x: 15, y: 20, label: '1', route: '/urunler/cam', tooltip: t('glass') },
+        { x: 30, y: 40, label: '2', route: '/urunler/kapilar', tooltip: t('door') },
+        { x: 60, y: 45, label: '3', route: '/urunler/balkon', tooltip: t('balcony') }
       ]
     },
     {
       image: '/images/house2.jpg',
       hotspots: [
-        { x: 20, y: 30, content: makeHotspot(4, '/urunler/bahce', 'Bahçe Mobilyası') },
-        { x: 45, y: 55, content: makeHotspot(5, '/urunler/ofis', 'Ofis Ürünleri') },
-        { x: 70, y: 65, content: makeHotspot(6, '/urunler/cephe', 'Dış Cephe') }
+        { x: 20, y: 30, label: '4', route: '/urunler/bahce', tooltip: t('garden') },
+        { x: 45, y: 55, label: '5', route: '/urunler/ofis', tooltip: t('office') },
+        { x: 70, y: 65, label: '6', route: '/urunler/cephe', tooltip: t('exterior') }
       ]
     }
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-6">Hoş Geldiniz</h1>
-      <Swiper
-        modules={[Autoplay, Pagination, Navigation]}
-        spaceBetween={30}
-        slidesPerView={1}
-        loop={true}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false
-        }}
-        pagination={{ clickable: true }}
-        navigation={true}
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-        }}
-      >
-        {imageData.map((item, index) => (
-          <SwiperSlide key={index}>
-            <ImageHotspots
-              src={item.image}
-              hotspots={item.hotspots}
-              hideFullscreenControl={true} // ✅ FS butonu devre dışı
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+    <>
+      {/* Başlık */}
+      <div className="w-full pt-[100px] px-4 text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">{t('welcome')}</h1>
+      </div>
 
-      <style>
-        {`
-          .swiper-button-next,
-          .swiper-button-prev {
-            color: white;
-            --swiper-navigation-size: 28px;
-          }
-          .swiper-button-next::after,
-          .swiper-button-prev::after {
-            font-weight: bold;
-          }
-        `}
-      </style>
-    </div>
+      {/* İçerik: Yazı + Slider */}
+      <div className="w-full mt-6 flex justify-center gap-6 px-4">
+        <div className="w-[30vw] max-w-sm p-4 text-left rounded bg-white shadow">
+          <h2 className="text-2xl font-semibold mb-2">{t('left_section_title')}</h2>
+          <p className="text-gray-700 text-sm leading-relaxed">{t('left_section_text')}</p>
+        </div>
+
+        <div className="relative w-[60vw] max-w-[1280px] aspect-video">
+          <Swiper
+            modules={[Autoplay, Pagination, Navigation]}
+            spaceBetween={30}
+            slidesPerView={1}
+            loop={true}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            pagination={{ clickable: true }}
+            navigation={true}
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            className="w-full h-full"
+          >
+            {imageData.map((item, index) => (
+              <SwiperSlide key={index}>
+                <div className="w-full h-full relative">
+                  <img
+                    src={item.image}
+                    alt={`Slide ${index}`}
+                    className="w-full h-full object-cover rounded"
+                  />
+                  {item.hotspots.map((hotspot, i) => (
+                    <div
+                      key={i}
+                      onClick={() => navigate(hotspot.route)}
+                      onMouseEnter={handlePause}
+                      onMouseLeave={handleResume}
+                      className="absolute z-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm w-8 h-8 hover:scale-110 transition cursor-pointer group"
+                      style={{
+                        top: `${hotspot.y}%`,
+                        left: `${hotspot.x}%`,
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                    >
+                      {hotspot.label}
+                      <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded shadow-md">
+                        {hotspot.tooltip}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </div>
+
+      {/* Bloglar */}
+      <div className="mt-20 px-4 max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('blogs')}</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {[t('blog1'), t('blog2'), t('blog3')].map((title, idx) => (
+            <div key={idx} className="bg-white rounded shadow-md p-4 hover:shadow-lg transition">
+              <h3 className="text-xl font-semibold mb-2 text-blue-600">{title}</h3>
+              <p className="text-gray-600 text-sm">{t('blog_sample_text')}</p>
+              <button className="mt-2 text-sm text-blue-500 hover:underline">
+                {t('readMore')}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Projeler */}
+      <div className="mt-20 px-4 max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('projects')}</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {['/images/project1.jpg', '/images/project2.jpg', '/images/project3.jpg'].map(
+            (src, idx) => (
+              <div
+                key={idx}
+                className="overflow-hidden rounded-lg shadow hover:shadow-lg transition"
+              >
+                <img src={src} alt={`Project ${idx + 1}`} className="w-full h-48 object-cover" />
+                <div className="p-4 bg-white">
+                  <h3 className="font-semibold text-lg text-gray-800">
+                    {t('project')} {idx + 1}
+                  </h3>
+                  <p className="text-gray-600 text-sm">{t('project_sample_text')}</p>
+                </div>
+              </div>
+            )
+          )}
+        </div>
+      </div>
+
+      {/* Ürün İncelemeleri */}
+      <div className="mt-20 px-4 max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('reviews')}</h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          {[
+            {
+              title: t('product_cam'),
+              desc: t('product_cam_desc'),
+              img: '/images/cam.jpg'
+            },
+            {
+              title: t('product_pimapen'),
+              desc: t('product_pimapen_desc'),
+              img: '/images/pimapen.jpg'
+            }
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="bg-white shadow rounded-lg overflow-hidden flex flex-col md:flex-row"
+            >
+              <img src={item.img} alt={item.title} className="w-full md:w-1/3 h-48 object-cover" />
+              <div className="p-4">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">{item.title}</h3>
+                <p className="text-gray-600">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="mt-20 bg-gray-900 text-white py-10 px-4">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
+          <div>
+            <h4 className="text-lg font-bold mb-2">{t('about')}</h4>
+            <p className="text-sm text-gray-300">{t('footer_about')}</p>
+          </div>
+          <div>
+            <h4 className="text-lg font-bold mb-2">{t('footer_menu')}</h4>
+            <ul className="text-sm text-gray-300 space-y-1">
+              <li>
+                <a href="/" className="hover:underline">
+                  {t('home')}
+                </a>
+              </li>
+              <li>
+                <a href="/urunler" className="hover:underline">
+                  {t('products')}
+                </a>
+              </li>
+              <li>
+                <a href="/hesaplama" className="hover:underline">
+                  {t('calculator')}
+                </a>
+              </li>
+              <li>
+                <a href="/iletisim" className="hover:underline">
+                  {t('contact')}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-lg font-bold mb-2">{t('footer_contact')}</h4>
+            <p className="text-sm text-gray-300">Email: info@sirket.com</p>
+            <p className="text-sm text-gray-300">Tel: +90 555 123 45 67</p>
+          </div>
+        </div>
+        <div className="text-center text-sm text-gray-500 mt-6">
+          © {new Date().getFullYear()} {t('copyright')}
+        </div>
+      </footer>
+    </>
   );
 };
 

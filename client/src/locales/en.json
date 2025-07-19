@@ -1,7 +1,20 @@
 {
+  "welcome": "Welcome",
+  "blogs": "Blogs",
+  "projects": "Our Latest Projects",
+  "reviews": "Product Reviews",
+  "readMore": "Read More",
+  "product_cam": "Glass Product Review",
+  "product_pimapen": "PVC Window Review",
+  "product_cam_desc": "Modernize your home with high-quality insulated glass.",
+  "product_pimapen_desc": "Durable PVC systems for thermal insulation.",
+  "footer_about": "Providing reliable and high-quality service for years.",
+  "footer_contact": "Contact",
+  "footer_menu": "Menu",
   "home": "Home",
   "products": "Products",
   "calculator": "Calculator",
-  "blogs": "Blogs",
-  "contact": "Contact"
+  "contact": "Contact",
+  "left_section_title": "Slider-Sol",
+  "left_section_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum, sapien nec laoreet tincidunt, neque velit facilisis tortor, at fermentum sapien lacus nec sem. Proin sed libero eu arcu sollicitudin cursus."
 }
