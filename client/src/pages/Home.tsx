@@ -185,7 +185,7 @@ const Home: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="/hesaplama" className="hover:underline">
+                <a href="/calculator" className="hover:underline">
                   {t('calculator')}
                 </a>
               </li>
