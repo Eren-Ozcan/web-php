@@ -19,6 +19,7 @@ export default function CalculatorForm() {
   const [qty, setQty] = useState(1);
   const [options, setOptions] = useState<Record<string, boolean>>({});
   const [error, setError] = useState<string | null>(null);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -53,19 +54,25 @@ export default function CalculatorForm() {
     );
   }, [config, product]);
 
-  const total = useMemo(() => {
-    if (!config) return 0;
+  const calculateTotal = () => {
+    if (!config) {
+      setTotal(0);
+      return;
+    }
     const w = parseFloat(width);
     const h = parseFloat(height);
-    if (!w || !h) return 0;
+    if (!w || !h) {
+      setTotal(0);
+      return;
+    }
     const area = (w * h) / 10000; // cm to m2
     const base = config.products[product].basePrice;
     let multiplier = 1;
     visibleFeatures.forEach(([key, val]) => {
       if (options[key]) multiplier *= val.multiplier;
     });
-    return area * base * multiplier * qty;
-  }, [config, width, height, product, qty, options, visibleFeatures]);
+    setTotal(area * base * multiplier * qty);
+  };
 
   if (error) return <div>{error}</div>;
   if (!config) return <div>Loading...</div>;
@@ -129,6 +136,13 @@ export default function CalculatorForm() {
           ))}
         </div>
       )}
+
+      <button
+        className="bg-blue-600 text-white px-4 py-2 rounded mb-4 w-full"
+        onClick={calculateTotal}
+      >
+        {t('calculate')}
+      </button>
 
       <div className="text-center font-semibold mb-4">
         {t('estimated_price')}: {total.toFixed(2)} TL
