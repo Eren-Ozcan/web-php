@@ -1,26 +1,52 @@
 import { useEffect, useState } from 'react';
 import api from '../api';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface Project {
   id: number;
   title: string;
   description: string;
   image: string;
+  category: string;
 }
+
+interface Review {
+  id: number;
+  title: string;
+  text: string;
+  image: string;
+  category: string;
+}
+
+const projectData: Project[] = [
+  { id: 1, title: 'Modern Villa', description: 'Large scale glass installation', image: '/images/project1.jpg', category: 'glass' },
+  { id: 2, title: 'Office Center', description: 'PVC window replacement', image: '/images/project2.jpg', category: 'pvc' },
+  { id: 3, title: 'Shopping Mall', description: 'Curtain wall facade', image: '/images/project3.jpg', category: 'balcony' }
+];
+
+const reviewData: Review[] = [
+  { id: 1, title: 'Glass Product Review', text: 'High quality insulated glass.', image: '/images/cam.jpg', category: 'glass' },
+  { id: 2, title: 'PVC Window Review', text: 'Durable PVC systems for insulation.', image: '/images/pimapen.jpg', category: 'pvc' }
+];
 
 export default function About() {
   const { t } = useTranslation();
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [highlightProjects, setHighlightProjects] = useState<Project[]>([]);
+  const [projectFilter, setProjectFilter] = useState('all');
+  const [reviewFilter, setReviewFilter] = useState('all');
+  const navigate = useNavigate();
+
+  const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   useEffect(() => {
     api
       .get<Project[]>('/api/projects?highlight=true')
       .then((res) => {
         const data = Array.isArray(res.data) ? res.data : [];
-        setProjects(data);
+        setHighlightProjects(data);
       })
-      .catch(() => setProjects([]));
+      .catch(() => setHighlightProjects([]));
   }, []);
 
   return (
@@ -45,12 +71,72 @@ export default function About() {
 
       <h2 className="text-2xl font-bold mb-4 text-center">{t('highlight_projects')}</h2>
       <div className="grid md:grid-cols-3 gap-6">
-        {projects.map((p) => (
-          <div key={p.id} className="bg-white shadow rounded overflow-hidden">
+        {highlightProjects.map((p) => (
+          <div
+            key={p.id}
+            onClick={() => navigate(`/article/${toSlug(p.title)}`)}
+            className="bg-white shadow rounded overflow-hidden cursor-pointer"
+          >
             <img src={p.image} alt={p.title} className="w-full h-40 object-cover" />
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-1">{p.title}</h3>
               <p className="text-sm text-gray-600">{p.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h2 id="projects" className="text-2xl font-bold mt-12 mb-4 text-center">{t('projects')}</h2>
+      <div className="flex justify-center space-x-2 mb-6">
+        {['all', 'glass', 'pvc', 'balcony'].map((f) => (
+          <button
+            key={f}
+            onClick={() => setProjectFilter(f)}
+            className={`px-3 py-1 rounded text-sm ${projectFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+          >
+            {t(`filter_${f}` as any)}
+          </button>
+        ))}
+      </div>
+      <div className="grid md:grid-cols-3 gap-6">
+        {(projectFilter === 'all' ? projectData : projectData.filter((p) => p.category === projectFilter)).map((p) => (
+          <div
+            key={p.id}
+            onClick={() => navigate(`/article/${toSlug(p.title)}`)}
+            className="bg-white shadow rounded overflow-hidden cursor-pointer"
+          >
+            <img src={p.image} alt={p.title} className="w-full h-40 object-cover" />
+            <div className="p-4">
+              <h3 className="font-semibold text-lg mb-1">{p.title}</h3>
+              <p className="text-sm text-gray-600">{p.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h2 id="reviews" className="text-2xl font-bold mt-12 mb-4 text-center">{t('reviews')}</h2>
+      <div className="flex justify-center space-x-2 mb-6">
+        {['all', 'glass', 'pvc'].map((f) => (
+          <button
+            key={f}
+            onClick={() => setReviewFilter(f)}
+            className={`px-3 py-1 rounded text-sm ${reviewFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+          >
+            {t(`filter_${f}` as any)}
+          </button>
+        ))}
+      </div>
+      <div className="grid md:grid-cols-2 gap-6">
+        {(reviewFilter === 'all' ? reviewData : reviewData.filter((r) => r.category === reviewFilter)).map((r) => (
+          <div
+            key={r.id}
+            onClick={() => navigate(`/article/${toSlug(r.title)}`)}
+            className="bg-white shadow rounded overflow-hidden flex flex-col md:flex-row cursor-pointer"
+          >
+            <img src={r.image} alt={r.title} className="w-full md:w-1/3 h-48 object-cover" />
+            <div className="p-4">
+              <h3 className="text-xl font-semibold mb-2">{r.title}</h3>
+              <p className="text-gray-600 text-sm">{r.text}</p>
             </div>
           </div>
         ))}

@@ -6,6 +6,7 @@ import Calculate from './pages/Calculate';
 import Blogs from './pages/Blogs';
 import Products from './pages/Products';
 import About from './pages/About';
+import Article from './pages/Article';
 import Layout from './Layout';
 
 export default function AppRoutes() {
@@ -19,6 +20,7 @@ export default function AppRoutes() {
         <Route path="/bloglar" element={<Blogs />} />
         <Route path="/urunler" element={<Products />} />
         <Route path="/about" element={<About />} />
+        <Route path="/article/:topic" element={<Article />} />
       </Route>
     </Routes>
   );
