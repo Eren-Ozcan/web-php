@@ -18,14 +18,32 @@ export default function CalculatorForm() {
   const [height, setHeight] = useState('');
   const [qty, setQty] = useState(1);
   const [options, setOptions] = useState<Record<string, boolean>>({});
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get<PricingConfig>('/api/pricing').then((res) => {
-      setConfig(res.data);
-      const initialOpts: Record<string, boolean> = {};
-      Object.keys(res.data.features).forEach((key) => (initialOpts[key] = false));
-      setOptions(initialOpts);
-    });
+    axios
+      .get<PricingConfig>('/api/pricing')
+      .then((res) => {
+        if (res.data && res.data.products && res.data.features) {
+          setConfig(res.data);
+          const initialOpts: Record<string, boolean> = {};
+          Object.keys(res.data.features).forEach(
+            (key) => (initialOpts[key] = false)
+          );
+          setOptions(initialOpts);
+          setError(null);
+        } else {
+          setConfig(null);
+          setOptions({});
+          setError('Failed to load pricing configuration.');
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to fetch pricing', err);
+        setConfig(null);
+        setOptions({});
+        setError('Failed to load pricing configuration.');
+      });
   }, []);
 
   const visibleFeatures = useMemo(() => {
@@ -49,6 +67,7 @@ export default function CalculatorForm() {
     return area * base * multiplier * qty;
   }, [config, width, height, product, qty, options, visibleFeatures]);
 
+  if (error) return <div>{error}</div>;
   if (!config) return <div>Loading...</div>;
 
   return (
