@@ -62,23 +62,7 @@ const Home: React.FC = () => {
             navigation={true}
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             className="w-full h-full"
-          >
-            {imageData.map((item, index) => (
-              <SwiperSlide key={index}>
-                <div className="w-full h-full relative">
-                  <img
-                    src={item.image}
-                    alt={`Slide ${index}`}
-                    className="w-full h-full object-cover rounded"
-                  />
-                  {item.hotspots.map((hotspot, i) => (
-                    <div
-                      key={i}
-                      onClick={() => navigate(hotspot.route)}
-                      onMouseEnter={handlePause}
-                      onMouseLeave={handleResume}
-                      className="absolute z-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm w-8 h-8 hover:scale-110 transition cursor-pointer group"
-                      style={{
+@@ -80,96 +82,96 @@ const Home: React.FC = () => {
                         top: `${hotspot.y}%`,
                         left: `${hotspot.x}%`,
                         transform: 'translate(-50%, -50%)'
