@@ -13,7 +13,8 @@ export default function Navbar() {
     { path: '/urunler', name: t('products') },
     { path: '/hesaplama', name: t('calculator') },
     { path: '/bloglar', name: t('blogs') },
-    { path: '/iletisim', name: t('contact') }
+    { path: '/iletisim', name: t('contact') },
+    { path: '/about', name: t('about') }
   ];
 
   const changeLanguage = (lng: 'tr' | 'en') => {

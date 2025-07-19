@@ -16,7 +16,10 @@ export default function About() {
   useEffect(() => {
     axios
       .get<Project[]>('/api/projects?highlight=true')
-      .then((res) => setProjects(res.data))
+      .then((res) => {
+        const data = Array.isArray(res.data) ? res.data : [];
+        setProjects(data);
+      })
       .catch(() => setProjects([]));
   }, []);
 
@@ -40,9 +43,7 @@ export default function About() {
         </div>
       </div>
 
-      <h2 className="text-2xl font-bold mb-4 text-center">
-        {t('highlight_projects')}
-      </h2>
+      <h2 className="text-2xl font-bold mb-4 text-center">{t('highlight_projects')}</h2>
       <div className="grid md:grid-cols-3 gap-6">
         {projects.map((p) => (
           <div key={p.id} className="bg-white shadow rounded overflow-hidden">
