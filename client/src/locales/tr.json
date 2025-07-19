@@ -15,6 +15,21 @@
   "products": "Ürünler",
   "calculator": "Hesaplama",
   "contact": "İletişim",
+  "about": "Hakkımızda",
+  "aboutTitle": "Şirketimiz Hakkında",
+  "about_intro": "Hikayemizi ve değerlerimizi keşfedin.",
+  "mission": "Misyonumuz",
+  "vision": "Vizyonumuz",
+  "values": "Değerlerimiz",
+  "mission_text": "Cam ve PVC alanında en kaliteli çözümleri sunmak.",
+  "vision_text": "Sektörümüzde lider konuma ulaşmak.",
+  "values_text": "Dürüstlük, kalite ve müşteri odaklılık.",
+  "highlight_projects": "Öne Çıkan Projeler",
+  "width_cm": "Genişlik (cm)",
+  "height_cm": "Yükseklik (cm)",
+  "quantity": "Adet",
+  "estimated_price": "Tahmini Fiyat",
   "left_section_title": "Tanıtım Yazısı",
-  "left_section_text": "Cam, kapı, balkon gibi ürünlerimiz hakkında bilgi almak için görseldeki numaralara tıklayın."
+  "left_section_text": "Cam, kapı, balkon gibi ürünlerimiz hakkında bilgi almak için görseldeki numaralara tıklayın.",
+  "copyright": "Tüm hakları saklıdır"
 }

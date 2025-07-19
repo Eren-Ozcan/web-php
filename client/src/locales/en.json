@@ -15,6 +15,21 @@
   "products": "Products",
   "calculator": "Calculator",
   "contact": "Contact",
+  "about": "About Us",
+  "aboutTitle": "About Our Company",
+  "about_intro": "Learn more about our story and values.",
+  "mission": "Our Mission",
+  "vision": "Our Vision",
+  "values": "Our Values",
+  "mission_text": "To provide top quality glass and PVC solutions.",
+  "vision_text": "To be the leading provider in our sector.",
+  "values_text": "Integrity, quality and customer focus.",
+  "highlight_projects": "Highlighted Projects",
+  "width_cm": "Width (cm)",
+  "height_cm": "Height (cm)",
+  "quantity": "Quantity",
+  "estimated_price": "Estimated Price",
   "left_section_title": "Slider-Sol",
-  "left_section_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum, sapien nec laoreet tincidunt, neque velit facilisis tortor, at fermentum sapien lacus nec sem. Proin sed libero eu arcu sollicitudin cursus."
+  "left_section_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum, sapien nec laoreet tincidunt, neque velit facilisis tortor, at fermentum sapien lacus nec sem. Proin sed libero eu arcu sollicitudin cursus.",
+  "copyright": "All rights reserved"
 }
