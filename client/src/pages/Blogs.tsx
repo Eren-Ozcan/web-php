@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface BlogPost {
   id: number;
@@ -17,6 +18,9 @@ const posts: BlogPost[] = [
 export default function Blogs() {
   const { t } = useTranslation();
   const [filter, setFilter] = useState('all');
+  const navigate = useNavigate();
+
+  const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   const filtered = filter === 'all' ? posts : posts.filter((p) => p.category === filter);
 
@@ -36,7 +40,11 @@ export default function Blogs() {
       </div>
       <div className="grid md:grid-cols-3 gap-6">
         {filtered.map((post) => (
-          <div key={post.id} className="bg-white shadow rounded p-4">
+          <div
+            key={post.id}
+            onClick={() => navigate(`/article/${toSlug(post.title)}`)}
+            className="bg-white shadow rounded p-4 cursor-pointer"
+          >
             <h3 className="font-semibold text-lg mb-2">{post.title}</h3>
             <p className="text-sm text-gray-600 mb-2">{post.text}</p>
           </div>
@@ -45,4 +53,3 @@ export default function Blogs() {
     </section>
   );
 }
-

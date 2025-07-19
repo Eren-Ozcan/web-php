@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../api';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface Project {
   id: number;
@@ -34,6 +35,9 @@ export default function About() {
   const [highlightProjects, setHighlightProjects] = useState<Project[]>([]);
   const [projectFilter, setProjectFilter] = useState('all');
   const [reviewFilter, setReviewFilter] = useState('all');
+  const navigate = useNavigate();
+
+  const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   useEffect(() => {
     api
@@ -68,7 +72,11 @@ export default function About() {
       <h2 className="text-2xl font-bold mb-4 text-center">{t('highlight_projects')}</h2>
       <div className="grid md:grid-cols-3 gap-6">
         {highlightProjects.map((p) => (
-          <div key={p.id} className="bg-white shadow rounded overflow-hidden">
+          <div
+            key={p.id}
+            onClick={() => navigate(`/article/${toSlug(p.title)}`)}
+            className="bg-white shadow rounded overflow-hidden cursor-pointer"
+          >
             <img src={p.image} alt={p.title} className="w-full h-40 object-cover" />
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-1">{p.title}</h3>
@@ -92,7 +100,11 @@ export default function About() {
       </div>
       <div className="grid md:grid-cols-3 gap-6">
         {(projectFilter === 'all' ? projectData : projectData.filter((p) => p.category === projectFilter)).map((p) => (
-          <div key={p.id} className="bg-white shadow rounded overflow-hidden">
+          <div
+            key={p.id}
+            onClick={() => navigate(`/article/${toSlug(p.title)}`)}
+            className="bg-white shadow rounded overflow-hidden cursor-pointer"
+          >
             <img src={p.image} alt={p.title} className="w-full h-40 object-cover" />
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-1">{p.title}</h3>
@@ -116,7 +128,11 @@ export default function About() {
       </div>
       <div className="grid md:grid-cols-2 gap-6">
         {(reviewFilter === 'all' ? reviewData : reviewData.filter((r) => r.category === reviewFilter)).map((r) => (
-          <div key={r.id} className="bg-white shadow rounded overflow-hidden flex flex-col md:flex-row">
+          <div
+            key={r.id}
+            onClick={() => navigate(`/article/${toSlug(r.title)}`)}
+            className="bg-white shadow rounded overflow-hidden flex flex-col md:flex-row cursor-pointer"
+          >
             <img src={r.image} alt={r.title} className="w-full md:w-1/3 h-48 object-cover" />
             <div className="p-4">
               <h3 className="text-xl font-semibold mb-2">{r.title}</h3>

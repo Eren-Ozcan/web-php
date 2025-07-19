@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface Product {
   id: number;
@@ -17,6 +18,9 @@ const products: Product[] = [
 export default function Products() {
   const { t } = useTranslation();
   const [filter, setFilter] = useState('all');
+  const navigate = useNavigate();
+
+  const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   const filtered = filter === 'all' ? products : products.filter((p) => p.category === filter);
 
@@ -36,7 +40,11 @@ export default function Products() {
       </div>
       <div className="grid md:grid-cols-3 gap-6">
         {filtered.map((p) => (
-          <div key={p.id} className="bg-white shadow rounded overflow-hidden">
+          <div
+            key={p.id}
+            onClick={() => navigate(`/article/${toSlug(p.title)}`)}
+            className="bg-white shadow rounded overflow-hidden cursor-pointer"
+          >
             <img src={p.image} alt={p.title} className="w-full h-40 object-cover" />
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-1">{p.title}</h3>

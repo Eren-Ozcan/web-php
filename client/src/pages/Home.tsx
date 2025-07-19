@@ -35,6 +35,8 @@ const Home: React.FC = () => {
     }
   ];
 
+  const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
+
   return (
     <>
       {/* Başlık */}
@@ -60,23 +62,7 @@ const Home: React.FC = () => {
             navigation={true}
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             className="w-full h-full"
-          >
-            {imageData.map((item, index) => (
-              <SwiperSlide key={index}>
-                <div className="w-full h-full relative">
-                  <img
-                    src={item.image}
-                    alt={`Slide ${index}`}
-                    className="w-full h-full object-cover rounded"
-                  />
-                  {item.hotspots.map((hotspot, i) => (
-                    <div
-                      key={i}
-                      onClick={() => navigate(hotspot.route)}
-                      onMouseEnter={handlePause}
-                      onMouseLeave={handleResume}
-                      className="absolute z-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm w-8 h-8 hover:scale-110 transition cursor-pointer group"
-                      style={{
+@@ -80,96 +82,96 @@ const Home: React.FC = () => {
                         top: `${hotspot.y}%`,
                         left: `${hotspot.x}%`,
                         transform: 'translate(-50%, -50%)'
@@ -102,7 +88,7 @@ const Home: React.FC = () => {
           {[t('blog1'), t('blog2'), t('blog3')].map((title, idx) => (
             <div
               key={idx}
-              onClick={() => navigate('/bloglar')}
+              onClick={() => navigate(`/article/${toSlug(title)}`)}
               className="bg-white rounded shadow-md p-4 hover:shadow-lg transition cursor-pointer"
             >
               <h3 className="text-xl font-semibold mb-2 text-blue-600">{title}</h3>
@@ -122,7 +108,7 @@ const Home: React.FC = () => {
           {['/images/project1.jpg', '/images/project2.jpg', '/images/project3.jpg'].map((src, idx) => (
             <div
               key={idx}
-              onClick={() => navigate('/about#projects')}
+              onClick={() => navigate(`/article/${toSlug(`${t('project')} ${idx + 1}`)}`)}
               className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
             >
               <img src={src} alt={`Project ${idx + 1}`} className="w-full h-48 object-cover" />
@@ -147,8 +133,7 @@ const Home: React.FC = () => {
           ].map((item, idx) => (
             <div
               key={idx}
-              onClick={() => navigate('/about#reviews')}
-
+              onClick={() => navigate(`/article/${toSlug(item.title)}`)}
               className="bg-white shadow rounded-lg overflow-hidden flex flex-col md:flex-row cursor-pointer"
             >
               <img src={item.img} alt={item.title} className="w-full md:w-1/3 h-48 object-cover" />
