@@ -5,6 +5,7 @@ import Contact from './pages/Contact';
 import Calculate from './pages/Calculate';
 import Blogs from './pages/Blogs';
 import Products from './pages/Products';
+import About from './pages/About';
 import Layout from './Layout';
 
 export default function AppRoutes() {
@@ -16,6 +17,7 @@ export default function AppRoutes() {
         <Route path="/hesaplama" element={<Calculate />} />
         <Route path="/bloglar" element={<Blogs />} />
         <Route path="/urunler" element={<Products />} />
+        <Route path="/about" element={<About />} />
       </Route>
     </Routes>
   );

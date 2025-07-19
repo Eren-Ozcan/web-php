@@ -1,3 +1,14 @@
+import CalculatorForm from '../components/CalculatorForm';
+import { useTranslation } from 'react-i18next';
+
 export default function Calculate() {
-  return <h1 className="text-center text-2xl mt-10">Fiyat Hesaplama Sayfası</h1>;
+  const { t } = useTranslation();
+  return (
+    <section className="min-h-screen pt-10">
+      <h1 className="text-3xl font-bold text-center mb-6">
+        {t('calculator')}
+      </h1>
+      <CalculatorForm />
+    </section>
+  );
 }

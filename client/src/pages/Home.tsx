@@ -190,6 +190,11 @@ const Home: React.FC = () => {
                 </a>
               </li>
               <li>
+                <a href="/about" className="hover:underline">
+                  {t('about')}
+                </a>
+              </li>
+              <li>
                 <a href="/iletisim" className="hover:underline">
                   {t('contact')}
                 </a>
