@@ -40,7 +40,7 @@ export default function CalculatorForm() {
         console.error('Failed to fetch pricing', err);
         setConfig(null);
         setOptions({});
-        setError('Unable to load pricing data. Please try again later.');
+        setError(t('pricing_error'));
       }
     };
 
@@ -75,7 +75,7 @@ export default function CalculatorForm() {
   };
 
   if (error) return <div>{error}</div>;
-  if (!config) return <div>Loading...</div>;
+  if (!config) return <div>{t('loading')}</div>;
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow rounded">

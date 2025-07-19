@@ -4,15 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 interface BlogPost {
   id: number;
-  title: string;
+  titleKey: string;
   category: string;
-  text: string;
+  textKey: string;
 }
 
 const posts: BlogPost[] = [
-  { id: 1, title: 'First Blog', category: 'news', text: 'Lorem ipsum dolor sit amet.' },
-  { id: 2, title: 'Second Blog', category: 'tips', text: 'Ut enim ad minim veniam.' },
-  { id: 3, title: 'Third Blog', category: 'news', text: 'Duis aute irure dolor.' }
+  { id: 1, titleKey: 'blog1', category: 'news', textKey: 'article_lorem1' },
+  { id: 2, titleKey: 'blog2', category: 'tips', textKey: 'article_lorem2' },
+  { id: 3, titleKey: 'blog3', category: 'news', textKey: 'article_lorem3' }
 ];
 
 export default function Blogs() {
@@ -42,11 +42,11 @@ export default function Blogs() {
         {filtered.map((post) => (
           <div
             key={post.id}
-            onClick={() => navigate(`/article/${toSlug(post.title)}`)}
+            onClick={() => navigate(`/article/${toSlug(t(post.titleKey))}`)}
             className="bg-white shadow rounded p-4 cursor-pointer"
           >
-            <h3 className="font-semibold text-lg mb-2">{post.title}</h3>
-            <p className="text-sm text-gray-600 mb-2">{post.text}</p>
+            <h3 className="font-semibold text-lg mb-2">{t(post.titleKey)}</h3>
+            <p className="text-sm text-gray-600 mb-2">{t(post.textKey)}</p>
           </div>
         ))}
       </div>

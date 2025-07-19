@@ -20,14 +20,14 @@ interface Review {
 }
 
 const projectData: Project[] = [
-  { id: 1, title: 'Modern Villa', description: 'Large scale glass installation', image: '/images/project1.jpg', category: 'glass' },
-  { id: 2, title: 'Office Center', description: 'PVC window replacement', image: '/images/project2.jpg', category: 'pvc' },
-  { id: 3, title: 'Shopping Mall', description: 'Curtain wall facade', image: '/images/project3.jpg', category: 'balcony' }
+  { id: 1, title: 'project_modern_villa', description: 'project_modern_villa_desc', image: '/images/project1.jpg', category: 'glass' },
+  { id: 2, title: 'project_office_center', description: 'project_office_center_desc', image: '/images/project2.jpg', category: 'pvc' },
+  { id: 3, title: 'project_shopping_mall', description: 'project_shopping_mall_desc', image: '/images/project3.jpg', category: 'balcony' }
 ];
 
 const reviewData: Review[] = [
-  { id: 1, title: 'Glass Product Review', text: 'High quality insulated glass.', image: '/images/cam.jpg', category: 'glass' },
-  { id: 2, title: 'PVC Window Review', text: 'Durable PVC systems for insulation.', image: '/images/pimapen.jpg', category: 'pvc' }
+  { id: 1, title: 'product_cam', text: 'product_cam_desc', image: '/images/cam.jpg', category: 'glass' },
+  { id: 2, title: 'product_pimapen', text: 'product_pimapen_desc', image: '/images/pimapen.jpg', category: 'pvc' }
 ];
 
 export default function About() {
@@ -102,13 +102,13 @@ export default function About() {
         {(projectFilter === 'all' ? projectData : projectData.filter((p) => p.category === projectFilter)).map((p) => (
           <div
             key={p.id}
-            onClick={() => navigate(`/article/${toSlug(p.title)}`)}
+            onClick={() => navigate(`/article/${toSlug(t(p.title))}`)}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
-            <img src={p.image} alt={p.title} className="w-full h-40 object-cover" />
+            <img src={p.image} alt={t(p.title)} className="w-full h-40 object-cover" />
             <div className="p-4">
-              <h3 className="font-semibold text-lg mb-1">{p.title}</h3>
-              <p className="text-sm text-gray-600">{p.description}</p>
+              <h3 className="font-semibold text-lg mb-1">{t(p.title)}</h3>
+              <p className="text-sm text-gray-600">{t(p.description)}</p>
             </div>
           </div>
         ))}
@@ -130,13 +130,13 @@ export default function About() {
         {(reviewFilter === 'all' ? reviewData : reviewData.filter((r) => r.category === reviewFilter)).map((r) => (
           <div
             key={r.id}
-            onClick={() => navigate(`/article/${toSlug(r.title)}`)}
+            onClick={() => navigate(`/article/${toSlug(t(r.title))}`)}
             className="bg-white shadow rounded overflow-hidden flex flex-col md:flex-row cursor-pointer"
           >
-            <img src={r.image} alt={r.title} className="w-full md:w-1/3 h-48 object-cover" />
+            <img src={r.image} alt={t(r.title)} className="w-full md:w-1/3 h-48 object-cover" />
             <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">{r.title}</h3>
-              <p className="text-gray-600 text-sm">{r.text}</p>
+              <h3 className="text-xl font-semibold mb-2">{t(r.title)}</h3>
+              <p className="text-gray-600 text-sm">{t(r.text)}</p>
             </div>
           </div>
         ))}
