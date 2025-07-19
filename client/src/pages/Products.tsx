@@ -4,15 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 interface Product {
   id: number;
-  title: string;
+  titleKey: string;
   image: string;
   category: string;
 }
 
 const products: Product[] = [
-  { id: 1, title: 'Tempered Glass', image: '/images/cam.jpg', category: 'glass' },
-  { id: 2, title: 'PVC Window', image: '/images/pimapen.jpg', category: 'pvc' },
-  { id: 3, title: 'Balcony System', image: '/images/project3.jpg', category: 'balcony' }
+  { id: 1, titleKey: 'product_tempered_glass', image: '/images/cam.jpg', category: 'glass' },
+  { id: 2, titleKey: 'product_pvc_window', image: '/images/pimapen.jpg', category: 'pvc' },
+  { id: 3, titleKey: 'product_balcony_system', image: '/images/project3.jpg', category: 'balcony' }
 ];
 
 export default function Products() {
@@ -42,12 +42,12 @@ export default function Products() {
         {filtered.map((p) => (
           <div
             key={p.id}
-            onClick={() => navigate(`/article/${toSlug(p.title)}`)}
+            onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
-            <img src={p.image} alt={p.title} className="w-full h-40 object-cover" />
+            <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />
             <div className="p-4">
-              <h3 className="font-semibold text-lg mb-1">{p.title}</h3>
+              <h3 className="font-semibold text-lg mb-1">{t(p.titleKey)}</h3>
             </div>
           </div>
         ))}

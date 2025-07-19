@@ -3,16 +3,16 @@ import { useTranslation } from 'react-i18next';
 
 interface Project {
   id: number;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   image: string;
   category: string;
 }
 
 const projects: Project[] = [
-  { id: 1, title: 'Modern Villa', description: 'Large scale glass installation', image: '/images/project1.jpg', category: 'glass' },
-  { id: 2, title: 'Office Center', description: 'PVC window replacement', image: '/images/project2.jpg', category: 'pvc' },
-  { id: 3, title: 'Shopping Mall', description: 'Curtain wall facade', image: '/images/project3.jpg', category: 'balcony' }
+  { id: 1, titleKey: 'project_modern_villa', descriptionKey: 'project_modern_villa_desc', image: '/images/project1.jpg', category: 'glass' },
+  { id: 2, titleKey: 'project_office_center', descriptionKey: 'project_office_center_desc', image: '/images/project2.jpg', category: 'pvc' },
+  { id: 3, titleKey: 'project_shopping_mall', descriptionKey: 'project_shopping_mall_desc', image: '/images/project3.jpg', category: 'balcony' }
 ];
 
 export default function Projects() {
@@ -38,10 +38,10 @@ export default function Projects() {
       <div className="grid md:grid-cols-3 gap-6">
         {filtered.map((p) => (
           <div key={p.id} className="bg-white shadow rounded overflow-hidden">
-            <img src={p.image} alt={p.title} className="w-full h-40 object-cover" />
+            <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />
             <div className="p-4">
-              <h3 className="font-semibold text-lg mb-1">{p.title}</h3>
-              <p className="text-sm text-gray-600">{p.description}</p>
+              <h3 className="font-semibold text-lg mb-1">{t(p.titleKey)}</h3>
+              <p className="text-sm text-gray-600">{t(p.descriptionKey)}</p>
             </div>
           </div>
         ))}
