@@ -122,7 +122,7 @@ const Home: React.FC = () => {
           {['/images/project1.jpg', '/images/project2.jpg', '/images/project3.jpg'].map((src, idx) => (
             <div
               key={idx}
-              onClick={() => navigate('/projects')}
+              onClick={() => navigate('/about#projects')}
               className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
             >
               <img src={src} alt={`Project ${idx + 1}`} className="w-full h-48 object-cover" />
@@ -147,7 +147,8 @@ const Home: React.FC = () => {
           ].map((item, idx) => (
             <div
               key={idx}
-              onClick={() => navigate('/reviews')}
+              onClick={() => navigate('/about#reviews')}
+
               className="bg-white shadow rounded-lg overflow-hidden flex flex-col md:flex-row cursor-pointer"
             >
               <img src={item.img} alt={item.title} className="w-full md:w-1/3 h-48 object-cover" />
