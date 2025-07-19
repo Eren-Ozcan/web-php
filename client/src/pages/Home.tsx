@@ -100,12 +100,16 @@ const Home: React.FC = () => {
         <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('blogs')}</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[t('blog1'), t('blog2'), t('blog3')].map((title, idx) => (
-            <div key={idx} className="bg-white rounded shadow-md p-4 hover:shadow-lg transition">
+            <div
+              key={idx}
+              onClick={() => navigate('/bloglar')}
+              className="bg-white rounded shadow-md p-4 hover:shadow-lg transition cursor-pointer"
+            >
               <h3 className="text-xl font-semibold mb-2 text-blue-600">{title}</h3>
               <p className="text-gray-600 text-sm">{t('blog_sample_text')}</p>
-              <button className="mt-2 text-sm text-blue-500 hover:underline">
+              <span className="mt-2 text-sm text-blue-500 hover:underline inline-block">
                 {t('readMore')}
-              </button>
+              </span>
             </div>
           ))}
         </div>
@@ -115,22 +119,21 @@ const Home: React.FC = () => {
       <div className="mt-20 px-4 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('projects')}</h2>
         <div className="grid md:grid-cols-3 gap-6">
-          {['/images/project1.jpg', '/images/project2.jpg', '/images/project3.jpg'].map(
-            (src, idx) => (
-              <div
-                key={idx}
-                className="overflow-hidden rounded-lg shadow hover:shadow-lg transition"
-              >
-                <img src={src} alt={`Project ${idx + 1}`} className="w-full h-48 object-cover" />
-                <div className="p-4 bg-white">
-                  <h3 className="font-semibold text-lg text-gray-800">
-                    {t('project')} {idx + 1}
-                  </h3>
-                  <p className="text-gray-600 text-sm">{t('project_sample_text')}</p>
-                </div>
+          {['/images/project1.jpg', '/images/project2.jpg', '/images/project3.jpg'].map((src, idx) => (
+            <div
+              key={idx}
+              onClick={() => navigate('/about#projects')}
+              className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
+            >
+              <img src={src} alt={`Project ${idx + 1}`} className="w-full h-48 object-cover" />
+              <div className="p-4 bg-white">
+                <h3 className="font-semibold text-lg text-gray-800">
+                  {t('project')} {idx + 1}
+                </h3>
+                <p className="text-gray-600 text-sm">{t('project_sample_text')}</p>
               </div>
-            )
-          )}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -139,20 +142,13 @@ const Home: React.FC = () => {
         <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('reviews')}</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {[
-            {
-              title: t('product_cam'),
-              desc: t('product_cam_desc'),
-              img: '/images/cam.jpg'
-            },
-            {
-              title: t('product_pimapen'),
-              desc: t('product_pimapen_desc'),
-              img: '/images/pimapen.jpg'
-            }
+            { title: t('product_cam'), desc: t('product_cam_desc'), img: '/images/cam.jpg' },
+            { title: t('product_pimapen'), desc: t('product_pimapen_desc'), img: '/images/pimapen.jpg' }
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-white shadow rounded-lg overflow-hidden flex flex-col md:flex-row"
+              onClick={() => navigate('/about#reviews')}
+              className="bg-white shadow rounded-lg overflow-hidden flex flex-col md:flex-row cursor-pointer"
             >
               <img src={item.img} alt={item.title} className="w-full md:w-1/3 h-48 object-cover" />
               <div className="p-4">
