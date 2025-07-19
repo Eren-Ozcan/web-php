@@ -148,6 +148,7 @@ const Home: React.FC = () => {
             <div
               key={idx}
               onClick={() => navigate('/about#reviews')}
+
               className="bg-white shadow rounded-lg overflow-hidden flex flex-col md:flex-row cursor-pointer"
             >
               <img src={item.img} alt={item.title} className="w-full md:w-1/3 h-48 object-cover" />
