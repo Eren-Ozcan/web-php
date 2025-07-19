@@ -62,14 +62,28 @@ const Home: React.FC = () => {
             navigation={true}
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             className="w-full h-full"
-@@ -80,96 +82,96 @@ const Home: React.FC = () => {
+          >
+            {imageData.map((slide, idx) => (
+              <SwiperSlide key={idx}>
+                <div className="relative w-full h-full group">
+                  <img
+                    src={slide.image}
+                    alt={`Slide ${idx + 1}`}
+                    className="w-full h-full object-cover rounded"
+                  />
+                  {slide.hotspots.map((hotspot, hIdx) => (
+                    <div
+                      key={hIdx}
+                      onClick={() => navigate(hotspot.route)}
+                      className="absolute flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer hover:bg-blue-700 transition group"
+                      style={{
                         top: `${hotspot.y}%`,
                         left: `${hotspot.x}%`,
                         transform: 'translate(-50%, -50%)'
                       }}
                     >
                       {hotspot.label}
-                      <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded shadow-md">
+                      <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded shadow-md z-10">
                         {hotspot.tooltip}
                       </div>
                     </div>
@@ -105,21 +119,23 @@ const Home: React.FC = () => {
       <div className="mt-20 px-4 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('projects')}</h2>
         <div className="grid md:grid-cols-3 gap-6">
-          {['/images/project1.jpg', '/images/project2.jpg', '/images/project3.jpg'].map((src, idx) => (
-            <div
-              key={idx}
-              onClick={() => navigate(`/article/${toSlug(`${t('project')} ${idx + 1}`)}`)}
-              className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
-            >
-              <img src={src} alt={`Project ${idx + 1}`} className="w-full h-48 object-cover" />
-              <div className="p-4 bg-white">
-                <h3 className="font-semibold text-lg text-gray-800">
-                  {t('project')} {idx + 1}
-                </h3>
-                <p className="text-gray-600 text-sm">{t('project_sample_text')}</p>
+          {['/images/project1.jpg', '/images/project2.jpg', '/images/project3.jpg'].map(
+            (src, idx) => (
+              <div
+                key={idx}
+                onClick={() => navigate(`/article/${toSlug(`${t('project')} ${idx + 1}`)}`)}
+                className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
+              >
+                <img src={src} alt={`Project ${idx + 1}`} className="w-full h-48 object-cover" />
+                <div className="p-4 bg-white">
+                  <h3 className="font-semibold text-lg text-gray-800">
+                    {t('project')} {idx + 1}
+                  </h3>
+                  <p className="text-gray-600 text-sm">{t('project_sample_text')}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </div>
 
@@ -129,7 +145,11 @@ const Home: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-6">
           {[
             { title: t('product_cam'), desc: t('product_cam_desc'), img: '/images/cam.jpg' },
-            { title: t('product_pimapen'), desc: t('product_pimapen_desc'), img: '/images/pimapen.jpg' }
+            {
+              title: t('product_pimapen'),
+              desc: t('product_pimapen_desc'),
+              img: '/images/pimapen.jpg'
+            }
           ].map((item, idx) => (
             <div
               key={idx}
