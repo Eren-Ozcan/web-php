@@ -1,5 +1,5 @@
 // client/src/routes.tsx
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Contact from './pages/Contact';
 import Calculate from './pages/Calculate';
@@ -14,7 +14,8 @@ export default function AppRoutes() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/iletisim" element={<Contact />} />
-        <Route path="/hesaplama" element={<Calculate />} />
+        <Route path="/calculator" element={<Calculate />} />
+        <Route path="/hesaplama" element={<Navigate to="/calculator" replace />} />
         <Route path="/bloglar" element={<Blogs />} />
         <Route path="/urunler" element={<Products />} />
         <Route path="/about" element={<About />} />

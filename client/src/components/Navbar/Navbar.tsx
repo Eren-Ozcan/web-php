@@ -11,7 +11,7 @@ export default function Navbar() {
   const menuItems = [
     { path: '/', name: t('home') },
     { path: '/urunler', name: t('products') },
-    { path: '/hesaplama', name: t('calculator') },
+    { path: '/calculator', name: t('calculator') },
     { path: '/bloglar', name: t('blogs') },
     { path: '/iletisim', name: t('contact') },
     { path: '/about', name: t('about') }
