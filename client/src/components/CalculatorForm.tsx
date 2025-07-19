@@ -95,29 +95,41 @@ export default function CalculatorForm() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <input
-          className="border rounded p-2"
-          type="number"
-          placeholder={t('width_cm')}
-          value={width}
-          onChange={(e) => setWidth(e.target.value)}
-        />
-        <input
-          className="border rounded p-2"
-          type="number"
-          placeholder={t('height_cm')}
-          value={height}
-          onChange={(e) => setHeight(e.target.value)}
-        />
+        <div className="flex border rounded overflow-hidden">
+          <span className="px-2 flex items-center bg-gray-100 text-sm whitespace-nowrap">
+            {t('width_cm')}
+          </span>
+          <input
+            className="p-2 flex-1 outline-none"
+            type="number"
+            value={width}
+            onChange={(e) => setWidth(e.target.value)}
+          />
+        </div>
+        <div className="flex border rounded overflow-hidden">
+          <span className="px-2 flex items-center bg-gray-100 text-sm whitespace-nowrap">
+            {t('height_cm')}
+          </span>
+          <input
+            className="p-2 flex-1 outline-none"
+            type="number"
+            value={height}
+            onChange={(e) => setHeight(e.target.value)}
+          />
+        </div>
       </div>
       <div className="mb-4">
-        <input
-          className="border rounded p-2 w-full"
-          type="number"
-          placeholder={t('quantity')}
-          value={qty}
-          onChange={(e) => setQty(parseInt(e.target.value) || 1)}
-        />
+        <div className="flex border rounded overflow-hidden">
+          <span className="px-2 flex items-center bg-gray-100 text-sm whitespace-nowrap">
+            {t('quantity')}
+          </span>
+          <input
+            className="p-2 flex-1 outline-none"
+            type="number"
+            value={qty}
+            onChange={(e) => setQty(parseInt(e.target.value) || 1)}
+          />
+        </div>
       </div>
 
       {visibleFeatures.length > 0 && (
