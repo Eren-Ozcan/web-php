@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useTranslation } from 'react-i18next';
 
 interface Project {
@@ -14,7 +14,7 @@ export default function About() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    axios
+    api
       .get<Project[]>('/api/projects?highlight=true')
       .then((res) => {
         const data = Array.isArray(res.data) ? res.data : [];
