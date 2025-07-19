@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useTranslation } from 'react-i18next';
 
 interface PricingConfig {
@@ -21,9 +21,9 @@ export default function CalculatorForm() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios
-      .get<PricingConfig>('/api/pricing')
-      .then((res) => {
+    const fetchConfig = async () => {
+      try {
+        const res = await api.get<PricingConfig>('/api/pricing');
         if (res.data && res.data.products && res.data.features) {
           setConfig(res.data);
           const initialOpts: Record<string, boolean> = {};
@@ -33,17 +33,17 @@ export default function CalculatorForm() {
           setOptions(initialOpts);
           setError(null);
         } else {
-          setConfig(null);
-          setOptions({});
-          setError('Failed to load pricing configuration.');
+          throw new Error('Invalid response');
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error('Failed to fetch pricing', err);
         setConfig(null);
         setOptions({});
-        setError('Failed to load pricing configuration.');
-      });
+        setError('Unable to load pricing data. Please try again later.');
+      }
+    };
+
+    fetchConfig();
   }, []);
 
   const visibleFeatures = useMemo(() => {
