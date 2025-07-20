@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
-import {
-  loadContent,
-  saveContent,
-  ContentData,
-  BlogPost,
-  Project,
-  Review,
-  Product
-} from '../content';
+import { loadContent, saveContent, ContentData } from '../content';
 
 const ContentAdmin: React.FC = () => {
   const { t, i18n: i18next } = useTranslation();
@@ -101,6 +93,8 @@ const ContentAdmin: React.FC = () => {
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">{t('admin_title')}</h1>
+
+      {/* Dil seçimi */}
       <div className="space-x-2">
         <label className="font-semibold">{t('admin_language')}:</label>
         <select value={lang} onChange={(e) => setLang(e.target.value)} className="border p-1">
@@ -111,6 +105,8 @@ const ContentAdmin: React.FC = () => {
           ))}
         </select>
       </div>
+
+      {/* Sekme seçimi */}
       <div className="space-x-2">
         {['blogs', 'projects', 'reviews', 'products', 'basic', 'categories'].map((s) => (
           <button
@@ -122,6 +118,8 @@ const ContentAdmin: React.FC = () => {
           </button>
         ))}
       </div>
+
+      {/* BASIC */}
       {section === 'basic' ? (
         <div className="space-y-2">
           {['mission_text', 'vision_text', 'values_text'].map((k) => (
@@ -238,10 +236,25 @@ const ContentAdmin: React.FC = () => {
                 )}
                 <td className="border p-2">
                   <input
-                    className="border p-1 w-full"
-                    value={item.image || ''}
-                    onChange={(e) => handleChange(idx, 'image', e.target.value)}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        handleChange(idx, 'image', reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }}
                   />
+                  {item.image && (
+                    <img
+                      src={item.image}
+                      alt="preview"
+                      className="mt-2 w-20 h-20 object-cover rounded shadow"
+                    />
+                  )}
                 </td>
                 <td className="border p-2">
                   <select
@@ -269,6 +282,7 @@ const ContentAdmin: React.FC = () => {
           </tbody>
         </table>
       )}
+
       <div className="space-x-2">
         {section !== 'basic' && section !== 'categories' && (
           <button onClick={addEntry} className="bg-blue-500 text-white px-3 py-1 rounded">
