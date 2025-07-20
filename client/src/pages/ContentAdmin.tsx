@@ -1,36 +1,32 @@
 import React, { useState } from 'react';
 import i18n from '../i18n';
-import {
-  loadContent,
-  saveContent,
-  ContentData,
-  BlogPost,
-  Project,
-  Review,
-  Product
-} from '../content';
+import { loadContent, saveContent, ContentData } from '../content';
 
 const ContentAdmin: React.FC = () => {
   const languages = Object.keys(i18n.options.resources || {});
   const [lang, setLang] = useState<string>(i18n.language);
   const [content, setContent] = useState<ContentData>(loadContent());
-  const [section, setSection] = useState<'blogs' | 'projects' | 'reviews' | 'products' | 'basic' | 'categories'>('blogs');
-  const [catSection, setCatSection] = useState<'blogs' | 'projects' | 'reviews' | 'products'>('blogs');
+  const [section, setSection] = useState<
+    'blogs' | 'projects' | 'reviews' | 'products' | 'basic' | 'categories'
+  >('blogs');
+  const [catSection, setCatSection] = useState<'blogs' | 'projects' | 'reviews' | 'products'>(
+    'blogs'
+  );
 
   const updateTranslation = (key: string, value: string) => {
-    i18n.addResource(lang, 'translation', { [key]: value }, true, true);
+    i18n.addResource(lang, 'translation', key, value);
   };
 
   const entries =
     section === 'blogs'
       ? content.blogs
       : section === 'projects'
-      ? content.projects
-      : section === 'reviews'
-      ? content.reviews
-      : section === 'products'
-      ? content.products
-      : [];
+        ? content.projects
+        : section === 'reviews'
+          ? content.reviews
+          : section === 'products'
+            ? content.products
+            : [];
 
   const setEntries = (items: any[]) => {
     const newContent = { ...content } as any;
@@ -107,6 +103,7 @@ const ContentAdmin: React.FC = () => {
           </button>
         ))}
       </div>
+
       {section === 'basic' ? (
         <div className="space-y-2">
           {['mission_text', 'vision_text', 'values_text'].map((k) => (
@@ -242,7 +239,10 @@ const ContentAdmin: React.FC = () => {
                   </select>
                 </td>
                 <td className="border p-2">
-                  <button onClick={() => removeEntry(item.id)} className="bg-red-500 text-white px-2 py-1 rounded">
+                  <button
+                    onClick={() => removeEntry(item.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
                     Delete
                   </button>
                 </td>
