@@ -235,19 +235,23 @@ const ContentAdmin: React.FC = () => {
                   </td>
                 )}
                 <td className="border p-2">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        handleChange(idx, 'image', reader.result as string);
-                      };
-                      reader.readAsDataURL(file);
-                    }}
-                  />
+                  <label className="bg-blue-600 text-white px-3 py-1 rounded cursor-pointer inline-block">
+                    {t('choose_file')}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          handleChange(idx, 'image', reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
+                      }}
+                    />
+                  </label>
                   {item.image && (
                     <img
                       src={item.image}
@@ -256,6 +260,7 @@ const ContentAdmin: React.FC = () => {
                     />
                   )}
                 </td>
+
                 <td className="border p-2">
                   <select
                     className="border p-1 w-full"
