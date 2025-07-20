@@ -10,6 +10,7 @@ import Reviews from './pages/Reviews';
 import About from './pages/About';
 import Article from './pages/Article';
 import ContentAdmin from './pages/ContentAdmin';
+import Admin from './pages/Admin';
 import Layout from './Layout';
 
 export default function AppRoutes() {
@@ -28,6 +29,7 @@ export default function AppRoutes() {
         <Route path="/about" element={<About />} />
         <Route path="/article/:topic" element={<Article />} />
         <Route path="/content-admin" element={<ContentAdmin />} />
+        <Route path="/admin" element={<Admin />} />
       </Route>
     </Routes>
   );

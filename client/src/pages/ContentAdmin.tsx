@@ -1,13 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
-import { loadContent, saveContent, ContentData } from '../content';
+import { loadContent, ContentData } from '../content';
+import api from '../api';
 
 const ContentAdmin: React.FC = () => {
   const { t, i18n: i18next } = useTranslation();
   const languages = Object.keys(i18next.options.resources || {});
   const [lang, setLang] = useState<string>(i18next.language);
   const [content, setContent] = useState<ContentData>(loadContent());
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [cRes, tRes] = await Promise.all([
+          api.get<ContentData>('/api/content'),
+          api.get<Record<string, Record<string, string>>>('/api/translations')
+        ]);
+        setContent(cRes.data);
+        localStorage.setItem('content', JSON.stringify(cRes.data));
+        localStorage.setItem('translations', JSON.stringify(tRes.data));
+        Object.entries(tRes.data).forEach(([lng, vals]) => {
+          Object.entries(vals).forEach(([k, v]) => {
+            i18next.addResource(lng, 'translation', k, v);
+          });
+        });
+      } catch (err) {
+        console.error('Failed to load admin data', err);
+      }
+    };
+    fetchData();
+  }, []);
   const [section, setSection] = useState<
     'blogs' | 'projects' | 'reviews' | 'products' | 'basic' | 'categories'
   >('blogs');
@@ -84,10 +107,19 @@ const ContentAdmin: React.FC = () => {
     setEntries(newEntries);
   };
 
-  const saveAll = () => {
-    saveContent(content);
-    localStorage.setItem('translations', JSON.stringify(i18n.store.data));
-    alert(t('admin_saved'));
+  const saveAll = async () => {
+    try {
+      await Promise.all([
+        api.post('/api/content', content),
+        api.post('/api/translations', i18n.store.data)
+      ]);
+      localStorage.setItem('content', JSON.stringify(content));
+      localStorage.setItem('translations', JSON.stringify(i18n.store.data));
+      alert(t('admin_saved'));
+    } catch (err) {
+      console.error('Save failed', err);
+      alert(t('admin_save_error'));
+    }
   };
 
   return (
