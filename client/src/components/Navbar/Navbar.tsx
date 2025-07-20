@@ -14,7 +14,8 @@ export default function Navbar() {
     { path: '/calculator', name: t('calculator') },
     { path: '/bloglar', name: t('blogs') },
     { path: '/iletisim', name: t('contact') },
-    { path: '/about', name: t('about') }
+    { path: '/about', name: t('about') },
+    { path: '/admin', name: 'Admin' }
   ];
 
   const changeLanguage = (lng: 'tr' | 'en') => {

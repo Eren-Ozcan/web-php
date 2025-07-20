@@ -9,6 +9,7 @@ import Projects from './pages/Projects';
 import Reviews from './pages/Reviews';
 import About from './pages/About';
 import Article from './pages/Article';
+import AdminDashboard from './pages/AdminDashboard';
 import Layout from './Layout';
 
 export default function AppRoutes() {
@@ -26,6 +27,7 @@ export default function AppRoutes() {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/about" element={<About />} />
         <Route path="/article/:topic" element={<Article />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Route>
     </Routes>
   );
