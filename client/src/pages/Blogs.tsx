@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { loadContent, BlogPost } from '../content';
 
-const posts: BlogPost[] = loadContent().blogs;
+const content = loadContent();
+const posts: BlogPost[] = content.blogs;
+const blogCategories = content.categories.blogs;
 
 export default function Blogs() {
   const { t } = useTranslation();
@@ -18,7 +20,7 @@ export default function Blogs() {
     <section className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">{t('blogs')}</h1>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', 'news', 'tips'].map((f) => (
+        {['all', ...blogCategories].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}

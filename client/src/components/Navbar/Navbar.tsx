@@ -15,7 +15,6 @@ export default function Navbar() {
     { path: '/bloglar', name: t('blogs') },
     { path: '/iletisim', name: t('contact') },
     { path: '/about', name: t('about') },
-    { path: '/admin', name: 'Admin' },
     { path: '/content-admin', name: 'Content' }
   ];
 
