@@ -9,6 +9,7 @@ const Admin: React.FC = () => {
   const [password, setPassword] = useState('');
   const [auth, setAuth] = useState(localStorage.getItem('admin-auth') === 'true');
   const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (auth) {
@@ -38,6 +39,11 @@ const Admin: React.FC = () => {
     if (password === import.meta.env.VITE_ADMIN_PASSWORD) {
       localStorage.setItem('admin-auth', 'true');
       setAuth(true);
+      alert(t('login_success'));
+      setError(null);
+    }
+    else {
+      setError(t('login_error'));
     }
   };
 
@@ -51,6 +57,7 @@ const Admin: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           className="border p-2"
         />
+        {error && <div className="text-red-500">{error}</div>}
         <button onClick={handleLogin} className="bg-blue-600 text-white px-3 py-1 rounded">
           {t('login')}
         </button>
