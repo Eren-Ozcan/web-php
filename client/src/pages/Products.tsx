@@ -15,7 +15,7 @@ const products: Product[] = [
   { id: 3, titleKey: 'product_balcony', image: '/images/project3.jpg', category: 'balcony' },
   { id: 4, titleKey: 'product_garden', image: '/images/house3.jpg', category: 'garden' },
   { id: 5, titleKey: 'product_office', image: '/images/project2.jpg', category: 'office' },
-  { id: 6, titleKey: 'product_facade', image: '/images/house2.jpg', category: 'exterior' }
+  { id: 6, titleKey: 'product_facade', image: '/images/house2.jpg', category: 'facade' }
 ];
 
 export default function Products() {
@@ -38,7 +38,7 @@ export default function Products() {
     <section className="p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">{t('products')}</h1>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', 'glass', 'door', 'balcony', 'garden', 'office', 'exterior'].map((f) => (
+        {['all', 'glass', 'door', 'balcony', 'garden', 'office', 'facade'].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}

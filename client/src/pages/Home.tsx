@@ -30,7 +30,7 @@ const Home: React.FC = () => {
       hotspots: [
         { x: 20, y: 30, label: '4', route: '/urunler/garden', tooltip: t('garden') },
         { x: 45, y: 55, label: '5', route: '/urunler/office', tooltip: t('office') },
-        { x: 70, y: 65, label: '6', route: '/urunler/exterior', tooltip: t('exterior') }
+        { x: 70, y: 65, label: '6', route: '/urunler/facade', tooltip: t('exterior') }
       ]
     }
   ];
@@ -65,7 +65,7 @@ const Home: React.FC = () => {
           >
             {imageData.map((slide, idx) => (
               <SwiperSlide key={idx}>
-                <div className="relative w-full h-full group">
+                <div className="relative w-full h-full">
                   <img
                     src={slide.image}
                     alt={`Slide ${idx + 1}`}
