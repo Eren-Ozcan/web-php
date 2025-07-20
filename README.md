@@ -46,17 +46,36 @@ Vite will start the client on `http://localhost:5173` (or the next available por
 
 No automated tests are currently defined. The `npm test` command in both the client and server simply prints a message so the command does not fail by default.
 
+## Database Setup
+
+The backend now uses **MySQL** for authentication. A sample SQL script is provided in `server/init_db.sql` to create the `glass_company` database and an initial admin user.
+
+Update the following environment variables if needed:
+
+```
+DB_HOST=localhost
+DB_USER=admin
+DB_PASS=merhaba123
+DB_NAME=glass_company
+```
+
+Run the script with phpMyAdmin or the MySQL CLI:
+
+```bash
+mysql -u admin -p < server/init_db.sql
+```
+
 ## Login API
 
-The server now exposes a simple `/api/login` endpoint for obtaining a JWT. A default
-admin user is stored in `server/data/users.json` with username `admin` and password
-`mypassword123`.
+The server exposes a `/api/login` endpoint for obtaining a JWT. User credentials
+are validated against the MySQL `users` table. The included SQL script creates a
+default admin user with username `admin` and password `merhaba123`.
 
 Example request:
 
 ```bash
 curl -X POST http://localhost:5000/api/login \
   -H 'Content-Type: application/json' \
-  -d '{"username":"admin","password":"mypassword123"}'
+  -d '{"username":"admin","password":"merhaba123"}'
 ```
 
