@@ -84,5 +84,15 @@
   "project_shopping_mall": "Alışveriş Merkezi",
   "project_modern_villa_desc": "Büyük ölçekli cam montajı",
   "project_office_center_desc": "PVC pencere değişimi",
-  "project_shopping_mall_desc": "Giydirme cephe uygulaması"
+  "project_shopping_mall_desc": "Giydirme cephe uygulaması",
+  "filter_door": "Kapı",
+  "filter_garden": "Bahçe",
+  "filter_office": "Ofis",
+  "filter_facade": "Dış cephe",
+  "product_glass": "Cam Çözümleri",
+  "product_doors": "Kapı Sistemleri",
+  "product_balcony": "Balkon Sistemleri",
+  "product_garden": "Bahçe Çözümleri",
+  "product_office": "Ofis Bölmeleri",
+  "product_facade": "Cephe Sistemleri"
 }

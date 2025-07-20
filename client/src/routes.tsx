@@ -21,6 +21,7 @@ export default function AppRoutes() {
         <Route path="/hesaplama" element={<Navigate to="/calculator" replace />} />
         <Route path="/bloglar" element={<Blogs />} />
         <Route path="/urunler" element={<Products />} />
+        <Route path="/urunler/:category" element={<Products />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/about" element={<About />} />
