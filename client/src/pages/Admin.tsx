@@ -35,15 +35,22 @@ const Admin: React.FC = () => {
     }
   }, [auth]);
 
-  const handleLogin = () => {
-    if (password === import.meta.env.VITE_ADMIN_PASSWORD) {
+  const handleLogin = async () => {
+    try {
+      const res = await api.post('/api/login', { username: 'admin', password });
+      localStorage.setItem('token', res.data.token);
       localStorage.setItem('admin-auth', 'true');
       setAuth(true);
       alert(t('login_success'));
       setError(null);
-    }
-    else {
-      setError(t('login_error'));
+    } catch (err: any) {
+      const msg = err?.response?.data?.error;
+      const key = msg === 'User not found'
+        ? 'user_not_found'
+        : msg === 'Password incorrect'
+        ? 'password_incorrect'
+        : 'login_error';
+      setError(t(key));
     }
   };
 

@@ -35,6 +35,8 @@
     "colored_feature": "Colored",
     "double_glazing_feature": "Double Glazing",
     "login": "Login",
+    "user_not_found": "User not found",
+    "password_incorrect": "Password incorrect",
     "contact": "Contact",
     "contact_email_label": "Email",
     "contact_email_placeholder": "Enter your email address",
