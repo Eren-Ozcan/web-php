@@ -50,19 +50,21 @@ export default function About() {
         {highlightProjects.map((p) => (
           <div
             key={p.id}
-            onClick={() => navigate(`/article/${toSlug(p.title)}`)}
+            onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
-            <img src={p.image} alt={p.title} className="w-full h-40 object-cover" />
+            <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />
             <div className="p-4">
-              <h3 className="font-semibold text-lg mb-1">{p.title}</h3>
-              <p className="text-sm text-gray-600">{p.description}</p>
+              <h3 className="font-semibold text-lg mb-1">{t(p.titleKey)}</h3>
+              <p className="text-sm text-gray-600">{t(p.descriptionKey)}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <h2 id="projects" className="text-2xl font-bold mt-12 mb-4 text-center">{t('projects')}</h2>
+      <h2 id="projects" className="text-2xl font-bold mt-12 mb-4 text-center">
+        {t('projects')}
+      </h2>
       <div className="flex justify-center space-x-2 mb-6">
         {['all', 'glass', 'pvc', 'balcony'].map((f) => (
           <button
@@ -70,27 +72,32 @@ export default function About() {
             onClick={() => setProjectFilter(f)}
             className={`px-3 py-1 rounded text-sm ${projectFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}` as any)}
+            {t(`filter_${f}`)}
           </button>
         ))}
       </div>
       <div className="grid md:grid-cols-3 gap-6">
-        {(projectFilter === 'all' ? projectData : projectData.filter((p) => p.category === projectFilter)).map((p) => (
+        {(projectFilter === 'all'
+          ? projectData
+          : projectData.filter((p) => p.category === projectFilter)
+        ).map((p) => (
           <div
             key={p.id}
-            onClick={() => navigate(`/article/${toSlug(t(p.title))}`)}
+            onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
-            <img src={p.image} alt={t(p.title)} className="w-full h-40 object-cover" />
+            <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />
             <div className="p-4">
-              <h3 className="font-semibold text-lg mb-1">{t(p.title)}</h3>
-              <p className="text-sm text-gray-600">{t(p.description)}</p>
+              <h3 className="font-semibold text-lg mb-1">{t(p.titleKey)}</h3>
+              <p className="text-sm text-gray-600">{t(p.descriptionKey)}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <h2 id="reviews" className="text-2xl font-bold mt-12 mb-4 text-center">{t('reviews')}</h2>
+      <h2 id="reviews" className="text-2xl font-bold mt-12 mb-4 text-center">
+        {t('reviews')}
+      </h2>
       <div className="flex justify-center space-x-2 mb-6">
         {['all', 'glass', 'pvc'].map((f) => (
           <button
@@ -98,21 +105,24 @@ export default function About() {
             onClick={() => setReviewFilter(f)}
             className={`px-3 py-1 rounded text-sm ${reviewFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}` as any)}
+            {t(`filter_${f}`)}
           </button>
         ))}
       </div>
       <div className="grid md:grid-cols-2 gap-6">
-        {(reviewFilter === 'all' ? reviewData : reviewData.filter((r) => r.category === reviewFilter)).map((r) => (
+        {(reviewFilter === 'all'
+          ? reviewData
+          : reviewData.filter((r) => r.category === reviewFilter)
+        ).map((r) => (
           <div
             key={r.id}
-            onClick={() => navigate(`/article/${toSlug(t(r.title))}`)}
+            onClick={() => navigate(`/article/${toSlug(t(r.titleKey))}`)}
             className="bg-white shadow rounded overflow-hidden flex flex-col md:flex-row cursor-pointer"
           >
-            <img src={r.image} alt={t(r.title)} className="w-full md:w-1/3 h-48 object-cover" />
+            <img src={r.image} alt={t(r.titleKey)} className="w-full md:w-1/3 h-48 object-cover" />
             <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">{t(r.title)}</h3>
-              <p className="text-gray-600 text-sm">{t(r.text)}</p>
+              <h3 className="text-xl font-semibold mb-2">{t(r.titleKey)}</h3>
+              <p className="text-gray-600 text-sm">{t(r.textKey)}</p>
             </div>
           </div>
         ))}
