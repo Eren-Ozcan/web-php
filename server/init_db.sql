@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS glass_company CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE glass_company;
+CREATE DATABASE IF NOT EXISTS mefaaluminyum CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE mefaaluminyum;
 
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,

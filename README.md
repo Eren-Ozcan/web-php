@@ -48,7 +48,7 @@ No automated tests are currently defined. The `npm test` command in both the cli
 
 ## Database Setup
 
-The backend now uses **MySQL** for authentication. A sample SQL script is provided in `server/init_db.sql` to create the `glass_company` database and an initial admin user.
+The backend now uses **MySQL** for authentication. A sample SQL script is provided in `server/init_db.sql` to create the `mefaaluminyum` database and an initial admin user.
 
 Update the following environment variables if needed:
 
@@ -56,7 +56,7 @@ Update the following environment variables if needed:
 DB_HOST=localhost
 DB_USER=admin
 DB_PASS=merhaba123
-DB_NAME=glass_company
+DB_NAME=mefaaluminyum
 ```
 
 Run the script with phpMyAdmin or the MySQL CLI:
@@ -78,4 +78,3 @@ curl -X POST http://localhost:5000/api/login \
   -H 'Content-Type: application/json' \
   -d '{"username":"admin","password":"merhaba123"}'
 ```
-
