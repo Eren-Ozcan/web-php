@@ -1,19 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { loadContent, BlogPost } from '../content';
 
-interface BlogPost {
-  id: number;
-  titleKey: string;
-  category: string;
-  textKey: string;
-}
-
-const posts: BlogPost[] = [
-  { id: 1, titleKey: 'blog1', category: 'news', textKey: 'article_lorem1' },
-  { id: 2, titleKey: 'blog2', category: 'tips', textKey: 'article_lorem2' },
-  { id: 3, titleKey: 'blog3', category: 'news', textKey: 'article_lorem3' }
-];
+const posts: BlogPost[] = loadContent().blogs;
 
 export default function Blogs() {
   const { t } = useTranslation();

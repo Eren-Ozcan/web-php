@@ -1,22 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { loadContent, Product } from '../content';
 
-interface Product {
-  id: number;
-  titleKey: string;
-  image: string;
-  category: string;
-}
-
-const products: Product[] = [
-  { id: 1, titleKey: 'product_glass', image: '/images/cam.jpg', category: 'glass' },
-  { id: 2, titleKey: 'product_doors', image: '/images/project1.jpg', category: 'door' },
-  { id: 3, titleKey: 'product_balcony', image: '/images/project3.jpg', category: 'balcony' },
-  { id: 4, titleKey: 'product_garden', image: '/images/house3.jpg', category: 'garden' },
-  { id: 5, titleKey: 'product_office', image: '/images/project2.jpg', category: 'office' },
-  { id: 6, titleKey: 'product_facade', image: '/images/house2.jpg', category: 'facade' }
-];
+const products: Product[] = loadContent().products;
 
 export default function Products() {
   const { t } = useTranslation();

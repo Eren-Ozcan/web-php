@@ -1,0 +1,102 @@
+export interface BlogPost {
+  id: number;
+  titleKey: string;
+  category: string;
+  textKey: string;
+}
+
+export interface Project {
+  id: number;
+  titleKey: string;
+  descriptionKey: string;
+  image: string;
+  category: string;
+}
+
+export interface Review {
+  id: number;
+  titleKey: string;
+  textKey: string;
+  image: string;
+  category: string;
+}
+
+export interface Product {
+  id: number;
+  titleKey: string;
+  image: string;
+  category: string;
+}
+
+export interface ContentData {
+  blogs: BlogPost[];
+  projects: Project[];
+  reviews: Review[];
+  products: Product[];
+}
+
+const defaultData: ContentData = {
+  blogs: [
+    { id: 1, titleKey: 'blog1', category: 'news', textKey: 'article_lorem1' },
+    { id: 2, titleKey: 'blog2', category: 'tips', textKey: 'article_lorem2' },
+    { id: 3, titleKey: 'blog3', category: 'news', textKey: 'article_lorem3' }
+  ],
+  projects: [
+    {
+      id: 1,
+      titleKey: 'project_modern_villa',
+      descriptionKey: 'project_modern_villa_desc',
+      image: '/images/project1.jpg',
+      category: 'glass'
+    },
+    {
+      id: 2,
+      titleKey: 'project_office_center',
+      descriptionKey: 'project_office_center_desc',
+      image: '/images/project2.jpg',
+      category: 'pvc'
+    },
+    {
+      id: 3,
+      titleKey: 'project_shopping_mall',
+      descriptionKey: 'project_shopping_mall_desc',
+      image: '/images/project3.jpg',
+      category: 'balcony'
+    }
+  ],
+  reviews: [
+    {
+      id: 1,
+      titleKey: 'product_cam',
+      textKey: 'product_cam_desc',
+      image: '/images/cam.jpg',
+      category: 'glass'
+    },
+    {
+      id: 2,
+      titleKey: 'product_pimapen',
+      textKey: 'product_pimapen_desc',
+      image: '/images/pimapen.jpg',
+      category: 'pvc'
+    }
+  ],
+  products: [
+    { id: 1, titleKey: 'product_glass', image: '/images/cam.jpg', category: 'glass' },
+    { id: 2, titleKey: 'product_doors', image: '/images/project1.jpg', category: 'door' },
+    { id: 3, titleKey: 'product_balcony', image: '/images/project3.jpg', category: 'balcony' },
+    { id: 4, titleKey: 'product_garden', image: '/images/house3.jpg', category: 'garden' },
+    { id: 5, titleKey: 'product_office', image: '/images/project2.jpg', category: 'office' },
+    { id: 6, titleKey: 'product_facade', image: '/images/house2.jpg', category: 'facade' }
+  ]
+};
+
+export function loadContent(): ContentData {
+  const stored = localStorage.getItem('content');
+  return stored ? (JSON.parse(stored) as ContentData) : defaultData;
+}
+
+export function saveContent(data: ContentData) {
+  localStorage.setItem('content', JSON.stringify(data));
+}
+
+export default defaultData;

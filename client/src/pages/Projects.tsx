@@ -1,19 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { loadContent, Project } from '../content';
 
-interface Project {
-  id: number;
-  titleKey: string;
-  descriptionKey: string;
-  image: string;
-  category: string;
-}
-
-const projects: Project[] = [
-  { id: 1, titleKey: 'project_modern_villa', descriptionKey: 'project_modern_villa_desc', image: '/images/project1.jpg', category: 'glass' },
-  { id: 2, titleKey: 'project_office_center', descriptionKey: 'project_office_center_desc', image: '/images/project2.jpg', category: 'pvc' },
-  { id: 3, titleKey: 'project_shopping_mall', descriptionKey: 'project_shopping_mall_desc', image: '/images/project3.jpg', category: 'balcony' }
-];
+const projects: Project[] = loadContent().projects;
 
 export default function Projects() {
   const { t } = useTranslation();
