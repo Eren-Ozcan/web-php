@@ -3,6 +3,8 @@ import cors from 'cors';
 import { readFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,14 +20,39 @@ function saveJson(file, data) {
   writeFileSync(join(dataDir, file), JSON.stringify(data, null, 2));
 }
 
+function verifyPassword(password, stored) {
+  const [salt, hash] = stored.split(':');
+  const hashed = crypto
+    .pbkdf2Sync(password, salt, 10000, 64, 'sha512')
+    .toString('hex');
+  return hashed === hash;
+}
+
 let contentData = loadJson('content.json');
 let translationsData = {
   en: loadJson('en.json'),
   tr: loadJson('tr.json')
 };
+let users = loadJson('users.json');
 
 app.use(cors());
 app.use(express.json());
+
+const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find((u) => u.username === username);
+  if (!user || !verifyPassword(password, user.passwordHash)) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+  const token = jwt.sign(
+    { id: user.id, username: user.username },
+    JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+  res.json({ token });
+});
 
 app.get('/', (req, res) => {
   res.send('Sunucu çalışıyor ✅');

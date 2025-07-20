@@ -46,3 +46,17 @@ Vite will start the client on `http://localhost:5173` (or the next available por
 
 No automated tests are currently defined. The `npm test` command in both the client and server simply prints a message so the command does not fail by default.
 
+## Login API
+
+The server now exposes a simple `/api/login` endpoint for obtaining a JWT. A default
+admin user is stored in `server/data/users.json` with username `admin` and password
+`mypassword123`.
+
+Example request:
+
+```bash
+curl -X POST http://localhost:5000/api/login \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"admin","password":"mypassword123"}'
+```
+
