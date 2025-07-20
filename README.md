@@ -50,13 +50,23 @@ No automated tests are currently defined. The `npm test` command in both the cli
 
 The backend now uses **MySQL** for authentication. A sample SQL script is provided in `server/init_db.sql` to create the `mefaalum_wp289` database and an initial admin user.
 
-Update the following environment variables if needed:
+Update the following environment variables if needed. These values should match the MySQL user that has access to the database (see the next subsection):
 
 ```
 DB_HOST=localhost
 DB_USER=admin
 DB_PASS=merhaba123
 DB_NAME=mefaalum_wp289
+```
+
+### Create the admin database user
+
+Before running the initialization script you need a MySQL user with privileges on the `mefaalum_wp289` database. As `root`, run:
+
+```sql
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'merhaba123';
+GRANT ALL PRIVILEGES ON mefaalum_wp289.* TO 'admin'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
 Run the script with phpMyAdmin or the MySQL CLI:
