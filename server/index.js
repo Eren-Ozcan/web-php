@@ -43,8 +43,11 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   const user = users.find((u) => u.username === username);
-  if (!user || !verifyPassword(password, user.passwordHash)) {
-    return res.status(401).json({ error: 'Invalid credentials' });
+  if (!user) {
+    return res.status(401).json({ error: 'User not found' });
+  }
+  if (!verifyPassword(password, user.passwordHash)) {
+    return res.status(401).json({ error: 'Password incorrect' });
   }
   const token = jwt.sign(
     { id: user.id, username: user.username },
