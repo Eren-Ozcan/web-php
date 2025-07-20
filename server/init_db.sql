@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS mefaalum_wp289;
 USE mefaalum_wp289;
 
 CREATE TABLE IF NOT EXISTS users (
