@@ -2,33 +2,9 @@ import { useEffect, useState } from 'react';
 import api from '../api';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { loadContent, Project, Review } from '../content';
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-}
-
-interface Review {
-  id: number;
-  title: string;
-  text: string;
-  image: string;
-  category: string;
-}
-
-const projectData: Project[] = [
-  { id: 1, title: 'project_modern_villa', description: 'project_modern_villa_desc', image: '/images/project1.jpg', category: 'glass' },
-  { id: 2, title: 'project_office_center', description: 'project_office_center_desc', image: '/images/project2.jpg', category: 'pvc' },
-  { id: 3, title: 'project_shopping_mall', description: 'project_shopping_mall_desc', image: '/images/project3.jpg', category: 'balcony' }
-];
-
-const reviewData: Review[] = [
-  { id: 1, title: 'product_cam', text: 'product_cam_desc', image: '/images/cam.jpg', category: 'glass' },
-  { id: 2, title: 'product_pimapen', text: 'product_pimapen_desc', image: '/images/pimapen.jpg', category: 'pvc' }
-];
+const { projects: projectData, reviews: reviewData } = loadContent();
 
 export default function About() {
   const { t } = useTranslation();

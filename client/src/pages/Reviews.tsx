@@ -1,18 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { loadContent, Review } from '../content';
 
-interface Review {
-  id: number;
-  titleKey: string;
-  textKey: string;
-  image: string;
-  category: string;
-}
-
-const reviews: Review[] = [
-  { id: 1, titleKey: 'product_cam', textKey: 'product_cam_desc', image: '/images/cam.jpg', category: 'glass' },
-  { id: 2, titleKey: 'product_pimapen', textKey: 'product_pimapen_desc', image: '/images/pimapen.jpg', category: 'pvc' }
-];
+const reviews: Review[] = loadContent().reviews;
 
 export default function Reviews() {
   const { t } = useTranslation();
