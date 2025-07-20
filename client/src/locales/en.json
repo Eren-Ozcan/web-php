@@ -84,5 +84,15 @@
   "project_shopping_mall": "Shopping Mall",
   "project_modern_villa_desc": "Large scale glass installation",
   "project_office_center_desc": "PVC window replacement",
-  "project_shopping_mall_desc": "Curtain wall facade"
+  "project_shopping_mall_desc": "Curtain wall facade",
+  "filter_door": "Door",
+  "filter_garden": "Garden",
+  "filter_office": "Office",
+  "filter_facade": "Facade",
+  "product_glass": "Glass Solutions",
+  "product_doors": "Door Systems",
+  "product_balcony": "Balcony Systems",
+  "product_garden": "Garden Solutions",
+  "product_office": "Office Partitions",
+  "product_facade": "Facade Systems"
 }

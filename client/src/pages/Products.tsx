@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface Product {
   id: number;
@@ -10,15 +10,25 @@ interface Product {
 }
 
 const products: Product[] = [
-  { id: 1, titleKey: 'product_tempered_glass', image: '/images/cam.jpg', category: 'glass' },
-  { id: 2, titleKey: 'product_pvc_window', image: '/images/pimapen.jpg', category: 'pvc' },
-  { id: 3, titleKey: 'product_balcony_system', image: '/images/project3.jpg', category: 'balcony' }
+  { id: 1, titleKey: 'product_glass', image: '/images/cam.jpg', category: 'glass' },
+  { id: 2, titleKey: 'product_doors', image: '/images/project1.jpg', category: 'door' },
+  { id: 3, titleKey: 'product_balcony', image: '/images/project3.jpg', category: 'balcony' },
+  { id: 4, titleKey: 'product_garden', image: '/images/house3.jpg', category: 'garden' },
+  { id: 5, titleKey: 'product_office', image: '/images/project2.jpg', category: 'office' },
+  { id: 6, titleKey: 'product_facade', image: '/images/house2.jpg', category: 'exterior' }
 ];
 
 export default function Products() {
   const { t } = useTranslation();
+  const params = useParams<{ category?: string }>();
   const [filter, setFilter] = useState('all');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (params.category) {
+      setFilter(params.category);
+    }
+  }, [params.category]);
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
@@ -28,7 +38,7 @@ export default function Products() {
     <section className="p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">{t('products')}</h1>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', 'glass', 'pvc', 'balcony'].map((f) => (
+        {['all', 'glass', 'door', 'balcony', 'garden', 'office', 'exterior'].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}

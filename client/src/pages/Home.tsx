@@ -20,17 +20,17 @@ const Home: React.FC = () => {
     {
       image: '/images/house1.jpg',
       hotspots: [
-        { x: 15, y: 20, label: '1', route: '/urunler/cam', tooltip: t('glass') },
-        { x: 30, y: 40, label: '2', route: '/urunler/kapilar', tooltip: t('door') },
-        { x: 60, y: 45, label: '3', route: '/urunler/balkon', tooltip: t('balcony') }
+        { x: 15, y: 20, label: '1', route: '/urunler/glass', tooltip: t('glass') },
+        { x: 30, y: 40, label: '2', route: '/urunler/door', tooltip: t('door') },
+        { x: 60, y: 45, label: '3', route: '/urunler/balcony', tooltip: t('balcony') }
       ]
     },
     {
       image: '/images/house2.jpg',
       hotspots: [
-        { x: 20, y: 30, label: '4', route: '/urunler/bahce', tooltip: t('garden') },
-        { x: 45, y: 55, label: '5', route: '/urunler/ofis', tooltip: t('office') },
-        { x: 70, y: 65, label: '6', route: '/urunler/cephe', tooltip: t('exterior') }
+        { x: 20, y: 30, label: '4', route: '/urunler/garden', tooltip: t('garden') },
+        { x: 45, y: 55, label: '5', route: '/urunler/office', tooltip: t('office') },
+        { x: 70, y: 65, label: '6', route: '/urunler/exterior', tooltip: t('exterior') }
       ]
     }
   ];
