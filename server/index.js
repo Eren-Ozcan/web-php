@@ -5,6 +5,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import { pool } from './db.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,28 +34,36 @@ let translationsData = {
   en: loadJson('en.json'),
   tr: loadJson('tr.json')
 };
-let users = loadJson('users.json');
 
 app.use(cors());
 app.use(express.json());
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  const user = users.find((u) => u.username === username);
-  if (!user) {
-    return res.status(401).json({ error: 'User not found' });
+  try {
+    const [rows] = await pool.query(
+      'SELECT id, username, passwordHash FROM users WHERE username = ?',
+      [username]
+    );
+    const user = rows[0];
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+    if (!verifyPassword(password, user.passwordHash)) {
+      return res.status(401).json({ error: 'Password incorrect' });
+    }
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    res.json({ token });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ error: 'Database error' });
   }
-  if (!verifyPassword(password, user.passwordHash)) {
-    return res.status(401).json({ error: 'Password incorrect' });
-  }
-  const token = jwt.sign(
-    { id: user.id, username: user.username },
-    JWT_SECRET,
-    { expiresIn: '1h' }
-  );
-  res.json({ token });
 });
 
 app.get('/', (req, res) => {
