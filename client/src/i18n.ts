@@ -3,11 +3,19 @@ import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import tr from './locales/tr.json';
 
+// Allow overriding translations via localStorage so the admin page can persist
+// updates across reloads. If no overrides exist, fall back to the bundled JSON
+// files.
+const stored = localStorage.getItem('translations');
+const resources = stored
+  ? (JSON.parse(stored) as Record<string, { translation: Record<string, string> }>)
+  : {
+      en: { translation: en },
+      tr: { translation: tr }
+    };
+
 i18n.use(initReactI18next).init({
-  resources: {
-    en: { translation: en },
-    tr: { translation: tr }
-  },
+  resources,
   lng: 'tr', // Default to Turkish
   fallbackLng: 'en',
   interpolation: { escapeValue: false }
