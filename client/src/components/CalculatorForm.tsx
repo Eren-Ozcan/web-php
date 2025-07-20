@@ -143,7 +143,7 @@ export default function CalculatorForm() {
                   setOptions({ ...options, [key]: e.target.checked })
                 }
               />
-              <span>{val.label}</span>
+              <span>{t(val.label)}</span>
             </label>
           ))}
         </div>

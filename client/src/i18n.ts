@@ -7,12 +7,18 @@ import tr from './locales/tr.json';
 // updates across reloads. If no overrides exist, fall back to the bundled JSON
 // files.
 const stored = localStorage.getItem('translations');
-const resources = stored
-  ? (JSON.parse(stored) as Record<string, { translation: Record<string, string> }>)
-  : {
-      en: { translation: en },
-      tr: { translation: tr }
-    };
+let overrides: Record<string, { translation: Record<string, string> }> | null = null;
+if (stored) {
+  try {
+    overrides = JSON.parse(stored);
+  } catch {
+    overrides = null;
+  }
+}
+const resources = {
+  en: { translation: { ...en, ...(overrides?.en?.translation || {}) } },
+  tr: { translation: { ...tr, ...(overrides?.tr?.translation || {}) } }
+};
 
 i18n.use(initReactI18next).init({
   resources,
