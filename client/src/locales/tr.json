@@ -36,6 +36,8 @@
   "login": "Giriş",
   "login_error": "Şifre yanlış",
   "login_success": "Giriş başarılı",
+  "user_not_found": "Kullanıcı bulunamadı",
+  "password_incorrect": "Şifre yanlış",
   "contact": "İletişim",
   "contact_email_label": "E-posta",
   "contact_email_placeholder": "E-posta adresinizi girin",

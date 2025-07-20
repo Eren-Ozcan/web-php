@@ -36,6 +36,8 @@
   "login": "Login",
   "login_error": "Incorrect password",
   "login_success": "Login successful",
+  "user_not_found": "User not found",
+  "password_incorrect": "Password incorrect",
   "contact": "Contact",
   "contact_email_label": "Email",
   "contact_email_placeholder": "Enter your email address",
