@@ -9,10 +9,10 @@ This project is a corporate showcase website for a company that sells glass, PVC
 ## 🔹 TECH STACK & STRUCTURE
 
 * **Frontend:** React + TypeScript + TailwindCSS + shadcn/ui
-* **Backend:** Express + PostgreSQL
+* **Backend:** Express + MySQL
 * **Language Support:** Turkish and English (via i18next)
 * **Admin Panel:** Custom SPA in React
-* **Hosting:** cPanel (with PostgreSQL support)
+* **Hosting:** cPanel (with MySQL support)
 * **Image Management:** Initially local storage, later via Cloudinary
 * **Design:** Fully responsive, mobile-friendly, and clean modern UI
 
