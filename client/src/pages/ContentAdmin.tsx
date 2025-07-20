@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
-import { loadContent, saveContent, ContentData } from '../content';
+import {
+  loadContent,
+  saveContent,
+  ContentData,
+  BlogPost,
+  Project,
+  Review,
+  Product
+} from '../content';
 
 const ContentAdmin: React.FC = () => {
-  const languages = Object.keys(i18n.options.resources || {});
-  const [lang, setLang] = useState<string>(i18n.language);
+  const { t, i18n: i18next } = useTranslation();
+  const languages = Object.keys(i18next.options.resources || {});
+  const [lang, setLang] = useState<string>(i18next.language);
   const [content, setContent] = useState<ContentData>(loadContent());
   const [section, setSection] = useState<
     'blogs' | 'projects' | 'reviews' | 'products' | 'basic' | 'categories'
@@ -13,8 +23,20 @@ const ContentAdmin: React.FC = () => {
     'blogs'
   );
 
+  useEffect(() => {
+    i18next.changeLanguage(lang);
+  }, [lang, i18next]);
+
+  useEffect(() => {
+    const handler = (l: string) => setLang(l);
+    i18next.on('languageChanged', handler);
+    return () => {
+      i18next.off('languageChanged', handler);
+    };
+  }, [i18next]);
+
   const updateTranslation = (key: string, value: string) => {
-    i18n.addResource(lang, 'translation', key, value);
+    i18next.addResource(lang, 'translation', key, value);
   };
 
   const entries =
@@ -40,16 +62,13 @@ const ContentAdmin: React.FC = () => {
     const id = Date.now();
     const titleKey = `${section}_title_${id}`;
     const textKey = `${section}_text_${id}`;
-    const newItem: any = { id, titleKey };
-    if (section === 'projects') newItem.descriptionKey = textKey;
-    if (section === 'blogs') newItem.textKey = textKey;
-    if (section === 'reviews') newItem.textKey = textKey;
-    if (section === 'products') {
-      newItem.image = '';
-    } else {
-      newItem.image = '';
-    }
-    newItem.category = categoryOptions[0] || 'all';
+    const newItem = {
+      id,
+      titleKey,
+      textKey: section !== 'products' ? textKey : undefined,
+      image: '',
+      category: ''
+    };
     updateTranslation(titleKey, '');
     if (newItem.textKey) updateTranslation(newItem.textKey, '');
     setEntries([...entries, newItem]);
@@ -76,14 +95,14 @@ const ContentAdmin: React.FC = () => {
   const saveAll = () => {
     saveContent(content);
     localStorage.setItem('translations', JSON.stringify(i18n.store.data));
-    alert('Saved');
+    alert(t('admin_saved'));
   };
 
   return (
     <div className="p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Content Admin</h1>
+      <h1 className="text-2xl font-bold">{t('admin_title')}</h1>
       <div className="space-x-2">
-        <label className="font-semibold">Language:</label>
+        <label className="font-semibold">{t('admin_language')}:</label>
         <select value={lang} onChange={(e) => setLang(e.target.value)} className="border p-1">
           {languages.map((l) => (
             <option key={l} value={l}>
@@ -99,19 +118,18 @@ const ContentAdmin: React.FC = () => {
             onClick={() => setSection(s as any)}
             className={`px-3 py-1 rounded ${section === s ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {s}
+            {t(s)}
           </button>
         ))}
       </div>
-
       {section === 'basic' ? (
         <div className="space-y-2">
           {['mission_text', 'vision_text', 'values_text'].map((k) => (
             <div key={k} className="flex items-center space-x-2">
-              <label className="w-32 font-semibold">{k}</label>
+              <label className="w-32 font-semibold">{t(k)}</label>
               <input
                 className="border p-1 flex-1"
-                value={i18n.t(k, { lng: lang })}
+                value={t(k)}
                 onChange={(e) => updateTranslation(k, e.target.value)}
               />
             </div>
@@ -126,15 +144,15 @@ const ContentAdmin: React.FC = () => {
                 onClick={() => setCatSection(s)}
                 className={`px-2 py-1 rounded ${catSection === s ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
               >
-                {s}
+                {t(s)}
               </button>
             ))}
           </div>
           <table className="w-full border mb-2">
             <thead>
               <tr className="text-left">
-                <th className="border p-2">Category</th>
-                <th className="border p-2">Actions</th>
+                <th className="border p-2">{t('admin_category')}</th>
+                <th className="border p-2">{t('admin_actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -168,7 +186,7 @@ const ContentAdmin: React.FC = () => {
                       }}
                       className="bg-red-500 text-white px-2 py-1 rounded"
                     >
-                      Delete
+                      {t('admin_delete')}
                     </button>
                   </td>
                 </tr>
@@ -185,18 +203,18 @@ const ContentAdmin: React.FC = () => {
             }}
             className="bg-blue-500 text-white px-3 py-1 rounded"
           >
-            Add Category
+            {t('admin_add_category')}
           </button>
         </div>
       ) : (
         <table className="w-full border">
           <thead>
             <tr className="text-left">
-              <th className="border p-2">Title</th>
-              {section !== 'products' && <th className="border p-2">Text</th>}
-              <th className="border p-2">Image</th>
-              <th className="border p-2">Category</th>
-              <th className="border p-2">Actions</th>
+              <th className="border p-2">{t('admin_title_label')}</th>
+              {section !== 'products' && <th className="border p-2">{t('admin_text')}</th>}
+              <th className="border p-2">{t('admin_image')}</th>
+              <th className="border p-2">{t('admin_category')}</th>
+              <th className="border p-2">{t('admin_actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -205,7 +223,7 @@ const ContentAdmin: React.FC = () => {
                 <td className="border p-2">
                   <input
                     className="border p-1 w-full"
-                    value={i18n.t(item.titleKey, { lng: lang })}
+                    value={t(item.titleKey)}
                     onChange={(e) => handleChange(idx, 'title', e.target.value)}
                   />
                 </td>
@@ -213,7 +231,7 @@ const ContentAdmin: React.FC = () => {
                   <td className="border p-2">
                     <input
                       className="border p-1 w-full"
-                      value={item.textKey ? i18n.t(item.textKey, { lng: lang }) : ''}
+                      value={item.textKey ? t(item.textKey) : ''}
                       onChange={(e) => handleChange(idx, 'text', e.target.value)}
                     />
                   </td>
@@ -243,7 +261,7 @@ const ContentAdmin: React.FC = () => {
                     onClick={() => removeEntry(item.id)}
                     className="bg-red-500 text-white px-2 py-1 rounded"
                   >
-                    Delete
+                    {t('admin_delete')}
                   </button>
                 </td>
               </tr>
@@ -254,11 +272,11 @@ const ContentAdmin: React.FC = () => {
       <div className="space-x-2">
         {section !== 'basic' && section !== 'categories' && (
           <button onClick={addEntry} className="bg-blue-500 text-white px-3 py-1 rounded">
-            Add
+            {t('admin_add')}
           </button>
         )}
         <button onClick={saveAll} className="bg-green-600 text-white px-3 py-1 rounded">
-          Save All
+          {t('admin_save_all')}
         </button>
       </div>
     </div>
