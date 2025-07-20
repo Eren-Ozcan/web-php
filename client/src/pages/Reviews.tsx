@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { loadContent, Review } from '../content';
 
-const reviews: Review[] = loadContent().reviews;
+const content = loadContent();
+const reviews: Review[] = content.reviews;
+const reviewCategories = content.categories.reviews;
 
 export default function Reviews() {
   const { t } = useTranslation();
@@ -14,7 +16,7 @@ export default function Reviews() {
     <section className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">{t('reviews')}</h1>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', 'glass', 'pvc'].map((f) => (
+        {['all', ...reviewCategories].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}

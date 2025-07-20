@@ -28,11 +28,19 @@ export interface Product {
   category: string;
 }
 
+export interface Categories {
+  blogs: string[];
+  projects: string[];
+  reviews: string[];
+  products: string[];
+}
+
 export interface ContentData {
   blogs: BlogPost[];
   projects: Project[];
   reviews: Review[];
   products: Product[];
+  categories: Categories;
 }
 
 const defaultData: ContentData = {
@@ -87,7 +95,13 @@ const defaultData: ContentData = {
     { id: 4, titleKey: 'product_garden', image: '/images/house3.jpg', category: 'garden' },
     { id: 5, titleKey: 'product_office', image: '/images/project2.jpg', category: 'office' },
     { id: 6, titleKey: 'product_facade', image: '/images/house2.jpg', category: 'facade' }
-  ]
+  ],
+  categories: {
+    blogs: ['news', 'tips'],
+    projects: ['glass', 'pvc', 'balcony'],
+    reviews: ['glass', 'pvc'],
+    products: ['glass', 'door', 'balcony', 'garden', 'office', 'facade']
+  }
 };
 
 export function loadContent(): ContentData {

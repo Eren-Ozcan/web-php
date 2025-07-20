@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { loadContent, Product } from '../content';
 
-const products: Product[] = loadContent().products;
+const content = loadContent();
+const products: Product[] = content.products;
+const productCategories = content.categories.products;
 
 export default function Products() {
   const { t } = useTranslation();
@@ -25,7 +27,7 @@ export default function Products() {
     <section className="p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">{t('products')}</h1>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', 'glass', 'door', 'balcony', 'garden', 'office', 'facade'].map((f) => (
+        {['all', ...productCategories].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
