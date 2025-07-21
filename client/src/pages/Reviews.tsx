@@ -4,11 +4,11 @@ import { Review } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Reviews() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
   const [filter, setFilter] = useState('all');
   const reviews: Review[] = content.reviews;
-  const reviewCategories = content.categories.reviews;
+  const reviewCategories = content.categories.reviews[i18n.language] || [];
 
   const filtered = filter === 'all' ? reviews : reviews.filter((r) => r.category === filter);
 

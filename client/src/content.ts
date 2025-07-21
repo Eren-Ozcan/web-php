@@ -28,11 +28,16 @@ export interface Product {
   category: string;
 }
 
+export interface CategoryList {
+  en: string[];
+  tr: string[];
+}
+
 export interface Categories {
-  blogs: string[];
-  projects: string[];
-  reviews: string[];
-  products: string[];
+  blogs: CategoryList;
+  projects: CategoryList;
+  reviews: CategoryList;
+  products: CategoryList;
 }
 
 export interface ContentData {
@@ -97,10 +102,13 @@ const defaultData: ContentData = {
     { id: 6, titleKey: 'product_facade', image: '/images/house2.jpg', category: 'facade' }
   ],
   categories: {
-    blogs: ['news', 'tips'],
-    projects: ['glass', 'pvc', 'balcony'],
-    reviews: ['glass', 'pvc'],
-    products: ['glass', 'door', 'balcony', 'garden', 'office', 'facade']
+    blogs: { en: ['news', 'tips'], tr: ['news', 'tips'] },
+    projects: { en: ['glass', 'pvc', 'balcony'], tr: ['glass', 'pvc', 'balcony'] },
+    reviews: { en: ['glass', 'pvc'], tr: ['glass', 'pvc'] },
+    products: {
+      en: ['glass', 'door', 'balcony', 'garden', 'office', 'facade'],
+      tr: ['glass', 'door', 'balcony', 'garden', 'office', 'facade']
+    }
   }
 };
 
@@ -110,6 +118,15 @@ export function loadContent(): ContentData {
     try {
       const data = JSON.parse(stored);
       if (data && typeof data === 'object' && 'blogs' in data) {
+        const cat = (data as any).categories;
+        if (cat && Array.isArray(cat.blogs)) {
+          (data as any).categories = {
+            blogs: { en: cat.blogs, tr: cat.blogs },
+            projects: { en: cat.projects, tr: cat.projects },
+            reviews: { en: cat.reviews, tr: cat.reviews },
+            products: { en: cat.products, tr: cat.products }
+          };
+        }
         return data as ContentData;
       }
     } catch {

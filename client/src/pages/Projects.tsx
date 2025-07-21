@@ -4,11 +4,11 @@ import { Project } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Projects() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
   const [filter, setFilter] = useState('all');
   const projects: Project[] = content.projects;
-  const projectCategories = content.categories.projects;
+  const projectCategories = content.categories.projects[i18n.language] || [];
 
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter);
 
