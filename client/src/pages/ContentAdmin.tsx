@@ -299,10 +299,7 @@ const ContentAdmin: React.FC = () => {
                           features: updatedFeatures
                         });
                       }}
-                      className="text-blue-600 underline"
-                    >
-                      {t('admin_rename')}
-                    </button>
+                      />
                   </td>
                   <td className="border p-2">
                     <input
