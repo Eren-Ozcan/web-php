@@ -1,14 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { BlogPost } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Blogs() {
   const { t, i18n } = useTranslation();
   const { content } = useContent();
-  const [filter, setFilter] = useState('all');
+  const location = useLocation();
   const navigate = useNavigate();
+  const [filter, setFilter] = useState((location.state as any)?.filter ?? 'all');
+
+  useEffect(() => {
+    if ((location.state as any)?.filter !== filter) {
+      navigate('.', { replace: true, state: { filter } });
+    }
+  }, [filter]);
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
   const posts: BlogPost[] = content.blogs;
@@ -38,7 +45,9 @@ export default function Blogs() {
         {filtered.map((post) => (
           <div
             key={post.id}
-            onClick={() => navigate(`/article/${toSlug(t(post.titleKey))}`)}
+            onClick={() =>
+              navigate(`/article/${toSlug(t(post.titleKey))}`, { state: { filter } })
+            }
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
             {post.image && (

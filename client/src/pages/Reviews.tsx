@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Review } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Reviews() {
   const { t, i18n } = useTranslation();
   const { content } = useContent();
-  const [filter, setFilter] = useState('all');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [filter, setFilter] = useState((location.state as any)?.filter ?? 'all');
+
+  useEffect(() => {
+    if ((location.state as any)?.filter !== filter) {
+      navigate('.', { replace: true, state: { filter } });
+    }
+  }, [filter]);
+
   const reviews: Review[] = content.reviews;
   const reviewCategories = content.categories.reviews[i18n.language] || [];
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Product } from '../content';
 import { useContent } from '../ContentContext';
 
@@ -8,16 +8,12 @@ export default function Products() {
   const { t, i18n } = useTranslation();
   const { content } = useContent();
   const params = useParams<{ category?: string }>();
-  const [filter, setFilter] = useState('all');
-
-  // keep last filter during navigation
-  useEffect(() => {
-    const stored = sessionStorage.getItem('productFilter');
-    if (!params.category && stored) {
-      setFilter(stored);
-    }
-  }, []);
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const initialFilter =
+    params.category ?? (location.state as any)?.filter ?? 'all';
+  const [filter, setFilter] = useState(initialFilter);
 
   useEffect(() => {
     if (params.category) {
@@ -26,7 +22,9 @@ export default function Products() {
   }, [params.category]);
 
   useEffect(() => {
-    sessionStorage.setItem('productFilter', filter);
+    if ((location.state as any)?.filter !== filter) {
+      navigate('.', { replace: true, state: { filter } });
+    }
   }, [filter]);
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
@@ -58,7 +56,9 @@ export default function Products() {
         {filtered.map((p) => (
           <div
             key={p.id}
-            onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
+            onClick={() =>
+              navigate(`/article/${toSlug(t(p.titleKey))}`, { state: { filter } })
+            }
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
             <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />
