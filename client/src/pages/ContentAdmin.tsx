@@ -13,6 +13,11 @@ const ContentAdmin: React.FC = () => {
   const [content, setContent] = useState<ContentData>(loadContent());
   const [pricing, setPricing] = useState<PricingConfig>(loadPricing());
   const [productNameEdits, setProductNameEdits] = useState<Record<string, string>>({});
+  const [basicTexts, setBasicTexts] = useState({
+    mission_text: t('mission_text'),
+    vision_text: t('vision_text'),
+    values_text: t('values_text'),
+  });
   const { setContent: setGlobalContent } = useContent();
 
   useEffect(() => {
@@ -33,6 +38,11 @@ const ContentAdmin: React.FC = () => {
             i18next.addResource(lng, 'translation', k, v);
           });
         });
+        setBasicTexts({
+          mission_text: i18next.t('mission_text'),
+          vision_text: i18next.t('vision_text'),
+          values_text: i18next.t('values_text'),
+        });
       } catch (err) {
         console.error('Failed to load admin data', err);
       }
@@ -49,6 +59,11 @@ const ContentAdmin: React.FC = () => {
   useEffect(() => {
     i18next.changeLanguage(lang);
     localStorage.setItem('language', lang);
+    setBasicTexts({
+      mission_text: i18next.t('mission_text'),
+      vision_text: i18next.t('vision_text'),
+      values_text: i18next.t('values_text'),
+    });
   }, [lang, i18next]);
 
   useEffect(() => {
@@ -86,16 +101,20 @@ const ContentAdmin: React.FC = () => {
     const id = Date.now();
     const titleKey = `${section}_title_${id}`;
     const textKey = `${section}_text_${id}`;
-    const newItem = {
+    const newItem: any = {
       id,
       titleKey,
-      textKey: section !== 'products' ? textKey : undefined,
       image: '',
       category: '',
       ...(section === 'projects' ? { featured: false } : {})
     };
+    if (section === 'products') {
+      newItem.descriptionKey = textKey;
+    } else {
+      newItem.textKey = textKey;
+    }
     updateTranslation(titleKey, '');
-    if (newItem.textKey) updateTranslation(newItem.textKey, '');
+    updateTranslation(textKey, '');
     setEntries([...entries, newItem]);
   };
 
@@ -108,8 +127,9 @@ const ContentAdmin: React.FC = () => {
     const item: any = { ...newEntries[index] };
     if (field === 'title') {
       updateTranslation(item.titleKey, value);
-    } else if (field === 'text' && item.textKey) {
-      updateTranslation(item.textKey, value);
+    } else if (field === 'text') {
+      const key = item.textKey || item.descriptionKey;
+      if (key) updateTranslation(key, value);
     } else {
       item[field] = value;
     }
@@ -172,8 +192,12 @@ const ContentAdmin: React.FC = () => {
               <label className="w-32 font-semibold">{t(k)}</label>
               <input
                 className="border p-1 flex-1"
-                value={t(k)}
-                onChange={(e) => updateTranslation(k, e.target.value)}
+                value={(basicTexts as any)[k]}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  updateTranslation(k, val);
+                  setBasicTexts((prev) => ({ ...prev, [k]: val }));
+                }}
               />
             </div>
           ))}
@@ -460,7 +484,7 @@ const ContentAdmin: React.FC = () => {
           <thead>
             <tr className="text-left">
               <th className="border p-2">{t('admin_title_label')}</th>
-              {section !== 'products' && <th className="border p-2">{t('admin_text')}</th>}
+              <th className="border p-2">{t('admin_text')}</th>
               <th className="border p-2">{t('admin_image')}</th>
               <th className="border p-2">{t('admin_category')}</th>
               {section === 'projects' && (
@@ -479,15 +503,19 @@ const ContentAdmin: React.FC = () => {
                     onChange={(e) => handleChange(idx, 'title', e.target.value)}
                   />
                 </td>
-                {section !== 'products' && (
-                  <td className="border p-2">
-                    <input
-                      className="border p-1 w-full"
-                      value={item.textKey ? t(item.textKey) : ''}
-                      onChange={(e) => handleChange(idx, 'text', e.target.value)}
-                    />
-                  </td>
-                )}
+                <td className="border p-2">
+                  <input
+                    className="border p-1 w-full"
+                    value={
+                      item.textKey
+                        ? t(item.textKey)
+                        : item.descriptionKey
+                          ? t(item.descriptionKey)
+                          : ''
+                    }
+                    onChange={(e) => handleChange(idx, 'text', e.target.value)}
+                  />
+                </td>
                 <td className="border p-2">
                   <label className="bg-blue-600 text-white px-3 py-1 rounded cursor-pointer inline-block">
                     {t('choose_file')}

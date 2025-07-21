@@ -22,7 +22,10 @@ export default function Projects() {
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}` as any)}
+            {(() => {
+              const label = t(`filter_${f}` as any);
+              return label.startsWith('filter_') ? f : label;
+            })()}
           </button>
         ))}
       </div>
