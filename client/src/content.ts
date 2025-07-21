@@ -3,6 +3,7 @@ export interface BlogPost {
   titleKey: string;
   category: string;
   textKey: string;
+  image: string;
 }
 
 export interface Project {
@@ -11,6 +12,7 @@ export interface Project {
   descriptionKey: string;
   image: string;
   category: string;
+  featured?: boolean;
 }
 
 export interface Review {
@@ -50,9 +52,27 @@ export interface ContentData {
 
 const defaultData: ContentData = {
   blogs: [
-    { id: 1, titleKey: 'blog1', category: 'news', textKey: 'article_lorem1' },
-    { id: 2, titleKey: 'blog2', category: 'tips', textKey: 'article_lorem2' },
-    { id: 3, titleKey: 'blog3', category: 'news', textKey: 'article_lorem3' }
+    {
+      id: 1,
+      titleKey: 'blog1',
+      category: 'news',
+      textKey: 'article_lorem1',
+      image: '/images/project1.jpg'
+    },
+    {
+      id: 2,
+      titleKey: 'blog2',
+      category: 'tips',
+      textKey: 'article_lorem2',
+      image: '/images/project2.jpg'
+    },
+    {
+      id: 3,
+      titleKey: 'blog3',
+      category: 'news',
+      textKey: 'article_lorem3',
+      image: '/images/project3.jpg'
+    }
   ],
   projects: [
     {
@@ -60,21 +80,24 @@ const defaultData: ContentData = {
       titleKey: 'project_modern_villa',
       descriptionKey: 'project_modern_villa_desc',
       image: '/images/project1.jpg',
-      category: 'glass'
+      category: 'glass',
+      featured: true
     },
     {
       id: 2,
       titleKey: 'project_office_center',
       descriptionKey: 'project_office_center_desc',
       image: '/images/project2.jpg',
-      category: 'pvc'
+      category: 'pvc',
+      featured: true
     },
     {
       id: 3,
       titleKey: 'project_shopping_mall',
       descriptionKey: 'project_shopping_mall_desc',
       image: '/images/project3.jpg',
-      category: 'balcony'
+      category: 'balcony',
+      featured: true
     }
   ],
   reviews: [
