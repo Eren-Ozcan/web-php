@@ -274,7 +274,36 @@ const ContentAdmin: React.FC = () => {
             <tbody>
               {Object.entries(pricing.products).map(([key, val]) => (
                 <tr key={key}>
-                  <td className="border p-2">{key}</td>
+                  <td className="border p-2 space-x-2">
+                    <span>{key}</span>
+                    <button
+                      onClick={() => {
+                        const newKey = prompt('product key', key);
+                        if (!newKey || newKey === key) return;
+                        const { [key]: val, ...rest } = pricing.products as any;
+                        const updatedProducts = { ...rest, [newKey]: val };
+                        const updatedFeatures = Object.fromEntries(
+                          Object.entries(pricing.features).map(([fKey, fVal]) => [
+                            fKey,
+                            {
+                              ...fVal,
+                              products: fVal.products.map((p) =>
+                                p === key ? newKey : p
+                              )
+                            }
+                          ])
+                        );
+                        setPricing({
+                          ...pricing,
+                          products: updatedProducts,
+                          features: updatedFeatures
+                        });
+                      }}
+                      className="text-blue-600 underline"
+                    >
+                      {t('admin_rename')}
+                    </button>
+                  </td>
                   <td className="border p-2">
                     <input
                       type="number"
