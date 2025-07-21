@@ -34,11 +34,29 @@ function verifyPassword(password, stored) {
 let contentData;
 let translationsData;
 
+async function ensureTables() {
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS content (
+      id INT PRIMARY KEY,
+      data JSON NOT NULL
+    )`
+  );
+  await pool.query(
+    `CREATE TABLE IF NOT EXISTS translations (
+      id INT PRIMARY KEY,
+      data JSON NOT NULL
+    )`
+  );
+  await pool.query("INSERT IGNORE INTO content (id, data) VALUES (1, '{}')");
+  await pool.query("INSERT IGNORE INTO translations (id, data) VALUES (1, '{}')");
+}
+
 async function loadData() {
   try {
     const [cRows] = await pool.query('SELECT data FROM content WHERE id = 1');
     if (cRows.length) {
-      contentData = cRows[0].data;
+      const row = cRows[0].data;
+      contentData = typeof row === 'string' ? JSON.parse(row) : row;
     } else {
       contentData = loadJson('content.json');
       await pool.query('INSERT INTO content (id, data) VALUES (1, ?)', [JSON.stringify(contentData)]);
@@ -46,7 +64,8 @@ async function loadData() {
 
     const [tRows] = await pool.query('SELECT data FROM translations WHERE id = 1');
     if (tRows.length) {
-      translationsData = tRows[0].data;
+     const row = tRows[0].data;
+      translationsData = typeof row === 'string' ? JSON.parse(row) : row;
     } else {
       translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
       await pool.query('INSERT INTO translations (id, data) VALUES (1, ?)', [JSON.stringify(translationsData)]);
@@ -177,6 +196,7 @@ app.post('/api/translations', async (req, res) => {
   }
 });
 
+await ensureTables();
 await loadData();
 
 app.listen(PORT, () => {

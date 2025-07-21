@@ -48,7 +48,7 @@ No automated tests are currently defined. The `npm test` command in both the cli
 
 ## Database Setup
 
-The backend now uses **MySQL** for authentication. A sample SQL script is provided in `server/init_db.sql` to create the `mefaalum_wp289` database and an initial admin user.
+The backend now uses **MySQL** for authentication. A sample SQL script is provided in `server/init_db.sql` to create the `mefaaluminyum_wp289` database and an initial admin user.
 
 Update the following environment variables if needed. These values should match the MySQL user that has access to the database (see the next subsection):
 
@@ -56,16 +56,16 @@ Update the following environment variables if needed. These values should match 
 DB_HOST=localhost
 DB_USER=admin
 DB_PASS=merhaba123
-DB_NAME=mefaalum_wp289
+DB_NAME=mefaaluminyum_wp289
 ```
 
 ### Create the admin database user
 
-Before running the initialization script you need a MySQL user with privileges on the `mefaalum_wp289` database. As `root`, run:
+Before running the initialization script you need a MySQL user with privileges on the `mefaaluminyum_wp289` database. As `root`, run:
 
 ```sql
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'merhaba123';
-GRANT ALL PRIVILEGES ON mefaalum_wp289.* TO 'admin'@'localhost';
+GRANT ALL PRIVILEGES ON mefaaluminyum_wp289.* TO 'admin'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
@@ -77,7 +77,9 @@ mysql -u admin -p < server/init_db.sql
 
 The script now also creates `content` and `translations` tables which store the
 website data edited from the admin panel. Any changes made in the admin
-interface are written to these tables so the site state persists in MySQL.
+interface are written to these tables so the site state persists in MySQL. The
+server will automatically create these tables on startup if they are missing,
+but running the script ensures they exist along with the default admin user.
 
 ## Login API
 
