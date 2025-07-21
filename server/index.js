@@ -130,6 +130,47 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Content API
+app.get('/api/content', (req, res) => {
+  res.json(contentData);
+});
+
+app.post('/api/content', async (req, res) => {
+  const data = req.body;
+  try {
+    contentData = data;
+    await pool.query('UPDATE content SET data = ? WHERE id = 1', [
+      JSON.stringify(contentData)
+    ]);
+    saveJson('content.json', contentData);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Failed to save content', err);
+    res.status(500).json({ error: 'Could not save content' });
+  }
+});
+
+// Translations API
+app.get('/api/translations', (req, res) => {
+  res.json(translationsData);
+});
+
+app.post('/api/translations', async (req, res) => {
+  const data = req.body;
+  try {
+    translationsData = data;
+    await pool.query('UPDATE translations SET data = ? WHERE id = 1', [
+      JSON.stringify(translationsData)
+    ]);
+    saveJson('en.json', translationsData.en);
+    saveJson('tr.json', translationsData.tr);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Failed to save translations', err);
+    res.status(500).json({ error: 'Could not save translations' });
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('Sunucu çalışıyor ✅');
 });
