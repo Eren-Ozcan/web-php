@@ -25,7 +25,10 @@ export default function Navbar() {
     <nav className="bg-blue-600 text-white">
       {/* Desktop Navbar */}
       <div className="hidden md:flex container mx-auto p-4 items-center justify-between">
-        <div className="flex space-x-6">
+        <div className="flex items-center space-x-6">
+          <Link to="/">
+            <img src="/images/logo.svg" alt="Logo" className="h-8 w-8 mr-4" />
+          </Link>
           {menuItems.map((item) => (
             <Link
               key={item.path}
@@ -61,6 +64,9 @@ export default function Navbar() {
       {/* Mobile Navbar */}
       <div className="md:hidden p-4">
         <div className="flex justify-between items-center">
+          <Link to="/">
+            <img src="/images/logo.svg" alt="Logo" className="h-8 w-8" />
+          </Link>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="text-white focus:outline-none"
