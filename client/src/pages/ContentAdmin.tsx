@@ -39,13 +39,7 @@ const ContentAdmin: React.FC = () => {
     fetchData();
   }, []);
   const [section, setSection] = useState<
-    | 'blogs'
-    | 'projects'
-    | 'reviews'
-    | 'products'
-    | 'basic'
-    | 'categories'
-    | 'pricing'
+    'blogs' | 'projects' | 'reviews' | 'products' | 'basic' | 'categories' | 'pricing'
   >('blogs');
   const [catSection, setCatSection] = useState<'blogs' | 'projects' | 'reviews' | 'products'>(
     'blogs'
@@ -85,8 +79,7 @@ const ContentAdmin: React.FC = () => {
     setContent(newContent);
   };
 
-  const categoryOptions =
-    ((content.categories as any)[section]?.[lang] as string[]) || [];
+  const categoryOptions = ((content.categories as any)[section]?.[lang] as string[]) || [];
 
   const addEntry = () => {
     const id = Date.now();
@@ -226,7 +219,9 @@ const ContentAdmin: React.FC = () => {
                   <td className="border p-2">
                     <button
                       onClick={() => {
-                        const list = content.categories[catSection][lang].filter((_, i) => i !== idx);
+                        const list = content.categories[catSection][lang].filter(
+                          (_, i) => i !== idx
+                        );
                         setContent({
                           ...content,
                           categories: {
@@ -275,21 +270,23 @@ const ContentAdmin: React.FC = () => {
               {Object.entries(pricing.products).map(([key, val]) => (
                 <tr key={key}>
                   <td className="border p-2 space-x-2">
-                    <span>{key}</span>
-                    <button
-                      onClick={() => {
-                        const newKey = prompt('product key', key);
-                        if (!newKey || newKey === key) return;
-                        const { [key]: val, ...rest } = pricing.products as any;
-                        const updatedProducts = { ...rest, [newKey]: val };
+                    {/* Ürün adı doğrudan input ile değiştiriliyor */}
+                    <input
+                      className="border p-1 w-full"
+                      value={key}
+                      onChange={(e) => {
+                        const newKey = e.target.value.trim();
+                        if (!newKey || newKey === key || pricing.products[newKey]) return;
+                        // Eski ürünü sil, yenisini ekle
+                        const { [key]: oldVal, ...rest } = pricing.products as any;
+                        const updatedProducts = { ...rest, [newKey]: oldVal };
+                        // Features içindeki product anahtarlarını da güncelle
                         const updatedFeatures = Object.fromEntries(
                           Object.entries(pricing.features).map(([fKey, fVal]) => [
                             fKey,
                             {
                               ...fVal,
-                              products: fVal.products.map((p) =>
-                                p === key ? newKey : p
-                              )
+                              products: fVal.products.map((p) => (p === key ? newKey : p))
                             }
                           ])
                         );
@@ -299,7 +296,7 @@ const ContentAdmin: React.FC = () => {
                           features: updatedFeatures
                         });
                       }}
-                      />
+                    />
                   </td>
                   <td className="border p-2">
                     <input
