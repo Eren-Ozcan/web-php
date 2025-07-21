@@ -20,9 +20,11 @@ const resources = {
   tr: { translation: { ...tr, ...(overrides?.tr?.translation || {}) } }
 };
 
+const storedLang = localStorage.getItem('language');
+
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'tr', // Default to Turkish
+  lng: storedLang || 'tr', // Default to Turkish if none stored
   fallbackLng: 'en',
   interpolation: { escapeValue: false }
 });
