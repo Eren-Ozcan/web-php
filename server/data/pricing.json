@@ -25,11 +25,11 @@
     }
   },
   "products": {
-    "pvc": {
-      "basePrice": 150
-    },
     "cam": {
       "basePrice": 100
+    },
+    "pvc": {
+      "basePrice": 150
     },
     "balkon": {
       "basePrice": 200
