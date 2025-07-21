@@ -12,6 +12,7 @@ const ContentAdmin: React.FC = () => {
   const [lang, setLang] = useState<string>(i18next.language);
   const [content, setContent] = useState<ContentData>(loadContent());
   const [pricing, setPricing] = useState<PricingConfig>(loadPricing());
+  const [productNameEdits, setProductNameEdits] = useState<Record<string, string>>({});
   const { setContent: setGlobalContent } = useContent();
 
   useEffect(() => {
@@ -271,17 +272,26 @@ const ContentAdmin: React.FC = () => {
               {Object.entries(pricing.products).map(([key, val]) => (
                 <tr key={key}>
                   <td className="border p-2 space-x-2">
-                    {/* Ürün adı doğrudan input ile değiştiriliyor */}
                     <input
                       className="border p-1 w-full"
-                      value={key}
-                      onChange={(e) => {
-                        const newKey = e.target.value.trim();
-                        if (!newKey || newKey === key || pricing.products[newKey]) return;
-                        // Eski ürünü sil, yenisini ekle
+                      value={productNameEdits[key] ?? key}
+                      onChange={(e) =>
+                        setProductNameEdits({
+                          ...productNameEdits,
+                          [key]: e.target.value
+                        })
+                      }
+                      onBlur={() => {
+                        const newKey = (productNameEdits[key] ?? key).trim();
+                        if (!newKey || newKey === key || pricing.products[newKey]) {
+                          setProductNameEdits((prev) => {
+                            const { [key]: _omit, ...rest } = prev;
+                            return rest;
+                          });
+                          return;
+                        }
                         const { [key]: oldVal, ...rest } = pricing.products as any;
                         const updatedProducts = { ...rest, [newKey]: oldVal };
-                        // Features içindeki product anahtarlarını da güncelle
                         const updatedFeatures = Object.fromEntries(
                           Object.entries(pricing.features).map(([fKey, fVal]) => [
                             fKey,
@@ -295,6 +305,10 @@ const ContentAdmin: React.FC = () => {
                           ...pricing,
                           products: updatedProducts,
                           features: updatedFeatures
+                        });
+                        setProductNameEdits((prev) => {
+                          const { [key]: _removed, ...rest } = prev;
+                          return rest;
                         });
                       }}
                     />
