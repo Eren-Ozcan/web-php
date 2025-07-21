@@ -79,7 +79,7 @@ export default function CalculatorForm() {
           value={product}
           onChange={(e) => setProduct(e.target.value)}
         >
-          {Object.keys(config.products).map((p) => (
+          {config.productOrder.map((p) => (
             <option key={p} value={p}>
               {p}
             </option>

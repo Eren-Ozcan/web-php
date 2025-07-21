@@ -268,13 +268,14 @@ const ContentAdmin: React.FC = () => {
                 <th className="border p-2">{t('admin_actions')}</th>
               </tr>
             </thead>
-            <tbody>
-              {Object.entries(pricing.products).map(([key, val]) => (
-                <tr key={key}>
-                  <td className="border p-2 space-x-2">
-                    <input
-                      className="border p-1 w-full"
-                      value={productNameEdits[key] ?? key}
+            <tbody>{pricing.productOrder.map((key) => {
+                const val = pricing.products[key];
+                return (
+                  <tr key={key}>
+                    <td className="border p-2 space-x-2">
+                      <input
+                        className="border p-1 w-full"
+                        value={productNameEdits[key] ?? key}
                       onChange={(e) =>
                         setProductNameEdits({
                           ...productNameEdits,
@@ -289,27 +290,30 @@ const ContentAdmin: React.FC = () => {
                             return rest;
                           });
                           return;
-                        }
-                        const { [key]: oldVal, ...rest } = pricing.products as any;
-                        const updatedProducts = { ...rest, [newKey]: oldVal };
-                        const updatedFeatures = Object.fromEntries(
-                          Object.entries(pricing.features).map(([fKey, fVal]) => [
-                            fKey,
-                            {
-                              ...fVal,
-                              products: fVal.products.map((p) => (p === key ? newKey : p))
-                            }
-                          ])
-                        );
-                        setPricing({
-                          ...pricing,
-                          products: updatedProducts,
-                          features: updatedFeatures
-                        });
-                        setProductNameEdits((prev) => {
-                          const { [key]: _removed, ...rest } = prev;
-                          return rest;
-                        });
+                        } const { [key]: oldVal, ...rest } = pricing.products as any;
+                          const updatedProducts = { ...rest, [newKey]: oldVal };
+                          const updatedFeatures = Object.fromEntries(
+                            Object.entries(pricing.features).map(([fKey, fVal]) => [
+                              fKey,
+                              {
+                                ...fVal,
+                                products: fVal.products.map((p) => (p === key ? newKey : p))
+                              }
+                            ])
+                          );
+                          const orderIndex = pricing.productOrder.indexOf(key);
+                          const newOrder = [...pricing.productOrder];
+                          if (orderIndex >= 0) newOrder[orderIndex] = newKey;
+                          setPricing({
+                            ...pricing,
+                            products: updatedProducts,
+                            features: updatedFeatures,
+                            productOrder: newOrder
+                          });
+                          setProductNameEdits((prev) => {
+                            const { [key]: _removed, ...rest } = prev;
+                            return rest;
+                          });
                       }}
                     />
                   </td>
@@ -329,29 +333,35 @@ const ContentAdmin: React.FC = () => {
                   </td>
                   <td className="border p-2">
                     <button
-                      onClick={() => {
-                        const prods = { ...pricing.products } as any;
-                        delete prods[key];
-                        setPricing({ ...pricing, products: prods });
-                      }}
+                        onClick={() => {
+                          const prods = { ...pricing.products } as any;
+                          delete prods[key];
+                          setPricing({
+                            ...pricing,
+                            products: prods,
+                            productOrder: pricing.productOrder.filter((k) => k !== key)
+                          });
+                        }}
                       className="bg-red-500 text-white px-2 py-1 rounded"
                     >
                       {t('admin_delete')}
                     </button>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
           <button
-            onClick={() => {
-              const name = prompt('product key');
-              if (!name) return;
-              setPricing({
-                ...pricing,
-                products: { ...pricing.products, [name]: { basePrice: 0 } }
-              });
-            }}
+              onClick={() => {
+                const name = prompt('product key');
+                if (!name || pricing.products[name]) return;
+                setPricing({
+                  ...pricing,
+                  products: { ...pricing.products, [name]: { basePrice: 0 } },
+                  productOrder: [...pricing.productOrder, name]
+                });
+              }}
             className="bg-blue-500 text-white px-3 py-1 rounded"
           >
             {t('admin_add_product')}
