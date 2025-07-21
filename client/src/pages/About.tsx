@@ -75,7 +75,10 @@ export default function About() {
             onClick={() => setProjectFilter(f)}
             className={`px-3 py-1 rounded text-sm ${projectFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}`)}
+            {(() => {
+              const label = t(`filter_${f}` as any);
+              return label.startsWith('filter_') ? f : label;
+            })()}
           </button>
         ))}
       </div>
@@ -108,7 +111,10 @@ export default function About() {
             onClick={() => setReviewFilter(f)}
             className={`px-3 py-1 rounded text-sm ${reviewFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}`)}
+            {(() => {
+              const label = t(`filter_${f}` as any);
+              return label.startsWith('filter_') ? f : label;
+            })()}
           </button>
         ))}
       </div>
