@@ -8,9 +8,20 @@ import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { pool } from './db.js';
+import nodemailer from 'nodemailer';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const mailTransporter = nodemailer.createTransport({
+  host: 'srvc192.trwww.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'info@mefaaluminyum.com',
+    pass: process.env.MAIL_PASS
+  }
+});
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const dataDir = join(__dirname, 'data');
@@ -225,6 +236,25 @@ app.post('/api/pricing', async (req, res) => {
   } catch (err) {
     console.error('Failed to save pricing', err);
     res.status(500).json({ error: 'Could not save pricing' });
+  }
+});
+
+app.post('/api/sendMail', async (req, res) => {
+  const { name, email, message } = req.body;
+  if (!name || !email || !message) {
+    return res.status(400).json({ ok: false, error: 'Missing fields' });
+  }
+  try {
+    await mailTransporter.sendMail({
+      from: 'info@mefaaluminyum.com',
+      to: 'info@mefaaluminyum.com',
+      subject: 'Yeni İletişim Mesajı',
+      text: `Gönderen: ${name} <${email}>\n\n${message}`
+    });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Send mail error:', err);
+    res.status(500).json({ ok: false, error: 'Failed to send email' });
   }
 });
 
