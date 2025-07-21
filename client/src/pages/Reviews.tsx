@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { loadContent, Review } from '../content';
-
-const content = loadContent();
-const reviews: Review[] = content.reviews;
-const reviewCategories = content.categories.reviews;
+import { Review } from '../content';
+import { useContent } from '../ContentContext';
 
 export default function Reviews() {
   const { t } = useTranslation();
+  const { content } = useContent();
   const [filter, setFilter] = useState('all');
+  const reviews: Review[] = content.reviews;
+  const reviewCategories = content.categories.reviews;
 
   const filtered = filter === 'all' ? reviews : reviews.filter((r) => r.category === filter);
 

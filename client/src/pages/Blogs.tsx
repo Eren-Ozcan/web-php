@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { loadContent, BlogPost } from '../content';
-
-const content = loadContent();
-const posts: BlogPost[] = content.blogs;
-const blogCategories = content.categories.blogs;
+import { BlogPost } from '../content';
+import { useContent } from '../ContentContext';
 
 export default function Blogs() {
   const { t } = useTranslation();
+  const { content } = useContent();
   const [filter, setFilter] = useState('all');
   const navigate = useNavigate();
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
+  const posts: BlogPost[] = content.blogs;
+  const blogCategories = content.categories.blogs;
 
   const filtered = filter === 'all' ? posts : posts.filter((p) => p.category === filter);
 

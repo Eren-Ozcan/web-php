@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import { loadContent, ContentData } from '../content';
 import api from '../api';
+import { useContent } from '../ContentContext';
 
 const ContentAdmin: React.FC = () => {
   const { t, i18n: i18next } = useTranslation();
   const languages = Object.keys(i18next.options.resources || {});
   const [lang, setLang] = useState<string>(i18next.language);
   const [content, setContent] = useState<ContentData>(loadContent());
+  const { setContent: setGlobalContent } = useContent();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,6 +117,7 @@ const ContentAdmin: React.FC = () => {
       ]);
       localStorage.setItem('content', JSON.stringify(content));
       localStorage.setItem('translations', JSON.stringify(i18n.store.data));
+      setGlobalContent(content);
       alert(t('admin_saved'));
     } catch (err) {
       console.error('Save failed', err);

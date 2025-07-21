@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import api from '../api';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { loadContent, Project, Review } from '../content';
-
-const { projects: projectData, reviews: reviewData } = loadContent();
+import { Project, Review } from '../content';
+import { useContent } from '../ContentContext';
 
 export default function About() {
   const { t } = useTranslation();
+  const { content } = useContent();
   const [highlightProjects, setHighlightProjects] = useState<Project[]>([]);
   const [projectFilter, setProjectFilter] = useState('all');
   const [reviewFilter, setReviewFilter] = useState('all');
@@ -24,6 +24,9 @@ export default function About() {
       })
       .catch(() => setHighlightProjects([]));
   }, []);
+
+  const projectData: Project[] = content.projects;
+  const reviewData: Review[] = content.reviews;
 
   return (
     <section className="p-6 max-w-6xl mx-auto">
