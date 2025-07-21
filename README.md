@@ -85,12 +85,12 @@ set up the initial admin user.
 
 The server exposes a `/api/login` endpoint for obtaining a JWT. User credentials
 are validated against the MySQL `users` table. The included SQL script creates a
-default admin user with username `admin` and password `merhaba123`.
+default admin user with username `admin` and password `1234`.
 
 Example request:
 
 ```bash
 curl -X POST http://localhost:5000/api/login \
   -H 'Content-Type: application/json' \
-  -d '{"username":"admin","password":"merhaba123"}'
+  -d '{"username":"admin","password":"1234"}'
 ```

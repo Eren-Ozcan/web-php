@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
 INSERT INTO users (username, passwordHash)
   VALUES (
     'admin',
-    'a33448fff98cd761fe10c8a7cecfd12d:42850e744618f339c5e71d279dfb5d2feb98c5d4441538f305526a186d258ce7e4adcc4b22d2ff89e8907342d5adf64f2704f63f177765fbbca733148c75281f'
+    '054cf408c1355d5dcbbafe9ea7d00a3b:95fd08aae8ded8e97b0989bf61bc53b8af8163199e1a87d3921b1fbb9fcdbdafec90b86950f1ee29aa2218f91bb8ff821f9b6b8524ee29a437a0eef619617e65'
   )
   ON DUPLICATE KEY UPDATE username=VALUES(username);
 
