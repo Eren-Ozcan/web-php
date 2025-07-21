@@ -26,6 +26,7 @@ export interface Review {
 export interface Product {
   id: number;
   titleKey: string;
+  descriptionKey: string;
   image: string;
   category: string;
 }
@@ -81,7 +82,7 @@ const defaultData: ContentData = {
       descriptionKey: 'project_modern_villa_desc',
       image: '/images/project1.jpg',
       category: 'glass',
-      featured: true
+      featured: false
     },
     {
       id: 2,
@@ -89,7 +90,7 @@ const defaultData: ContentData = {
       descriptionKey: 'project_office_center_desc',
       image: '/images/project2.jpg',
       category: 'pvc',
-      featured: true
+      featured: false
     },
     {
       id: 3,
@@ -97,7 +98,7 @@ const defaultData: ContentData = {
       descriptionKey: 'project_shopping_mall_desc',
       image: '/images/project3.jpg',
       category: 'balcony',
-      featured: true
+      featured: false
     }
   ],
   reviews: [
@@ -117,12 +118,48 @@ const defaultData: ContentData = {
     }
   ],
   products: [
-    { id: 1, titleKey: 'product_glass', image: '/images/cam.jpg', category: 'glass' },
-    { id: 2, titleKey: 'product_doors', image: '/images/project1.jpg', category: 'door' },
-    { id: 3, titleKey: 'product_balcony', image: '/images/project3.jpg', category: 'balcony' },
-    { id: 4, titleKey: 'product_garden', image: '/images/house3.jpg', category: 'garden' },
-    { id: 5, titleKey: 'product_office', image: '/images/project2.jpg', category: 'office' },
-    { id: 6, titleKey: 'product_facade', image: '/images/house2.jpg', category: 'facade' }
+    {
+      id: 1,
+      titleKey: 'product_glass',
+      descriptionKey: 'product_glass_desc',
+      image: '/images/cam.jpg',
+      category: 'glass'
+    },
+    {
+      id: 2,
+      titleKey: 'product_doors',
+      descriptionKey: 'product_doors_desc',
+      image: '/images/project1.jpg',
+      category: 'door'
+    },
+    {
+      id: 3,
+      titleKey: 'product_balcony',
+      descriptionKey: 'product_balcony_desc',
+      image: '/images/project3.jpg',
+      category: 'balcony'
+    },
+    {
+      id: 4,
+      titleKey: 'product_garden',
+      descriptionKey: 'product_garden_desc',
+      image: '/images/house3.jpg',
+      category: 'garden'
+    },
+    {
+      id: 5,
+      titleKey: 'product_office',
+      descriptionKey: 'product_office_desc',
+      image: '/images/project2.jpg',
+      category: 'office'
+    },
+    {
+      id: 6,
+      titleKey: 'product_facade',
+      descriptionKey: 'product_facade_desc',
+      image: '/images/house2.jpg',
+      category: 'facade'
+    }
   ],
   categories: {
     blogs: { en: ['news', 'tips'], tr: ['news', 'tips'] },
