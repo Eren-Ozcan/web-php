@@ -28,13 +28,13 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="/about" className="hover:underline">
-                {t('about')}
+              <a href="/iletisim" className="hover:underline">
+                {t('contact')}
               </a>
             </li>
             <li>
-              <a href="/iletisim" className="hover:underline">
-                {t('contact')}
+              <a href="/about" className="hover:underline">
+                {t('about')}
               </a>
             </li>
           </ul>
