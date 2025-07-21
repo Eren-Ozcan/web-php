@@ -75,6 +75,10 @@ Run the script with phpMyAdmin or the MySQL CLI:
 mysql -u admin -p < server/init_db.sql
 ```
 
+The script now also creates `content` and `translations` tables which store the
+website data edited from the admin panel. Any changes made in the admin
+interface are written to these tables so the site state persists in MySQL.
+
 ## Login API
 
 The server exposes a `/api/login` endpoint for obtaining a JWT. User credentials
