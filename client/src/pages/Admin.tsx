@@ -15,12 +15,14 @@ const Admin: React.FC = () => {
     if (auth) {
       const load = async () => {
         try {
-          const [cRes, tRes] = await Promise.all([
+          const [cRes, tRes, pRes] = await Promise.all([
             api.get('/api/content'),
-            api.get('/api/translations')
+            api.get('/api/translations'),
+            api.get('/api/pricing')
           ]);
           localStorage.setItem('content', JSON.stringify(cRes.data));
           localStorage.setItem('translations', JSON.stringify(tRes.data));
+          localStorage.setItem('pricing', JSON.stringify(pRes.data));
           Object.entries(tRes.data).forEach(([lng, vals]) => {
             Object.entries(vals as Record<string, string>).forEach(([k, v]) => {
               i18n.addResource(lng, 'translation', k, v);

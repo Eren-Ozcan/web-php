@@ -107,5 +107,14 @@
   "vision": "Vizyonumuz",
   "vision_text": "Sektörümüzde lider konuma ulaşmak.",
   "welcome": "Hoş Geldiniz",
-  "width_cm": "Genişlik (cm)"
+  "width_cm": "Genişlik (cm)",
+  "pricing": "Fiyatlandırma",
+  "admin_product": "Ürün",
+  "admin_products": "Ürünler",
+  "admin_base_price": "Birim Fiyat",
+  "admin_features": "Özellikler",
+  "admin_label": "Etiket",
+  "admin_multiplier": "Katsayı",
+  "admin_add_product": "Ürün Ekle",
+  "admin_add_feature": "Özellik Ekle"
 }
