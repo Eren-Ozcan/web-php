@@ -1,4 +1,9 @@
 {
+  "productOrder": [
+    "glass",
+    "pvc",
+    "balcony"
+  ],
   "features": {
     "double": {
       "label": "double_glazing_feature",

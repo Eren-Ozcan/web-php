@@ -101,6 +101,9 @@ async function loadData() {
     const [pRows] = await pool.query('SELECT data FROM pricing WHERE id = 1');
     if (!pRows.length) {
       pricingData = loadJson('pricing.json');
+      if (!pricingData.productOrder) {
+        pricingData.productOrder = Object.keys(pricingData.products || {});
+      }
       await pool.query('INSERT INTO pricing (id, data) VALUES (1, ?)', [
         JSON.stringify(pricingData)
       ]);
@@ -108,9 +111,15 @@ async function loadData() {
       const rawP = pRows[0].data;
       const parsedP = typeof rawP === 'string' ? JSON.parse(rawP) : rawP;
       if (parsedP && Object.keys(parsedP).length) {
+        if (!parsedP.productOrder) {
+          parsedP.productOrder = Object.keys(parsedP.products || {});
+        }
         pricingData = parsedP;
       } else {
         pricingData = loadJson('pricing.json');
+        if (!pricingData.productOrder) {
+          pricingData.productOrder = Object.keys(pricingData.products || {});
+        }
         await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [
           JSON.stringify(pricingData)
         ]);
@@ -121,6 +130,9 @@ async function loadData() {
     contentData = loadJson('content.json');
     translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
     pricingData = loadJson('pricing.json');
+    if (!pricingData.productOrder) {
+      pricingData.productOrder = Object.keys(pricingData.products || {});
+    }
   }
 }
 

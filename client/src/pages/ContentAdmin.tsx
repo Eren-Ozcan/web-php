@@ -12,6 +12,7 @@ const ContentAdmin: React.FC = () => {
   const [lang, setLang] = useState<string>(i18next.language);
   const [content, setContent] = useState<ContentData>(loadContent());
   const [pricing, setPricing] = useState<PricingConfig>(loadPricing());
+  const [productNameEdits, setProductNameEdits] = useState<Record<string, string>>({});
   const { setContent: setGlobalContent } = useContent();
 
   useEffect(() => {
@@ -268,34 +269,53 @@ const ContentAdmin: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(pricing.products).map(([key, val]) => (
-                <tr key={key}>
-                  <td className="border p-2 space-x-2">
-                    {/* Ürün adı doğrudan input ile değiştiriliyor */}
-                    <input
-                      className="border p-1 w-full"
-                      value={key}
-                      onChange={(e) => {
-                        const newKey = e.target.value.trim();
-                        if (!newKey || newKey === key || pricing.products[newKey]) return;
-                        // Eski ürünü sil, yenisini ekle
-                        const { [key]: oldVal, ...rest } = pricing.products as any;
-                        const updatedProducts = { ...rest, [newKey]: oldVal };
-                        // Features içindeki product anahtarlarını da güncelle
-                        const updatedFeatures = Object.fromEntries(
-                          Object.entries(pricing.features).map(([fKey, fVal]) => [
-                            fKey,
-                            {
-                              ...fVal,
-                              products: fVal.products.map((p) => (p === key ? newKey : p))
-                            }
-                          ])
-                        );
-                        setPricing({
-                          ...pricing,
-                          products: updatedProducts,
-                          features: updatedFeatures
-                        });
+              {pricing.productOrder.map((key) => {
+                const val = pricing.products[key];
+                return (
+                  <tr key={key}>
+                    <td className="border p-2 space-x-2">
+                      <input
+                        className="border p-1 w-full"
+                        value={productNameEdits[key] ?? key}
+                      onChange={(e) =>
+                        setProductNameEdits({
+                          ...productNameEdits,
+                          [key]: e.target.value
+                        })
+                      }
+                      onBlur={() => {
+                        const newKey = (productNameEdits[key] ?? key).trim();
+                        if (!newKey || newKey === key || pricing.products[newKey]) {
+                          setProductNameEdits((prev) => {
+                            const { [key]: _omit, ...rest } = prev;
+                            return rest;
+                          });
+                          return;
+                        }
+                          const { [key]: oldVal, ...rest } = pricing.products as any;
+                          const updatedProducts = { ...rest, [newKey]: oldVal };
+                          const updatedFeatures = Object.fromEntries(
+                            Object.entries(pricing.features).map(([fKey, fVal]) => [
+                              fKey,
+                              {
+                                ...fVal,
+                                products: fVal.products.map((p) => (p === key ? newKey : p))
+                              }
+                            ])
+                          );
+                          const orderIndex = pricing.productOrder.indexOf(key);
+                          const newOrder = [...pricing.productOrder];
+                          if (orderIndex >= 0) newOrder[orderIndex] = newKey;
+                          setPricing({
+                            ...pricing,
+                            products: updatedProducts,
+                            features: updatedFeatures,
+                            productOrder: newOrder
+                          });
+                          setProductNameEdits((prev) => {
+                            const { [key]: _removed, ...rest } = prev;
+                            return rest;
+                          });
                       }}
                     />
                   </td>
@@ -315,29 +335,35 @@ const ContentAdmin: React.FC = () => {
                   </td>
                   <td className="border p-2">
                     <button
-                      onClick={() => {
-                        const prods = { ...pricing.products } as any;
-                        delete prods[key];
-                        setPricing({ ...pricing, products: prods });
-                      }}
+                        onClick={() => {
+                          const prods = { ...pricing.products } as any;
+                          delete prods[key];
+                          setPricing({
+                            ...pricing,
+                            products: prods,
+                            productOrder: pricing.productOrder.filter((k) => k !== key)
+                          });
+                        }}
                       className="bg-red-500 text-white px-2 py-1 rounded"
                     >
                       {t('admin_delete')}
                     </button>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
           <button
-            onClick={() => {
-              const name = prompt('product key');
-              if (!name) return;
-              setPricing({
-                ...pricing,
-                products: { ...pricing.products, [name]: { basePrice: 0 } }
-              });
-            }}
+              onClick={() => {
+                const name = prompt('product key');
+                if (!name || pricing.products[name]) return;
+                setPricing({
+                  ...pricing,
+                  products: { ...pricing.products, [name]: { basePrice: 0 } },
+                  productOrder: [...pricing.productOrder, name]
+                });
+              }}
             className="bg-blue-500 text-white px-3 py-1 rounded"
           >
             {t('admin_add_product')}
