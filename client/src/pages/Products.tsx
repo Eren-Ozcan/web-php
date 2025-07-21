@@ -5,7 +5,7 @@ import { Product } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Products() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
   const params = useParams<{ category?: string }>();
   const [filter, setFilter] = useState('all');
@@ -20,7 +20,7 @@ export default function Products() {
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   const products: Product[] = content.products;
-  const productCategories = content.categories.products;
+  const productCategories = content.categories.products[i18n.language] || [];
 
   const filtered = filter === 'all' ? products : products.filter((p) => p.category === filter);
 

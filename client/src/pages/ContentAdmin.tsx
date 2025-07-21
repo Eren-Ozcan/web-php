@@ -85,7 +85,8 @@ const ContentAdmin: React.FC = () => {
     setContent(newContent);
   };
 
-  const categoryOptions = (content.categories as any)[section] || [];
+  const categoryOptions =
+    ((content.categories as any)[section]?.[lang] as string[]) || [];
 
   const addEntry = () => {
     const id = Date.now();
@@ -203,20 +204,20 @@ const ContentAdmin: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {content.categories[catSection].map((c, idx) => (
+              {content.categories[catSection][lang].map((c: string, idx: number) => (
                 <tr key={idx}>
                   <td className="border p-2">
                     <input
                       className="border p-1 w-full"
                       value={c}
                       onChange={(e) => {
-                        const list = [...content.categories[catSection]];
+                        const list = [...content.categories[catSection][lang]];
                         list[idx] = e.target.value;
                         setContent({
                           ...content,
                           categories: {
                             ...content.categories,
-                            [catSection]: list
+                            [catSection]: { ...content.categories[catSection], [lang]: list }
                           }
                         });
                       }}
@@ -225,10 +226,13 @@ const ContentAdmin: React.FC = () => {
                   <td className="border p-2">
                     <button
                       onClick={() => {
-                        const list = content.categories[catSection].filter((_, i) => i !== idx);
+                        const list = content.categories[catSection][lang].filter((_, i) => i !== idx);
                         setContent({
                           ...content,
-                          categories: { ...content.categories, [catSection]: list }
+                          categories: {
+                            ...content.categories,
+                            [catSection]: { ...content.categories[catSection], [lang]: list }
+                          }
                         });
                       }}
                       className="bg-red-500 text-white px-2 py-1 rounded"
@@ -242,10 +246,13 @@ const ContentAdmin: React.FC = () => {
           </table>
           <button
             onClick={() => {
-              const list = [...content.categories[catSection], ''];
+              const list = [...content.categories[catSection][lang], ''];
               setContent({
                 ...content,
-                categories: { ...content.categories, [catSection]: list }
+                categories: {
+                  ...content.categories,
+                  [catSection]: { ...content.categories[catSection], [lang]: list }
+                }
               });
             }}
             className="bg-blue-500 text-white px-3 py-1 rounded"
@@ -465,7 +472,7 @@ const ContentAdmin: React.FC = () => {
                   >
                     {categoryOptions.map((c: string) => (
                       <option key={c} value={c}>
-                        {c}
+                        {t(`filter_${c}` as any)}
                       </option>
                     ))}
                   </select>
