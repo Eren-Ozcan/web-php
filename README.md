@@ -94,3 +94,18 @@ curl -X POST http://localhost:5000/api/login \
   -H 'Content-Type: application/json' \
   -d '{"username":"admin","password":"1234"}'
 ```
+
+## Content & Translations APIs
+
+The admin panel communicates with the following endpoints to load and save
+website data:
+
+- `GET /api/content` – returns the current JSON content structure.
+- `POST /api/content` – accepts the updated JSON from the admin panel and
+  persists it.
+- `GET /api/translations` – returns all translation strings.
+- `POST /api/translations` – saves updated translations.
+
+Both `POST` endpoints update the MySQL tables and also write to the JSON files
+under `server/data` so that the data is available even if the database is not
+pre-populated.
