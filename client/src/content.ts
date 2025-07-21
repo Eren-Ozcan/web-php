@@ -106,7 +106,17 @@ const defaultData: ContentData = {
 
 export function loadContent(): ContentData {
   const stored = localStorage.getItem('content');
-  return stored ? (JSON.parse(stored) as ContentData) : defaultData;
+  if (stored) {
+    try {
+      const data = JSON.parse(stored);
+      if (data && typeof data === 'object' && 'blogs' in data) {
+        return data as ContentData;
+      }
+    } catch {
+      // ignore parse errors and fall back to defaults
+    }
+  }
+  return defaultData;
 }
 
 export function saveContent(data: ContentData) {

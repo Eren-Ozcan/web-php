@@ -31,11 +31,57 @@ function verifyPassword(password, stored) {
   return hashed === hash;
 }
 
-let contentData = loadJson('content.json');
-let translationsData = {
-  en: loadJson('en.json'),
-  tr: loadJson('tr.json')
-};
+let contentData;
+let translationsData;
+
+async function ensureTables() {
+  await pool.query(`CREATE TABLE IF NOT EXISTS content (
+    id INT PRIMARY KEY,
+    data JSON NOT NULL
+  )`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS translations (
+    id INT PRIMARY KEY,
+    data JSON NOT NULL
+  )`);
+}
+
+async function loadData() {
+  try {
+    const [cRows] = await pool.query('SELECT data FROM content WHERE id = 1');
+    if (!cRows.length) {
+      contentData = loadJson('content.json');
+      await pool.query('INSERT INTO content (id, data) VALUES (1, ?)', [JSON.stringify(contentData)]);
+    } else {
+      const raw = cRows[0].data;
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (parsed && Object.keys(parsed).length) {
+        contentData = parsed;
+      } else {
+        contentData = loadJson('content.json');
+        await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
+      }
+    }
+
+    const [tRows] = await pool.query('SELECT data FROM translations WHERE id = 1');
+    if (!tRows.length) {
+      translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
+      await pool.query('INSERT INTO translations (id, data) VALUES (1, ?)', [JSON.stringify(translationsData)]);
+    } else {
+      const rawT = tRows[0].data;
+      const parsedT = typeof rawT === 'string' ? JSON.parse(rawT) : rawT;
+      if (parsedT && Object.keys(parsedT).length) {
+        translationsData = parsedT;
+      } else {
+        translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
+        await pool.query('UPDATE translations SET data = ? WHERE id = 1', [JSON.stringify(translationsData)]);
+      }
+    }
+  } catch (err) {
+    console.error('Failed to load from database, falling back to files', err);
+    contentData = loadJson('content.json');
+    translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
+  }
+}
 
 app.use(cors());
 app.use(express.json());
@@ -127,10 +173,11 @@ app.get('/api/content', (req, res) => {
   res.json(contentData);
 });
 
-app.post('/api/content', (req, res) => {
+app.post('/api/content', async (req, res) => {
   contentData = req.body;
   try {
     saveJson('content.json', contentData);
+    await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
     res.json({ ok: true });
   } catch (err) {
     console.error('Failed to save content', err);
@@ -142,17 +189,21 @@ app.get('/api/translations', (req, res) => {
   res.json(translationsData);
 });
 
-app.post('/api/translations', (req, res) => {
+app.post('/api/translations', async (req, res) => {
   translationsData = req.body;
   try {
     saveJson('en.json', translationsData.en);
     saveJson('tr.json', translationsData.tr);
+    await pool.query('UPDATE translations SET data = ? WHERE id = 1', [JSON.stringify(translationsData)]);
     res.json({ ok: true });
   } catch (err) {
     console.error('Failed to save translations', err);
     res.status(500).json({ ok: false });
   }
 });
+
+await ensureTables();
+await loadData();
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend çalışıyor → http://localhost:${PORT}`);
