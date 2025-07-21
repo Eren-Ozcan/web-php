@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { loadContent, Project } from '../content';
-
-const content = loadContent();
-const projects: Project[] = content.projects;
-const projectCategories = content.categories.projects;
+import { Project } from '../content';
+import { useContent } from '../ContentContext';
 
 export default function Projects() {
   const { t } = useTranslation();
+  const { content } = useContent();
   const [filter, setFilter] = useState('all');
+  const projects: Project[] = content.projects;
+  const projectCategories = content.categories.projects;
 
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter);
 

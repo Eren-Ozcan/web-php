@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { loadContent, Product } from '../content';
-
-const content = loadContent();
-const products: Product[] = content.products;
-const productCategories = content.categories.products;
+import { Product } from '../content';
+import { useContent } from '../ContentContext';
 
 export default function Products() {
   const { t } = useTranslation();
+  const { content } = useContent();
   const params = useParams<{ category?: string }>();
   const [filter, setFilter] = useState('all');
   const navigate = useNavigate();
@@ -20,6 +18,9 @@ export default function Products() {
   }, [params.category]);
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
+
+  const products: Product[] = content.products;
+  const productCategories = content.categories.products;
 
   const filtered = filter === 'all' ? products : products.filter((p) => p.category === filter);
 
