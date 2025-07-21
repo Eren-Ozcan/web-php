@@ -42,6 +42,7 @@ const ContentAdmin: React.FC = () => {
 
   useEffect(() => {
     i18next.changeLanguage(lang);
+    localStorage.setItem('language', lang);
   }, [lang, i18next]);
 
   useEffect(() => {
