@@ -88,6 +88,12 @@ async function loadData() {
         contentData = loadJson('content.json');
         await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
       }
+
+      if (Array.isArray(contentData.products)) {
+        contentData.products = contentData.products.map((p) =>
+          p.descriptionKey ? p : { ...p, descriptionKey: `${p.titleKey}_desc` }
+        );
+      }
     }
 
     const [tRows] = await pool.query('SELECT data FROM translations WHERE id = 1');
@@ -237,6 +243,14 @@ app.post('/api/pricing', async (req, res) => {
     console.error('Failed to save pricing', err);
     res.status(500).json({ error: 'Could not save pricing' });
   }
+});
+
+app.get('/api/projects', (req, res) => {
+  const highlight = req.query.highlight === 'true';
+  const data = highlight
+    ? (contentData.projects || []).filter((p) => p.featured)
+    : contentData.projects || [];
+  res.json(data);
 });
 
 app.post('/api/sendMail', async (req, res) => {
