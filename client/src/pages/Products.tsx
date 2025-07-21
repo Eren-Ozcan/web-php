@@ -63,6 +63,7 @@ export default function Products() {
             <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-1">{t(p.titleKey)}</h3>
+              <p className="text-sm text-gray-600">{t(p.descriptionKey)}</p>
             </div>
           </div>
         ))}
