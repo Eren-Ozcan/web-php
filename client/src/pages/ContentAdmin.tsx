@@ -268,8 +268,7 @@ const ContentAdmin: React.FC = () => {
                 <th className="border p-2">{t('admin_actions')}</th>
               </tr>
             </thead>
-            <tbody>
-              {pricing.productOrder.map((key) => {
+            <tbody>{pricing.productOrder.map((key) => {
                 const val = pricing.products[key];
                 return (
                   <tr key={key}>
@@ -291,8 +290,7 @@ const ContentAdmin: React.FC = () => {
                             return rest;
                           });
                           return;
-                        }
-                          const { [key]: oldVal, ...rest } = pricing.products as any;
+                        } const { [key]: oldVal, ...rest } = pricing.products as any;
                           const updatedProducts = { ...rest, [newKey]: oldVal };
                           const updatedFeatures = Object.fromEntries(
                             Object.entries(pricing.features).map(([fKey, fVal]) => [
