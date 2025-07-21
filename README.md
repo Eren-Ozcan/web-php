@@ -55,7 +55,7 @@ Update the following environment variables if needed. These values should match 
 ```
 DB_HOST=localhost
 DB_USER=admin
-DB_PASS=merhaba123
+DB_PASS=1234
 DB_NAME=mefaaluminyum_wp289
 ```
 
@@ -64,7 +64,7 @@ DB_NAME=mefaaluminyum_wp289
 Before running the initialization script you need a MySQL user with privileges on the `mefaaluminyum_wp289` database. As `root`, run:
 
 ```sql
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'merhaba123';
+CREATE USER 'admin'@'localhost' IDENTIFIED BY '1234';
 GRANT ALL PRIVILEGES ON mefaaluminyum_wp289.* TO 'admin'@'localhost';
 FLUSH PRIVILEGES;
 ```

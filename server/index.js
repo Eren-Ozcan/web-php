@@ -25,9 +25,7 @@ function saveJson(file, data) {
 
 function verifyPassword(password, stored) {
   const [salt, hash] = stored.split(':');
-  const hashed = crypto
-    .pbkdf2Sync(password, salt, 10000, 64, 'sha512')
-    .toString('hex');
+  const hashed = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
   return hashed === hash;
 }
 
@@ -50,7 +48,9 @@ async function loadData() {
     const [cRows] = await pool.query('SELECT data FROM content WHERE id = 1');
     if (!cRows.length) {
       contentData = loadJson('content.json');
-      await pool.query('INSERT INTO content (id, data) VALUES (1, ?)', [JSON.stringify(contentData)]);
+      await pool.query('INSERT INTO content (id, data) VALUES (1, ?)', [
+        JSON.stringify(contentData)
+      ]);
     } else {
       const raw = cRows[0].data;
       const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
@@ -65,7 +65,9 @@ async function loadData() {
     const [tRows] = await pool.query('SELECT data FROM translations WHERE id = 1');
     if (!tRows.length) {
       translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
-      await pool.query('INSERT INTO translations (id, data) VALUES (1, ?)', [JSON.stringify(translationsData)]);
+      await pool.query('INSERT INTO translations (id, data) VALUES (1, ?)', [
+        JSON.stringify(translationsData)
+      ]);
     } else {
       const rawT = tRows[0].data;
       const parsedT = typeof rawT === 'string' ? JSON.parse(rawT) : rawT;
@@ -73,7 +75,9 @@ async function loadData() {
         translationsData = parsedT;
       } else {
         translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
-        await pool.query('UPDATE translations SET data = ? WHERE id = 1', [JSON.stringify(translationsData)]);
+        await pool.query('UPDATE translations SET data = ? WHERE id = 1', [
+          JSON.stringify(translationsData)
+        ]);
       }
     }
   } catch (err) {
@@ -84,7 +88,9 @@ async function loadData() {
 }
 
 app.use(cors());
-app.use(express.json());
+// Increase body size limit to handle base64 images from admin panel
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
@@ -102,11 +108,9 @@ app.post('/api/login', async (req, res) => {
     if (!verifyPassword(password, user.passwordHash)) {
       return res.status(401).json({ error: 'Password incorrect' });
     }
-    const token = jwt.sign(
-      { id: user.id, username: user.username },
-      JWT_SECRET,
-      { expiresIn: '1h' }
-    );
+    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, {
+      expiresIn: '1h'
+    });
     res.json({ token });
   } catch (err) {
     console.error('Login error:', err);
@@ -194,7 +198,9 @@ app.post('/api/translations', async (req, res) => {
   try {
     saveJson('en.json', translationsData.en);
     saveJson('tr.json', translationsData.tr);
-    await pool.query('UPDATE translations SET data = ? WHERE id = 1', [JSON.stringify(translationsData)]);
+    await pool.query('UPDATE translations SET data = ? WHERE id = 1', [
+      JSON.stringify(translationsData)
+    ]);
     res.json({ ok: true });
   } catch (err) {
     console.error('Failed to save translations', err);
