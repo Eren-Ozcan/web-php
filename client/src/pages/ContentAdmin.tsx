@@ -4,24 +4,29 @@ import i18n from '../i18n';
 import { loadContent, ContentData } from '../content';
 import api from '../api';
 import { useContent } from '../ContentContext';
+import { PricingConfig, loadPricing } from '../pricing';
 
 const ContentAdmin: React.FC = () => {
   const { t, i18n: i18next } = useTranslation();
   const languages = Object.keys(i18next.options.resources || {});
   const [lang, setLang] = useState<string>(i18next.language);
   const [content, setContent] = useState<ContentData>(loadContent());
+  const [pricing, setPricing] = useState<PricingConfig>(loadPricing());
   const { setContent: setGlobalContent } = useContent();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [cRes, tRes] = await Promise.all([
+        const [cRes, tRes, pRes] = await Promise.all([
           api.get<ContentData>('/api/content'),
-          api.get<Record<string, Record<string, string>>>('/api/translations')
+          api.get<Record<string, Record<string, string>>>('/api/translations'),
+          api.get<PricingConfig>('/api/pricing')
         ]);
         setContent(cRes.data);
+        setPricing(pRes.data);
         localStorage.setItem('content', JSON.stringify(cRes.data));
         localStorage.setItem('translations', JSON.stringify(tRes.data));
+        localStorage.setItem('pricing', JSON.stringify(pRes.data));
         Object.entries(tRes.data).forEach(([lng, vals]) => {
           Object.entries(vals).forEach(([k, v]) => {
             i18next.addResource(lng, 'translation', k, v);
@@ -34,7 +39,13 @@ const ContentAdmin: React.FC = () => {
     fetchData();
   }, []);
   const [section, setSection] = useState<
-    'blogs' | 'projects' | 'reviews' | 'products' | 'basic' | 'categories'
+    | 'blogs'
+    | 'projects'
+    | 'reviews'
+    | 'products'
+    | 'basic'
+    | 'categories'
+    | 'pricing'
   >('blogs');
   const [catSection, setCatSection] = useState<'blogs' | 'projects' | 'reviews' | 'products'>(
     'blogs'
@@ -113,10 +124,12 @@ const ContentAdmin: React.FC = () => {
     try {
       await Promise.all([
         api.post('/api/content', content),
-        api.post('/api/translations', i18n.store.data)
+        api.post('/api/translations', i18n.store.data),
+        api.post('/api/pricing', pricing)
       ]);
       localStorage.setItem('content', JSON.stringify(content));
       localStorage.setItem('translations', JSON.stringify(i18n.store.data));
+      localStorage.setItem('pricing', JSON.stringify(pricing));
       setGlobalContent(content);
       alert(t('admin_saved'));
     } catch (err) {
@@ -143,7 +156,7 @@ const ContentAdmin: React.FC = () => {
 
       {/* Sekme seçimi */}
       <div className="space-x-2">
-        {['blogs', 'projects', 'reviews', 'products', 'basic', 'categories'].map((s) => (
+        {['blogs', 'projects', 'reviews', 'products', 'basic', 'categories', 'pricing'].map((s) => (
           <button
             key={s}
             onClick={() => setSection(s as any)}
@@ -239,6 +252,182 @@ const ContentAdmin: React.FC = () => {
             {t('admin_add_category')}
           </button>
         </div>
+      ) : section === 'pricing' ? (
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">{t('admin_products')}</h2>
+          <table className="w-full border mb-4">
+            <thead>
+              <tr className="text-left">
+                <th className="border p-2">{t('admin_product')}</th>
+                <th className="border p-2">{t('admin_base_price')}</th>
+                <th className="border p-2">{t('admin_actions')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(pricing.products).map(([key, val]) => (
+                <tr key={key}>
+                  <td className="border p-2 space-x-2">
+                    <span>{key}</span>
+                    <button
+                      onClick={() => {
+                        const newKey = prompt('product key', key);
+                        if (!newKey || newKey === key) return;
+                        const { [key]: val, ...rest } = pricing.products as any;
+                        const updatedProducts = { ...rest, [newKey]: val };
+                        const updatedFeatures = Object.fromEntries(
+                          Object.entries(pricing.features).map(([fKey, fVal]) => [
+                            fKey,
+                            {
+                              ...fVal,
+                              products: fVal.products.map((p) =>
+                                p === key ? newKey : p
+                              )
+                            }
+                          ])
+                        );
+                        setPricing({
+                          ...pricing,
+                          products: updatedProducts,
+                          features: updatedFeatures
+                        });
+                      }}
+                      className="text-blue-600 underline"
+                    >
+                      {t('admin_rename')}
+                    </button>
+                  </td>
+                  <td className="border p-2">
+                    <input
+                      type="number"
+                      className="border p-1 w-full"
+                      value={val.basePrice}
+                      onChange={(e) => {
+                        const bp = parseFloat(e.target.value) || 0;
+                        setPricing({
+                          ...pricing,
+                          products: { ...pricing.products, [key]: { basePrice: bp } }
+                        });
+                      }}
+                    />
+                  </td>
+                  <td className="border p-2">
+                    <button
+                      onClick={() => {
+                        const prods = { ...pricing.products } as any;
+                        delete prods[key];
+                        setPricing({ ...pricing, products: prods });
+                      }}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                      {t('admin_delete')}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button
+            onClick={() => {
+              const name = prompt('product key');
+              if (!name) return;
+              setPricing({
+                ...pricing,
+                products: { ...pricing.products, [name]: { basePrice: 0 } }
+              });
+            }}
+            className="bg-blue-500 text-white px-3 py-1 rounded"
+          >
+            {t('admin_add_product')}
+          </button>
+
+          <h2 className="text-xl font-semibold mt-6">{t('admin_features')}</h2>
+          <table className="w-full border mb-4">
+            <thead>
+              <tr className="text-left">
+                <th className="border p-2">{t('admin_label')}</th>
+                <th className="border p-2">{t('admin_multiplier')}</th>
+                <th className="border p-2">{t('admin_products')}</th>
+                <th className="border p-2">{t('admin_actions')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(pricing.features).map(([k, f]) => (
+                <tr key={k}>
+                  <td className="border p-2">
+                    <input
+                      className="border p-1 w-full"
+                      value={f.label}
+                      onChange={(e) => {
+                        setPricing({
+                          ...pricing,
+                          features: {
+                            ...pricing.features,
+                            [k]: { ...f, label: e.target.value }
+                          }
+                        });
+                      }}
+                    />
+                  </td>
+                  <td className="border p-2">
+                    <input
+                      type="number"
+                      className="border p-1 w-full"
+                      value={f.multiplier}
+                      onChange={(e) => {
+                        const m = parseFloat(e.target.value) || 1;
+                        setPricing({
+                          ...pricing,
+                          features: { ...pricing.features, [k]: { ...f, multiplier: m } }
+                        });
+                      }}
+                    />
+                  </td>
+                  <td className="border p-2">
+                    <input
+                      className="border p-1 w-full"
+                      value={f.products.join(',')}
+                      onChange={(e) => {
+                        const arr = e.target.value.split(',').map((s) => s.trim());
+                        setPricing({
+                          ...pricing,
+                          features: { ...pricing.features, [k]: { ...f, products: arr } }
+                        });
+                      }}
+                    />
+                  </td>
+                  <td className="border p-2">
+                    <button
+                      onClick={() => {
+                        const feats = { ...pricing.features } as any;
+                        delete feats[k];
+                        setPricing({ ...pricing, features: feats });
+                      }}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                      {t('admin_delete')}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button
+            onClick={() => {
+              const key = prompt('feature key');
+              if (!key) return;
+              setPricing({
+                ...pricing,
+                features: {
+                  ...pricing.features,
+                  [key]: { label: '', multiplier: 1, products: [] }
+                }
+              });
+            }}
+            className="bg-blue-500 text-white px-3 py-1 rounded"
+          >
+            {t('admin_add_feature')}
+          </button>
+        </div>
       ) : (
         <table className="w-full border">
           <thead>
@@ -324,7 +513,7 @@ const ContentAdmin: React.FC = () => {
       )}
 
       <div className="space-x-2">
-        {section !== 'basic' && section !== 'categories' && (
+        {section !== 'basic' && section !== 'categories' && section !== 'pricing' && (
           <button onClick={addEntry} className="bg-blue-500 text-white px-3 py-1 rounded">
             {t('admin_add')}
           </button>

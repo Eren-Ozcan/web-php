@@ -7,6 +7,7 @@
   "admin_add_category": "Kategori Ekle",
   "admin_category": "Kategori",
   "admin_delete": "Sil",
+  "admin_rename": "Yeniden Adlandır",
   "admin_image": "Görsel",
   "admin_language": "Dil",
   "admin_save_all": "Tümünü Kaydet",
@@ -107,5 +108,14 @@
   "vision": "Vizyonumuz",
   "vision_text": "Sektörümüzde lider konuma ulaşmak.",
   "welcome": "Hoş Geldiniz",
-  "width_cm": "Genişlik (cm)"
+  "width_cm": "Genişlik (cm)",
+  "pricing": "Fiyatlandırma",
+  "admin_product": "Ürün",
+  "admin_products": "Ürünler",
+  "admin_base_price": "Birim Fiyat",
+  "admin_features": "Özellikler",
+  "admin_label": "Etiket",
+  "admin_multiplier": "Katsayı",
+  "admin_add_product": "Ürün Ekle",
+  "admin_add_feature": "Özellik Ekle"
 }

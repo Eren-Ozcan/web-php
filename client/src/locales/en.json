@@ -7,6 +7,7 @@
   "admin_add_category": "Add Category",
   "admin_category": "Category",
   "admin_delete": "Delete",
+  "admin_rename": "Rename",
   "admin_image": "Image",
   "admin_language": "Language",
   "admin_save_all": "Save All",
@@ -107,5 +108,14 @@
   "vision": "Our Vision",
   "vision_text": "To be the leading provider in our sector.",
   "welcome": "Welcome",
-  "width_cm": "Width (cm)"
+  "width_cm": "Width (cm)",
+  "pricing": "Pricing",
+  "admin_product": "Product",
+  "admin_products": "Products",
+  "admin_base_price": "Base Price",
+  "admin_features": "Features",
+  "admin_label": "Label",
+  "admin_multiplier": "Multiplier",
+  "admin_add_product": "Add Product",
+  "admin_add_feature": "Add Feature"
 }
