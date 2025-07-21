@@ -7,9 +7,11 @@ import 'swiper/css/navigation';
 import { useNavigate } from 'react-router-dom';
 import type { Swiper as SwiperClass } from 'swiper/types';
 import { useTranslation } from 'react-i18next';
+import { useContent } from '../ContentContext';
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
+  const { content } = useContent();
   const navigate = useNavigate();
   const swiperRef = useRef<SwiperClass | null>(null);
 
@@ -119,23 +121,19 @@ const Home: React.FC = () => {
       <div className="mt-20 px-4 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('projects')}</h2>
         <div className="grid md:grid-cols-3 gap-6">
-          {['/images/project1.jpg', '/images/project2.jpg', '/images/project3.jpg'].map(
-            (src, idx) => (
-              <div
-                key={idx}
-                onClick={() => navigate(`/article/${toSlug(`${t('project')} ${idx + 1}`)}`)}
-                className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
-              >
-                <img src={src} alt={`Project ${idx + 1}`} className="w-full h-48 object-cover" />
-                <div className="p-4 bg-white">
-                  <h3 className="font-semibold text-lg text-gray-800">
-                    {t('project')} {idx + 1}
-                  </h3>
-                  <p className="text-gray-600 text-sm">{t('project_sample_text')}</p>
-                </div>
+          {content.projects.slice(0, 3).map((p) => (
+            <div
+              key={p.id}
+              onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
+              className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
+            >
+              <img src={p.image} alt={t(p.titleKey)} className="w-full h-48 object-cover" />
+              <div className="p-4 bg-white">
+                <h3 className="font-semibold text-lg text-gray-800">{t(p.titleKey)}</h3>
+                <p className="text-gray-600 text-sm">{t(p.descriptionKey)}</p>
               </div>
-            )
-          )}
+            </div>
+          ))}
         </div>
       </div>
 
