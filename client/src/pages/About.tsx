@@ -76,8 +76,9 @@ export default function About() {
             className={`px-3 py-1 rounded text-sm ${projectFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
             {(() => {
-              const label = t(`filter_${f}` as any);
-              return label.startsWith('filter_') ? f : label;
+              const key = f.replace(/^filter_/, '');
+              const label = t(`filter_${key}` as any);
+              return label.startsWith('filter_') ? key : label;
             })()}
           </button>
         ))}
@@ -112,8 +113,9 @@ export default function About() {
             className={`px-3 py-1 rounded text-sm ${reviewFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
             {(() => {
-              const label = t(`filter_${f}` as any);
-              return label.startsWith('filter_') ? f : label;
+              const key = f.replace(/^filter_/, '');
+              const label = t(`filter_${key}` as any);
+              return label.startsWith('filter_') ? key : label;
             })()}
           </button>
         ))}

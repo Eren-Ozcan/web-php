@@ -230,8 +230,9 @@ const ContentAdmin: React.FC = () => {
                       className="border p-1 w-full"
                       value={c}
                       onChange={(e) => {
+                        const val = e.target.value.replace(/^filter_/, '');
                         const list = [...content.categories[catSection][lang]];
-                        list[idx] = e.target.value;
+                        list[idx] = val;
                         setContent({
                           ...content,
                           categories: {
@@ -549,11 +550,15 @@ const ContentAdmin: React.FC = () => {
                     value={item.category || ''}
                     onChange={(e) => handleChange(idx, 'category', e.target.value)}
                   >
-                    {categoryOptions.map((c: string) => (
-                      <option key={c} value={c}>
-                        {t(`filter_${c}` as any)}
-                      </option>
-                    ))}
+                    {categoryOptions.map((c: string) => {
+                      const key = c.replace(/^filter_/, '');
+                      const label = t(`filter_${key}` as any);
+                      return (
+                        <option key={c} value={c}>
+                          {label.startsWith('filter_') ? key : label}
+                        </option>
+                      );
+                    })}
                   </select>
                 </td>
                 {section === 'projects' && (

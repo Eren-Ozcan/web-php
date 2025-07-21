@@ -187,6 +187,32 @@ export function loadContent(): ContentData {
             products: { en: cat.products, tr: cat.products }
           };
         }
+        const sanitize = (list: string[]) =>
+          list.map((c) => c.replace(/^filter_/, ''));
+        (data as ContentData).categories.blogs.en = sanitize(
+          (data as ContentData).categories.blogs.en
+        );
+        (data as ContentData).categories.blogs.tr = sanitize(
+          (data as ContentData).categories.blogs.tr
+        );
+        (data as ContentData).categories.projects.en = sanitize(
+          (data as ContentData).categories.projects.en
+        );
+        (data as ContentData).categories.projects.tr = sanitize(
+          (data as ContentData).categories.projects.tr
+        );
+        (data as ContentData).categories.reviews.en = sanitize(
+          (data as ContentData).categories.reviews.en
+        );
+        (data as ContentData).categories.reviews.tr = sanitize(
+          (data as ContentData).categories.reviews.tr
+        );
+        (data as ContentData).categories.products.en = sanitize(
+          (data as ContentData).categories.products.en
+        );
+        (data as ContentData).categories.products.tr = sanitize(
+          (data as ContentData).categories.products.tr
+        );
         return data as ContentData;
       }
     } catch {
