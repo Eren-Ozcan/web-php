@@ -77,9 +77,9 @@ mysql -u admin -p < server/init_db.sql
 
 The script now also creates `content` and `translations` tables which store the
 website data edited from the admin panel. Any changes made in the admin
-interface are written to these tables so the site state persists in MySQL. The
-server will automatically create these tables on startup if they are missing,
-but running the script ensures they exist along with the default admin user.
+missing. On first launch, if the tables are empty, the server seeds them using
+the JSON files under `server/data`. Running the script is still recommended to
+set up the initial admin user.
 
 ## Login API
 

@@ -23,6 +23,3 @@ CREATE TABLE IF NOT EXISTS translations (
   id INT PRIMARY KEY,
   data JSON NOT NULL
 );
-
-INSERT IGNORE INTO content (id, data) VALUES (1, '{}');
-INSERT IGNORE INTO translations (id, data) VALUES (1, '{}');

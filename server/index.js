@@ -35,40 +35,46 @@ let contentData;
 let translationsData;
 
 async function ensureTables() {
-  await pool.query(
-    `CREATE TABLE IF NOT EXISTS content (
-      id INT PRIMARY KEY,
-      data JSON NOT NULL
-    )`
-  );
-  await pool.query(
-    `CREATE TABLE IF NOT EXISTS translations (
-      id INT PRIMARY KEY,
-      data JSON NOT NULL
-    )`
-  );
-  await pool.query("INSERT IGNORE INTO content (id, data) VALUES (1, '{}')");
-  await pool.query("INSERT IGNORE INTO translations (id, data) VALUES (1, '{}')");
+  await pool.query(`CREATE TABLE IF NOT EXISTS content (
+    id INT PRIMARY KEY,
+    data JSON NOT NULL
+  )`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS translations (
+    id INT PRIMARY KEY,
+    data JSON NOT NULL
+  )`);
 }
 
 async function loadData() {
   try {
     const [cRows] = await pool.query('SELECT data FROM content WHERE id = 1');
-    if (cRows.length) {
-      const row = cRows[0].data;
-      contentData = typeof row === 'string' ? JSON.parse(row) : row;
-    } else {
+    if (!cRows.length) {
       contentData = loadJson('content.json');
       await pool.query('INSERT INTO content (id, data) VALUES (1, ?)', [JSON.stringify(contentData)]);
+    } else {
+      const raw = cRows[0].data;
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (parsed && Object.keys(parsed).length) {
+        contentData = parsed;
+      } else {
+        contentData = loadJson('content.json');
+        await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
+      }
     }
 
     const [tRows] = await pool.query('SELECT data FROM translations WHERE id = 1');
-    if (tRows.length) {
-     const row = tRows[0].data;
-      translationsData = typeof row === 'string' ? JSON.parse(row) : row;
-    } else {
+    if (!tRows.length) {
       translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
       await pool.query('INSERT INTO translations (id, data) VALUES (1, ?)', [JSON.stringify(translationsData)]);
+    } else {
+      const rawT = tRows[0].data;
+      const parsedT = typeof rawT === 'string' ? JSON.parse(rawT) : rawT;
+      if (parsedT && Object.keys(parsedT).length) {
+        translationsData = parsedT;
+      } else {
+        translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
+        await pool.query('UPDATE translations SET data = ? WHERE id = 1', [JSON.stringify(translationsData)]);
+      }
     }
   } catch (err) {
     console.error('Failed to load from database, falling back to files', err);
