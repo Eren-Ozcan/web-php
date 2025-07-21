@@ -90,7 +90,8 @@ const ContentAdmin: React.FC = () => {
       titleKey,
       textKey: section !== 'products' ? textKey : undefined,
       image: '',
-      category: ''
+      category: '',
+      ...(section === 'projects' ? { featured: false } : {})
     };
     updateTranslation(titleKey, '');
     if (newItem.textKey) updateTranslation(newItem.textKey, '');
@@ -101,7 +102,7 @@ const ContentAdmin: React.FC = () => {
     setEntries(entries.filter((e) => e.id !== id));
   };
 
-  const handleChange = (index: number, field: string, value: string) => {
+  const handleChange = (index: number, field: string, value: any) => {
     const newEntries = [...entries];
     const item: any = { ...newEntries[index] };
     if (field === 'title') {
@@ -438,6 +439,9 @@ const ContentAdmin: React.FC = () => {
               {section !== 'products' && <th className="border p-2">{t('admin_text')}</th>}
               <th className="border p-2">{t('admin_image')}</th>
               <th className="border p-2">{t('admin_category')}</th>
+              {section === 'projects' && (
+                <th className="border p-2">{t('admin_featured')}</th>
+              )}
               <th className="border p-2">{t('admin_actions')}</th>
             </tr>
           </thead>
@@ -500,6 +504,15 @@ const ContentAdmin: React.FC = () => {
                     ))}
                   </select>
                 </td>
+                {section === 'projects' && (
+                  <td className="border p-2 text-center">
+                    <input
+                      type="checkbox"
+                      checked={!!item.featured}
+                      onChange={(e) => handleChange(idx, 'featured', e.target.checked)}
+                    />
+                  </td>
+                )}
                 <td className="border p-2">
                   <button
                     onClick={() => removeEntry(item.id)}
