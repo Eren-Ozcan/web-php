@@ -64,7 +64,7 @@ async function loadData() {
 
     const [tRows] = await pool.query('SELECT data FROM translations WHERE id = 1');
     if (tRows.length) {
-      const row = tRows[0].data;
+     const row = tRows[0].data;
       translationsData = typeof row === 'string' ? JSON.parse(row) : row;
     } else {
       translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
