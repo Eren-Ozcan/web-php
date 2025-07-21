@@ -9,6 +9,14 @@ export default function Products() {
   const { content } = useContent();
   const params = useParams<{ category?: string }>();
   const [filter, setFilter] = useState('all');
+
+  // keep last filter during navigation
+  useEffect(() => {
+    const stored = sessionStorage.getItem('productFilter');
+    if (!params.category && stored) {
+      setFilter(stored);
+    }
+  }, []);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +24,10 @@ export default function Products() {
       setFilter(params.category);
     }
   }, [params.category]);
+
+  useEffect(() => {
+    sessionStorage.setItem('productFilter', filter);
+  }, [filter]);
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
@@ -34,7 +46,10 @@ export default function Products() {
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}` as any)}
+            {(() => {
+              const label = t(`filter_${f}` as any);
+              return label.startsWith('filter_') ? f : label;
+            })()}
           </button>
         ))}
       </div>
