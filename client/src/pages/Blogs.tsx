@@ -5,14 +5,14 @@ import { BlogPost } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Blogs() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
   const [filter, setFilter] = useState('all');
   const navigate = useNavigate();
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
   const posts: BlogPost[] = content.blogs;
-  const blogCategories = content.categories.blogs;
+  const blogCategories = content.categories.blogs[i18n.language] || [];
 
   const filtered = filter === 'all' ? posts : posts.filter((p) => p.category === filter);
 
