@@ -23,3 +23,8 @@ CREATE TABLE IF NOT EXISTS translations (
   id INT PRIMARY KEY,
   data JSON NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS pricing (
+  id INT PRIMARY KEY,
+  data JSON NOT NULL
+);

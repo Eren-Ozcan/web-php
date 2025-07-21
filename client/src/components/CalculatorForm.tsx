@@ -1,14 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import api from '../api';
 import { useTranslation } from 'react-i18next';
-
-interface PricingConfig {
-  products: Record<string, { basePrice: number }>;
-  features: Record<
-    string,
-    { label: string; multiplier: number; products: string[] }
-  >;
-}
+import { PricingConfig } from '../pricing';
 
 export default function CalculatorForm() {
   const { t } = useTranslation();

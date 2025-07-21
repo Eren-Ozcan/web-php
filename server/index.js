@@ -43,6 +43,7 @@ export function hashPassword(password) {
 
 let contentData;
 let translationsData;
+let pricingData;
 
 async function ensureTables() {
   await pool.query(`CREATE TABLE IF NOT EXISTS content (
@@ -50,6 +51,10 @@ async function ensureTables() {
     data JSON NOT NULL
   )`);
   await pool.query(`CREATE TABLE IF NOT EXISTS translations (
+    id INT PRIMARY KEY,
+    data JSON NOT NULL
+  )`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS pricing (
     id INT PRIMARY KEY,
     data JSON NOT NULL
   )`);
@@ -92,10 +97,30 @@ async function loadData() {
         ]);
       }
     }
+
+    const [pRows] = await pool.query('SELECT data FROM pricing WHERE id = 1');
+    if (!pRows.length) {
+      pricingData = loadJson('pricing.json');
+      await pool.query('INSERT INTO pricing (id, data) VALUES (1, ?)', [
+        JSON.stringify(pricingData)
+      ]);
+    } else {
+      const rawP = pRows[0].data;
+      const parsedP = typeof rawP === 'string' ? JSON.parse(rawP) : rawP;
+      if (parsedP && Object.keys(parsedP).length) {
+        pricingData = parsedP;
+      } else {
+        pricingData = loadJson('pricing.json');
+        await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [
+          JSON.stringify(pricingData)
+        ]);
+      }
+    }
   } catch (err) {
     console.error('Failed to load from database, falling back to files', err);
     contentData = loadJson('content.json');
     translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
+    pricingData = loadJson('pricing.json');
   }
 }
 
@@ -168,6 +193,26 @@ app.post('/api/translations', async (req, res) => {
   } catch (err) {
     console.error('Failed to save translations', err);
     res.status(500).json({ error: 'Could not save translations' });
+  }
+});
+
+// Pricing API
+app.get('/api/pricing', (req, res) => {
+  res.json(pricingData);
+});
+
+app.post('/api/pricing', async (req, res) => {
+  const data = req.body;
+  try {
+    pricingData = data;
+    await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [
+      JSON.stringify(pricingData)
+    ]);
+    saveJson('pricing.json', pricingData);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Failed to save pricing', err);
+    res.status(500).json({ error: 'Could not save pricing' });
   }
 });
 
