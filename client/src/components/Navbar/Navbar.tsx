@@ -25,10 +25,14 @@ export default function Navbar() {
   return (
     <nav className="bg-blue-600 text-white">
       {/* Desktop Navbar */}
-      <div className="hidden md:flex container mx-auto p-4 items-center justify-between h-16">
+      <div className="hidden md:flex container mx-auto p-4 items-center justify-between h-24">
         <div className="flex items-center space-x-6 h-full">
           <Link to="/" className="h-full flex items-center">
-            <img src="/images/logo.svg" alt="Logo" className="h-full w-auto mr-4 object-contain" />
+            <img
+              src="/images/logo.svg"
+              alt="Logo"
+              className="h-[80x] md:h-[90px] max-h-[90px] w-auto mr-4 object-contain transition-all duration-200"
+            />
           </Link>
           {menuItems.map((item) => (
             <Link
@@ -65,8 +69,13 @@ export default function Navbar() {
       {/* Mobile Navbar */}
       <div className="md:hidden p-4 h-16">
         <div className="flex justify-between items-center h-full">
-          <Link to="/" className="h-full flex items-center">
-            <img src="/images/logo.svg" alt="Logo" className="h-full w-auto object-contain" />
+          <Link to="/" className="h-full flex items-center px-4">
+            <img
+              src="/images/logo.svg"
+              alt="Logo"
+              className="h-full w-auto object-contain"
+              style={{ minWidth: 48 }} // İsteğe bağlı, minimum genişlik için
+            />
           </Link>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
