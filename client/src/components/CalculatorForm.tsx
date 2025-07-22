@@ -41,6 +41,13 @@ export default function CalculatorForm() {
     fetchConfig();
   }, []);
 
+  useEffect(() => {
+    if (!config) return;
+    const initialOpts: Record<string, boolean> = {};
+    Object.keys(config.features).forEach((key) => (initialOpts[key] = false));
+    setOptions(initialOpts);
+  }, [product, config]);
+
   const visibleFeatures = useMemo(() => {
     if (!config) return [];
     return Object.entries(config.features).filter(([_, v]) => v.products.includes(product));
@@ -127,13 +134,24 @@ export default function CalculatorForm() {
       {visibleFeatures.length > 0 && (
         <div className="mb-4 space-y-2">
           {visibleFeatures.map(([key, val]) => (
-            <label key={key} className="flex items-center space-x-2">
+            <label key={key} className="flex items-start space-x-2">
               <input
                 type="checkbox"
                 checked={options[key]}
-                onChange={(e) => setOptions({ ...options, [key]: e.target.checked })}
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  const cleared: Record<string, boolean> = {};
+                  Object.keys(options).forEach((k) => (cleared[k] = false));
+                  if (checked) cleared[key] = true;
+                  setOptions(cleared);
+                }}
               />
-              <span>{t(val.label)}</span>
+              <span className="flex flex-col">
+                {t(val.label)}
+                {val.description && (
+                  <span className="text-sm text-gray-600">{t(val.description)}</span>
+                )}
+              </span>
             </label>
           ))}
         </div>

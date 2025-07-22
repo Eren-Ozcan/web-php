@@ -1,6 +1,6 @@
 export interface PricingConfig {
   products: Record<string, { basePrice: number }>;
-  features: Record<string, { label: string; multiplier: number; products: string[] }>;
+  features: Record<string, { label: string; description?: string; multiplier: number; products: string[] }>;
   productOrder: string[];
 }
 
@@ -12,9 +12,24 @@ const defaultPricing: PricingConfig = {
     balcony: { basePrice: 200 }
   },
   features: {
-    tempered: { label: 'tempered_feature', multiplier: 1.25, products: ['glass'] },
-    colored: { label: 'colored_feature', multiplier: 1.1, products: ['glass', 'pvc'] },
-    double: { label: 'double_glazing_feature', multiplier: 1.3, products: ['pvc', 'balcony'] }
+    tempered: {
+      label: 'tempered_feature',
+      description: 'tempered_feature_desc',
+      multiplier: 1.25,
+      products: ['glass']
+    },
+    colored: {
+      label: 'colored_feature',
+      description: 'colored_feature_desc',
+      multiplier: 1.1,
+      products: ['glass', 'pvc']
+    },
+    double: {
+      label: 'double_glazing_feature',
+      description: 'double_glazing_feature_desc',
+      multiplier: 1.3,
+      products: ['pvc', 'balcony']
+    }
   }
 };
 
