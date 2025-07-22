@@ -18,7 +18,6 @@ export default function Blogs() {
     }
   }, [filter]);
 
-  const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
   const posts: BlogPost[] = content.blogs;
   const blogCategories = content.categories.blogs;
 
@@ -42,7 +41,7 @@ export default function Blogs() {
         {filtered.map((post) => (
           <div
             key={post.id}
-            onClick={() => navigate(`/article/${toSlug(t(post.titleKey))}`, { state: { filter } })}
+            onClick={() => navigate(`/article/${post.id}`, { state: { filter } })}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
             {post.image && (

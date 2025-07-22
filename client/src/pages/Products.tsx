@@ -27,7 +27,6 @@ export default function Products() {
     }
   }, [filter]);
 
-  const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   const products: Product[] = content.products;
   const lang = i18n.language as Language;
@@ -53,7 +52,7 @@ export default function Products() {
         {filtered.map((p) => (
           <div
             key={p.id}
-            onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`, { state: { filter } })}
+            onClick={() => navigate(`/article/${p.id}`, { state: { filter } })}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
             <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />

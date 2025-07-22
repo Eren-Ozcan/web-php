@@ -43,6 +43,21 @@ const ContentAdmin: React.FC = () => {
       en: t('values_text', { lng: 'en' })
     }
   });
+  const duplicateInfo = React.useMemo(() => {
+    const ids = new Set<number>();
+    const titles = new Set<string>();
+    const idDup: number[] = [];
+    const titleDup: string[] = [];
+    ['blogs', 'projects', 'reviews', 'products'].forEach((key) => {
+      (content as any)[key]?.forEach((item: any) => {
+        if (ids.has(item.id)) idDup.push(item.id);
+        ids.add(item.id);
+        if (titles.has(item.titleKey)) titleDup.push(item.titleKey);
+        titles.add(item.titleKey);
+      });
+    });
+    return { idDup, titleDup };
+  }, [content]);
   const { setContent: setGlobalContent } = useContent();
 
   useEffect(() => {
@@ -194,6 +209,20 @@ const ContentAdmin: React.FC = () => {
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">{t('admin_title')}</h1>
+      {(duplicateInfo.idDup.length > 0 || duplicateInfo.titleDup.length > 0) && (
+        <div className="bg-yellow-100 text-yellow-800 p-2 rounded">
+          {duplicateInfo.idDup.length > 0 && (
+            <div>
+              {t('admin_duplicate_id')}: {duplicateInfo.idDup.join(', ')}
+            </div>
+          )}
+          {duplicateInfo.titleDup.length > 0 && (
+            <div>
+              {t('admin_duplicate_title')}: {duplicateInfo.titleDup.join(', ')}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Sekme seçimi */}
       <div className="space-x-2">
