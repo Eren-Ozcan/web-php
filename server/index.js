@@ -160,11 +160,6 @@ async function loadData() {
       if (!pricingData.productOrder) {
         pricingData.productOrder = Object.keys(pricingData.products || {});
       }
-      Object.entries(pricingData.features || {}).forEach(([k, f]) => {
-        if (!f.description) {
-          pricingData.features[k].description = `${k}_desc`;
-        }
-      });
       await pool.query('INSERT INTO pricing (id, data) VALUES (1, ?)', [
         JSON.stringify(pricingData)
       ]);
@@ -176,21 +171,11 @@ async function loadData() {
           parsedP.productOrder = Object.keys(parsedP.products || {});
         }
         pricingData = parsedP;
-        Object.entries(pricingData.features || {}).forEach(([k, f]) => {
-          if (!f.description) {
-            pricingData.features[k].description = `${k}_desc`;
-          }
-        });
       } else {
         pricingData = loadJson('pricing.json');
         if (!pricingData.productOrder) {
           pricingData.productOrder = Object.keys(pricingData.products || {});
         }
-        Object.entries(pricingData.features || {}).forEach(([k, f]) => {
-          if (!f.description) {
-            pricingData.features[k].description = `${k}_desc`;
-          }
-        });
         await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [JSON.stringify(pricingData)]);
       }
     }
@@ -203,11 +188,6 @@ async function loadData() {
     if (!pricingData.productOrder) {
       pricingData.productOrder = Object.keys(pricingData.products || {});
     }
-    Object.entries(pricingData.features || {}).forEach(([k, f]) => {
-      if (!f.description) {
-        pricingData.features[k].description = `${k}_desc`;
-      }
-    });
   }
 }
 
