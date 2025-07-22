@@ -6,7 +6,7 @@ import { PricingConfig } from '../pricing';
 export default function CalculatorForm() {
   const { t } = useTranslation();
   const [config, setConfig] = useState<PricingConfig | null>(null);
-  const [product, setProduct] = useState('glass');
+  const [product, setProduct] = useState('');
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
   const [qty, setQty] = useState(1);
@@ -19,6 +19,9 @@ export default function CalculatorForm() {
       try {
         const res = await api.get<PricingConfig>('/api/pricing');
         if (res.data && res.data.products && res.data.features) {
+          if (res.data.productOrder && res.data.productOrder.length > 0) {
+            setProduct(res.data.productOrder[0]);
+          }
           setConfig(res.data);
           const initialOpts: Record<string, boolean> = {};
           Object.keys(res.data.features).forEach((key) => (initialOpts[key] = false));
@@ -77,7 +80,7 @@ export default function CalculatorForm() {
         >
           {config.productOrder.map((p) => (
             <option key={p} value={p}>
-              {p}
+              {t(`product_${p}`, p)}
             </option>
           ))}
         </select>
