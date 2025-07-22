@@ -4,7 +4,7 @@ import i18n, { Language } from '../i18n';
 import { loadContent, ContentData, CategoryEntry, normalizeCategories } from '../content';
 import api from '../api';
 import { useContent } from '../ContentContext';
-import { PricingConfig, loadPricing } from '../pricing';
+import { PricingConfig, loadPricing, normalizePricing } from '../pricing';
 
 const SECTION_KEYS = [
   'blogs',
@@ -54,7 +54,7 @@ const ContentAdmin: React.FC = () => {
           api.get<PricingConfig>('/api/pricing')
         ]);
         setContent(cRes.data);
-        setPricing(pRes.data);
+        setPricing(normalizePricing(pRes.data));
         localStorage.setItem('content', JSON.stringify(cRes.data));
         localStorage.setItem('translations', JSON.stringify(tRes.data));
         localStorage.setItem('pricing', JSON.stringify(pRes.data));
@@ -437,7 +437,10 @@ const ContentAdmin: React.FC = () => {
                               fKey,
                               {
                                 ...fVal,
-                                products: fVal.products.map((p) => (p === key ? newKey : p))
+                                products: {
+                                  tr: fVal.products.tr.map((p) => (p === key ? newKey : p)),
+                                  en: fVal.products.en.map((p) => (p === key ? newKey : p))
+                                }
                               }
                             ])
                           );
@@ -512,7 +515,6 @@ const ContentAdmin: React.FC = () => {
             <thead>
               <tr className="text-left">
                 <th className="border p-2">{t('admin_label')}</th>
-                <th className="border p-2">{t('admin_description')}</th>
                 <th className="border p-2">{t('admin_multiplier')}</th>
                 <th className="border p-2">{t('admin_products')}</th>
                 <th className="border p-2">{t('admin_actions')}</th>
@@ -527,60 +529,32 @@ const ContentAdmin: React.FC = () => {
                         <span className="w-12 text-sm font-semibold">TR</span>
                         <input
                           className="border p-1 flex-1"
-                          value={i18next.t(f.label, { lng: 'tr' })}
-                          onChange={(e) => updateTranslation('tr', f.label, e.target.value)}
+                          value={f.label.tr}
+                          onChange={(e) =>
+                            setPricing({
+                              ...pricing,
+                              features: {
+                                ...pricing.features,
+                                [k]: { ...f, label: { ...f.label, tr: e.target.value } }
+                              }
+                            })
+                          }
                         />
                       </div>
                       <div className="flex items-center space-x-2">
                         <span className="w-12 text-sm font-semibold">EN</span>
                         <input
                           className="border p-1 flex-1"
-                          value={i18next.t(f.label, { lng: 'en' })}
-                          onChange={(e) => updateTranslation('en', f.label, e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  </td>
-                  <td className="border p-2">
-                    <div className="flex flex-col space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className="w-12 text-sm font-semibold">TR</span>
-                        <input
-                          className="border p-1 flex-1"
-                          value={f.description ? i18next.t(f.description, { lng: 'tr' }) : ''}
-                          onChange={(e) => {
-                            const descKey = f.description || `${k}_desc`;
-                            if (!f.description) {
-                              setPricing({
-                                ...pricing,
-                                features: {
-                                  ...pricing.features,
-                                  [k]: { ...f, description: descKey }
-                                }
-                              });
-                            }
-                            updateTranslation('tr', descKey, e.target.value);
-                          }}
-                        />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="w-12 text-sm font-semibold">EN</span>
-                        <input
-                          className="border p-1 flex-1"
-                          value={f.description ? i18next.t(f.description, { lng: 'en' }) : ''}
-                          onChange={(e) => {
-                            const descKey = f.description || `${k}_desc`;
-                            if (!f.description) {
-                              setPricing({
-                                ...pricing,
-                                features: {
-                                  ...pricing.features,
-                                  [k]: { ...f, description: descKey }
-                                }
-                              });
-                            }
-                            updateTranslation('en', descKey, e.target.value);
-                          }}
+                          value={f.label.en}
+                          onChange={(e) =>
+                            setPricing({
+                              ...pricing,
+                              features: {
+                                ...pricing.features,
+                                [k]: { ...f, label: { ...f.label, en: e.target.value } }
+                              }
+                            })
+                          }
                         />
                       </div>
                     </div>
@@ -600,17 +574,48 @@ const ContentAdmin: React.FC = () => {
                     />
                   </td>
                   <td className="border p-2">
-                    <input
-                      className="border p-1 w-full"
-                      value={f.products.join(',')}
-                      onChange={(e) => {
-                        const arr = e.target.value.split(',').map((s) => s.trim());
-                        setPricing({
-                          ...pricing,
-                          features: { ...pricing.features, [k]: { ...f, products: arr } }
-                        });
-                      }}
-                    />
+                    <div className="flex flex-col space-y-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="w-12 text-sm font-semibold">TR</span>
+                        <input
+                          className="border p-1 flex-1"
+                          value={f.products.tr.join(',')}
+                          onChange={(e) => {
+                            const arr = e.target.value
+                              .split(',')
+                              .map((s) => s.trim())
+                              .filter(Boolean);
+                            setPricing({
+                              ...pricing,
+                              features: {
+                                ...pricing.features,
+                                [k]: { ...f, products: { ...f.products, tr: arr } }
+                              }
+                            });
+                          }}
+                        />
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="w-12 text-sm font-semibold">EN</span>
+                        <input
+                          className="border p-1 flex-1"
+                          value={f.products.en.join(',')}
+                          onChange={(e) => {
+                            const arr = e.target.value
+                              .split(',')
+                              .map((s) => s.trim())
+                              .filter(Boolean);
+                            setPricing({
+                              ...pricing,
+                              features: {
+                                ...pricing.features,
+                                [k]: { ...f, products: { ...f.products, en: arr } }
+                              }
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
                   </td>
                   <td className="border p-2">
                     <button
@@ -631,16 +636,15 @@ const ContentAdmin: React.FC = () => {
           <button
             onClick={() => {
               const key = prompt('feature key');
-              if (!key) return;
+              if (!key || pricing.features[key]) return;
               setPricing({
                 ...pricing,
                 features: {
                   ...pricing.features,
                   [key]: {
-                    label: key,
-                    description: `${key}_desc`,
+                    label: { tr: '', en: '' },
                     multiplier: 1,
-                    products: []
+                    products: { tr: [], en: [] }
                   }
                 }
               });

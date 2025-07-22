@@ -92,6 +92,34 @@ function normalizeCategories(cat) {
   };
 }
 
+function normalizePricing(p) {
+  if (!p) return { features: {}, products: {}, productOrder: [] };
+  if (!p.productOrder) {
+    p.productOrder = Object.keys(p.products || {});
+  }
+  Object.entries(p.features || {}).forEach(([k, f]) => {
+    if (typeof f.label === 'string') {
+      const tr = translationsData?.tr?.[f.label] || f.label;
+      const en = translationsData?.en?.[f.label] || f.label;
+      p.features[k].label = { tr, en };
+    } else {
+      f.label = { tr: f.label.tr || '', en: f.label.en || '' };
+    }
+
+    if (Array.isArray(f.products)) {
+      p.features[k].products = { tr: f.products, en: f.products };
+    } else {
+      p.features[k].products = {
+        tr: f.products?.tr || [],
+        en: f.products?.en || []
+      };
+    }
+
+    if ('description' in f) delete p.features[k].description;
+  });
+  return p;
+}
+
 async function ensureTables() {
   await pool.query(`CREATE TABLE IF NOT EXISTS content (
     id INT PRIMARY KEY,
@@ -156,15 +184,7 @@ async function loadData() {
 
     const [pRows] = await pool.query('SELECT data FROM pricing WHERE id = 1');
     if (!pRows.length) {
-      pricingData = loadJson('pricing.json');
-      if (!pricingData.productOrder) {
-        pricingData.productOrder = Object.keys(pricingData.products || {});
-      }
-      Object.entries(pricingData.features || {}).forEach(([k, f]) => {
-        if (!f.description) {
-          pricingData.features[k].description = `${k}_desc`;
-        }
-      });
+      pricingData = normalizePricing(loadJson('pricing.json'));
       await pool.query('INSERT INTO pricing (id, data) VALUES (1, ?)', [
         JSON.stringify(pricingData)
       ]);
@@ -175,22 +195,9 @@ async function loadData() {
         if (!parsedP.productOrder) {
           parsedP.productOrder = Object.keys(parsedP.products || {});
         }
-        pricingData = parsedP;
-        Object.entries(pricingData.features || {}).forEach(([k, f]) => {
-          if (!f.description) {
-            pricingData.features[k].description = `${k}_desc`;
-          }
-        });
+        pricingData = normalizePricing(parsedP);
       } else {
-        pricingData = loadJson('pricing.json');
-        if (!pricingData.productOrder) {
-          pricingData.productOrder = Object.keys(pricingData.products || {});
-        }
-        Object.entries(pricingData.features || {}).forEach(([k, f]) => {
-          if (!f.description) {
-            pricingData.features[k].description = `${k}_desc`;
-          }
-        });
+        pricingData = normalizePricing(loadJson('pricing.json'));
         await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [JSON.stringify(pricingData)]);
       }
     }
@@ -199,15 +206,7 @@ async function loadData() {
     contentData = loadJson('content.json');
     contentData.categories = normalizeCategories(contentData.categories);
     translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
-    pricingData = loadJson('pricing.json');
-    if (!pricingData.productOrder) {
-      pricingData.productOrder = Object.keys(pricingData.products || {});
-    }
-    Object.entries(pricingData.features || {}).forEach(([k, f]) => {
-      if (!f.description) {
-        pricingData.features[k].description = `${k}_desc`;
-      }
-    });
+    pricingData = normalizePricing(loadJson('pricing.json'));
   }
 }
 
@@ -289,7 +288,7 @@ app.get('/api/pricing', (req, res) => {
 app.post('/api/pricing', async (req, res) => {
   const data = req.body;
   try {
-    pricingData = data;
+    pricingData = normalizePricing(data);
     await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [JSON.stringify(pricingData)]);
     saveJson('pricing.json', pricingData);
     res.json({ success: true });

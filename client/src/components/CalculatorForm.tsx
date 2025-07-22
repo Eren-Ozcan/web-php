@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { PricingConfig } from '../pricing';
 
 export default function CalculatorForm() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [config, setConfig] = useState<PricingConfig | null>(null);
-  const [product, setProduct] = useState('glass');
+  const [product, setProduct] = useState('cam');
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
   const [qty, setQty] = useState(1);
-  const [options, setOptions] = useState<Record<string, boolean>>({});
+  const [selected, setSelected] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
 
@@ -20,9 +20,7 @@ export default function CalculatorForm() {
         const res = await api.get<PricingConfig>('/api/pricing');
         if (res.data && res.data.products && res.data.features) {
           setConfig(res.data);
-          const initialOpts: Record<string, boolean> = {};
-          Object.keys(res.data.features).forEach((key) => (initialOpts[key] = false));
-          setOptions(initialOpts);
+          setSelected('');
           setError(null);
         } else {
           throw new Error('Invalid response');
@@ -30,7 +28,7 @@ export default function CalculatorForm() {
       } catch (err) {
         console.error('Failed to fetch pricing', err);
         setConfig(null);
-        setOptions({});
+        setSelected('');
         setError(t('pricing_error'));
       }
     };
@@ -39,15 +37,17 @@ export default function CalculatorForm() {
   }, []);
 
   useEffect(() => {
-    if (!config) return;
-    const reset: Record<string, boolean> = {};
-    Object.keys(config.features).forEach((k) => (reset[k] = false));
-    setOptions(reset);
+    setSelected('');
   }, [product, config]);
 
   const visibleFeatures = useMemo(() => {
     if (!config) return [];
-    return Object.entries(config.features).filter(([_, v]) => v.products.includes(product));
+    return Object.entries(config.features).filter(([_, v]) => {
+      const list = Array.isArray((v as any).products)
+        ? (v as any).products
+        : v.products?.tr;
+      return Array.isArray(list) && list.includes(product);
+    });
   }, [config, product]);
 
   const calculateTotal = () => {
@@ -64,9 +64,9 @@ export default function CalculatorForm() {
     const area = (w * h) / 10000; // cm to m2
     const base = config.products[product].basePrice;
     let multiplier = 1;
-    visibleFeatures.forEach(([key, val]) => {
-      if (options[key]) multiplier *= val.multiplier;
-    });
+    if (selected && config.features[selected]) {
+      multiplier *= config.features[selected].multiplier;
+    }
     setTotal(area * base * multiplier * qty);
   };
 
@@ -133,20 +133,15 @@ export default function CalculatorForm() {
           {visibleFeatures.map(([key, val]) => (
             <label key={key} className="flex items-start space-x-2">
               <input
-                type="checkbox"
-                checked={options[key]}
-                onChange={(e) => {
-                  const newOpts: Record<string, boolean> = {};
-                  Object.keys(options).forEach((k) => (newOpts[k] = false));
-                  if (e.target.checked) newOpts[key] = true;
-                  setOptions(newOpts);
-                }}
+                type="radio"
+                name="feature"
+                checked={selected === key}
+                onChange={() => setSelected(key)}
               />
-              <span className="flex-1">
-                <span className="font-medium block">{t(val.label)}</span>
-                {val.description && (
-                  <span className="text-sm text-gray-600">{t(val.description)}</span>
-                )}
+              <span className="flex-1 font-medium">
+                {typeof (val as any).label === 'string'
+                  ? (val as any).label
+                  : (val as any).label[i18n.language as 'tr' | 'en']}
               </span>
             </label>
           ))}
