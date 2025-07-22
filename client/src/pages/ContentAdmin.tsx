@@ -6,6 +6,18 @@ import api from '../api';
 import { useContent } from '../ContentContext';
 import { PricingConfig, loadPricing } from '../pricing';
 
+const SECTION_KEYS = [
+  'blogs',
+  'projects',
+  'reviews',
+  'products',
+  'basic',
+  'categories',
+  'pricing'
+] as const;
+
+const CATEGORY_KEYS = ['blogs', 'projects', 'reviews', 'products'] as const;
+
 const ContentAdmin: React.FC = () => {
   const { t, i18n: i18next } = useTranslation();
   const [content, setContent] = useState<ContentData>(loadContent());
@@ -185,7 +197,9 @@ const ContentAdmin: React.FC = () => {
 
       {/* Sekme seçimi */}
       <div className="space-x-2">
-        {['blogs', 'projects', 'reviews', 'products', 'basic', 'categories', 'pricing'].map((s) => (
+        {[...SECTION_KEYS]
+          .sort((a, b) => t(a).localeCompare(t(b)))
+          .map((s) => (
           <button
             key={s}
             onClick={() => setSection(s as any)}
@@ -287,7 +301,9 @@ const ContentAdmin: React.FC = () => {
       ) : section === 'categories' ? (
         <div className="space-y-2">
           <div className="space-x-2 mb-2">
-            {(['blogs', 'projects', 'reviews', 'products'] as const).map((s) => (
+            {[...CATEGORY_KEYS]
+              .sort((a, b) => t(a).localeCompare(t(b)))
+              .map((s) => (
               <button
                 key={s}
                 onClick={() => setCatSection(s)}
