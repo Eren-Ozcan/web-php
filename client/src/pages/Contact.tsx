@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 export default function Contact() {
   const { t } = useTranslation();
   return (
-    <section className="min-h-screen bg-gray-50 py-12 px-4">
+    <section className="bg-gray-50 py-12 px-4">
       <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-8">
         <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">
           {t('contact_form_heading')}
