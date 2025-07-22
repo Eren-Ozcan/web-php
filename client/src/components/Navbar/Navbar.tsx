@@ -25,13 +25,13 @@ export default function Navbar() {
   return (
     <nav className="bg-blue-600 text-white">
       {/* Desktop Navbar */}
-      <div className="hidden md:flex container mx-auto p-4 items-center justify-between">
-        <div className="flex items-center space-x-6">
-          <Link to="/">
+      <div className="hidden md:flex container mx-auto p-4 items-center justify-between h-16">
+        <div className="flex items-center space-x-6 h-full">
+          <Link to="/" className="h-full flex items-center">
             <img
               src="/images/logo.svg"
               alt="Logo"
-              className="h-10 w-10 mr-4 object-contain"
+              className="h-full w-auto mr-4 object-contain"
             />
           </Link>
           {menuItems.map((item) => (
@@ -67,13 +67,13 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Navbar */}
-      <div className="md:hidden p-4">
-        <div className="flex justify-between items-center">
-          <Link to="/">
+      <div className="md:hidden p-4 h-16">
+        <div className="flex justify-between items-center h-full">
+          <Link to="/" className="h-full flex items-center">
             <img
               src="/images/logo.svg"
               alt="Logo"
-              className="h-10 w-10 object-contain"
+              className="h-full w-auto object-contain"
             />
           </Link>
           <button
