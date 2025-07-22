@@ -11,13 +11,25 @@ const ContentAdmin: React.FC = () => {
   const [content, setContent] = useState<ContentData>(loadContent());
   const [pricing, setPricing] = useState<PricingConfig>(loadPricing());
   const [productNameEdits, setProductNameEdits] = useState<Record<string, string>>({});
-  const [basicTexts, setBasicTexts] = useState({
-    mission: t('mission'),
-    mission_text: t('mission_text'),
-    vision: t('vision'),
-    vision_text: t('vision_text'),
-    values: t('values'),
-    values_text: t('values_text')
+  const [basicTexts, setBasicTexts] = useState<Record<string, { tr: string; en: string }>>({
+    mission: {
+      tr: t('mission', { lng: 'tr' }),
+      en: t('mission', { lng: 'en' })
+    },
+    mission_text: {
+      tr: t('mission_text', { lng: 'tr' }),
+      en: t('mission_text', { lng: 'en' })
+    },
+    vision: { tr: t('vision', { lng: 'tr' }), en: t('vision', { lng: 'en' }) },
+    vision_text: {
+      tr: t('vision_text', { lng: 'tr' }),
+      en: t('vision_text', { lng: 'en' })
+    },
+    values: { tr: t('values', { lng: 'tr' }), en: t('values', { lng: 'en' }) },
+    values_text: {
+      tr: t('values_text', { lng: 'tr' }),
+      en: t('values_text', { lng: 'en' })
+    }
   });
   const { setContent: setGlobalContent } = useContent();
 
@@ -40,12 +52,30 @@ const ContentAdmin: React.FC = () => {
           });
         });
         setBasicTexts({
-          mission: i18next.t('mission'),
-          mission_text: i18next.t('mission_text'),
-          vision: i18next.t('vision'),
-          vision_text: i18next.t('vision_text'),
-          values: i18next.t('values'),
-          values_text: i18next.t('values_text')
+          mission: {
+            tr: i18next.t('mission', { lng: 'tr' }),
+            en: i18next.t('mission', { lng: 'en' })
+          },
+          mission_text: {
+            tr: i18next.t('mission_text', { lng: 'tr' }),
+            en: i18next.t('mission_text', { lng: 'en' })
+          },
+          vision: {
+            tr: i18next.t('vision', { lng: 'tr' }),
+            en: i18next.t('vision', { lng: 'en' })
+          },
+          vision_text: {
+            tr: i18next.t('vision_text', { lng: 'tr' }),
+            en: i18next.t('vision_text', { lng: 'en' })
+          },
+          values: {
+            tr: i18next.t('values', { lng: 'tr' }),
+            en: i18next.t('values', { lng: 'en' })
+          },
+          values_text: {
+            tr: i18next.t('values_text', { lng: 'tr' }),
+            en: i18next.t('values_text', { lng: 'en' })
+          }
         });
       } catch (err) {
         console.error('Failed to load admin data', err);
@@ -187,26 +217,72 @@ const ContentAdmin: React.FC = () => {
             ].map(({ titleKey, textKey }) => (
               <tr key={titleKey}>
                 <td className="border p-2">
-                  <input
-                    className="border p-1 w-full"
-                    value={(basicTexts as any)[titleKey]}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      updateTranslation(titleKey, val);
-                      setBasicTexts((prev) => ({ ...prev, [titleKey]: val }));
-                    }}
-                  />
+                  <div className="flex flex-col space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">TR</span>
+                      <input
+                        className="border p-1 flex-1"
+                        value={basicTexts[titleKey].tr}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          updateTranslation('tr', titleKey, val);
+                          setBasicTexts((prev) => ({
+                            ...prev,
+                            [titleKey]: { ...prev[titleKey], tr: val }
+                          }));
+                        }}
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">EN</span>
+                      <input
+                        className="border p-1 flex-1"
+                        value={basicTexts[titleKey].en}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          updateTranslation('en', titleKey, val);
+                          setBasicTexts((prev) => ({
+                            ...prev,
+                            [titleKey]: { ...prev[titleKey], en: val }
+                          }));
+                        }}
+                      />
+                    </div>
+                  </div>
                 </td>
                 <td className="border p-2">
-                  <input
-                    className="border p-1 w-full"
-                    value={(basicTexts as any)[textKey]}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      updateTranslation(textKey, val);
-                      setBasicTexts((prev) => ({ ...prev, [textKey]: val }));
-                    }}
-                  />
+                  <div className="flex flex-col space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">TR</span>
+                      <input
+                        className="border p-1 flex-1"
+                        value={basicTexts[textKey].tr}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          updateTranslation('tr', textKey, val);
+                          setBasicTexts((prev) => ({
+                            ...prev,
+                            [textKey]: { ...prev[textKey], tr: val }
+                          }));
+                        }}
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">EN</span>
+                      <input
+                        className="border p-1 flex-1"
+                        value={basicTexts[textKey].en}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          updateTranslation('en', textKey, val);
+                          setBasicTexts((prev) => ({
+                            ...prev,
+                            [textKey]: { ...prev[textKey], en: val }
+                          }));
+                        }}
+                      />
+                    </div>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -523,55 +599,63 @@ const ContentAdmin: React.FC = () => {
             {entries.map((item: any, idx: number) => (
               <tr key={item.id}>
                 <td className="border p-2">
-                  <div className="flex flex-col space-y-1">
-                    <input
-                      className="border p-1 w-full"
-                      value={i18next.t(item.titleKey, { lng: 'tr' })}
-                      onChange={(e) =>
-                        handleChange(idx, 'title', e.target.value, 'tr')
-                      }
-                      placeholder="TR"
-                    />
-                    <input
-                      className="border p-1 w-full"
-                      value={i18next.t(item.titleKey, { lng: 'en' })}
-                      onChange={(e) =>
-                        handleChange(idx, 'title', e.target.value, 'en')
-                      }
-                      placeholder="EN"
-                    />
+                  <div className="flex flex-col space-y-1"> 
+                    <div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">TR</span>
+                      <input
+                        className="border p-1 flex-1"
+                        value={i18next.t(item.titleKey, { lng: 'tr' })}
+                        onChange={(e) =>
+                          handleChange(idx, 'title', e.target.value, 'tr')
+                        }
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">EN</span>
+                      <input
+                        className="border p-1 flex-1"
+                        value={i18next.t(item.titleKey, { lng: 'en' })}
+                        onChange={(e) =>
+                          handleChange(idx, 'title', e.target.value, 'en')
+                        }
+                      />
+                    </div>
                   </div>
                 </td>
                 <td className="border p-2">
                   <div className="flex flex-col space-y-1">
-                    <input
-                      className="border p-1 w-full"
-                      value={
-                        item.textKey
-                          ? i18next.t(item.textKey, { lng: 'tr' })
-                          : item.descriptionKey
-                            ? i18next.t(item.descriptionKey, { lng: 'tr' })
-                            : ''
-                      }
-                      onChange={(e) =>
-                        handleChange(idx, 'text', e.target.value, 'tr')
-                      }
-                      placeholder="TR"
-                    />
-                    <input
-                      className="border p-1 w-full"
-                      value={
-                        item.textKey
-                          ? i18next.t(item.textKey, { lng: 'en' })
-                          : item.descriptionKey
-                            ? i18next.t(item.descriptionKey, { lng: 'en' })
-                            : ''
-                      }
-                      onChange={(e) =>
-                        handleChange(idx, 'text', e.target.value, 'en')
-                      }
-                      placeholder="EN"
-                    />
+<div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">TR</span>
+                      <input
+                        className="border p-1 flex-1"
+                        value={
+                          item.textKey
+                            ? i18next.t(item.textKey, { lng: 'tr' })
+                            : item.descriptionKey
+                              ? i18next.t(item.descriptionKey, { lng: 'tr' })
+                              : ''
+                        }
+                        onChange={(e) =>
+                          handleChange(idx, 'text', e.target.value, 'tr')
+                        }
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">EN</span>
+                      <input
+                        className="border p-1 flex-1"
+                        value={
+                          item.textKey
+                            ? i18next.t(item.textKey, { lng: 'en' })
+                            : item.descriptionKey
+                              ? i18next.t(item.descriptionKey, { lng: 'en' })
+                              : ''
+                        }
+                        onChange={(e) =>
+                          handleChange(idx, 'text', e.target.value, 'en')
+                        }
+                      />
+                    </div>
                   </div>
                 </td>
                 <td className="border p-2">
@@ -600,31 +684,36 @@ const ContentAdmin: React.FC = () => {
                     />
                   )}
                 </td>
-
                 <td className="border p-2">
                   <div className="flex flex-col space-y-1">
-                    <select
-                      className="border p-1 w-full"
-                      value={item.category || ''}
-                      onChange={(e) => handleChange(idx, 'category', e.target.value)}
-                    >
-                      {Object.entries(categoryOptions).map(([key, val]) => (
-                        <option key={key} value={key}>
-                          {val.tr}
-                        </option>
-                      ))}
-                    </select>
-                    <select
-                      className="border p-1 w-full"
-                      value={item.category || ''}
-                      onChange={(e) => handleChange(idx, 'category', e.target.value)}
-                    >
-                      {Object.entries(categoryOptions).map(([key, val]) => (
-                        <option key={key} value={key}>
-                          {val.en}
-                        </option>
-                      ))}
-                    </select>
+ <div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">TR</span>
+                      <select
+                        className="border p-1 flex-1"
+                        value={item.category || ''}
+                        onChange={(e) => handleChange(idx, 'category', e.target.value)}
+                      >
+                        {Object.entries(categoryOptions).map(([key, val]) => (
+                          <option key={key} value={key}>
+                            {val.tr}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-12 text-sm font-semibold">EN</span>
+                      <select
+                        className="border p-1 flex-1"
+                        value={item.category || ''}
+                        onChange={(e) => handleChange(idx, 'category', e.target.value)}
+                      >
+                        {Object.entries(categoryOptions).map(([key, val]) => (
+                          <option key={key} value={key}>
+                            {val.en}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </td>
                 {section === 'projects' && (
