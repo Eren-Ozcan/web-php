@@ -1,18 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { BlogPost } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Blogs() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
-  const [filter, setFilter] = useState('all');
+  const location = useLocation();
   const navigate = useNavigate();
+  const [filter, setFilter] = useState((location.state as any)?.filter ?? 'all');
+
+  useEffect(() => {
+    if ((location.state as any)?.filter !== filter) {
+      navigate('.', { replace: true, state: { filter } });
+    }
+  }, [filter]);
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
   const posts: BlogPost[] = content.blogs;
-  const blogCategories = content.categories.blogs;
+  const blogCategories = content.categories.blogs[i18n.language] || [];
 
   const filtered = filter === 'all' ? posts : posts.filter((p) => p.category === filter);
 
@@ -26,7 +33,11 @@ export default function Blogs() {
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}` as any)}
+            {(() => {
+              const key = f.replace(/^filter_/, '');
+              const label = t(`filter_${key}` as any);
+              return label.startsWith('filter_') ? key : label;
+            })()}
           </button>
         ))}
       </div>
@@ -34,11 +45,22 @@ export default function Blogs() {
         {filtered.map((post) => (
           <div
             key={post.id}
-            onClick={() => navigate(`/article/${toSlug(t(post.titleKey))}`)}
-            className="bg-white shadow rounded p-4 cursor-pointer"
+            onClick={() =>
+              navigate(`/article/${toSlug(t(post.titleKey))}`, { state: { filter } })
+            }
+            className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
-            <h3 className="font-semibold text-lg mb-2">{t(post.titleKey)}</h3>
-            <p className="text-sm text-gray-600 mb-2">{t(post.textKey)}</p>
+            {post.image && (
+              <img
+                src={post.image}
+                alt={t(post.titleKey)}
+                className="w-full h-48 object-cover"
+              />
+            )}
+            <div className="p-4">
+              <h3 className="font-semibold text-lg mb-2">{t(post.titleKey)}</h3>
+              <p className="text-sm text-gray-600 mb-2">{t(post.textKey)}</p>
+            </div>
           </div>
         ))}
       </div>

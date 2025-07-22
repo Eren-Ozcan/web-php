@@ -14,7 +14,7 @@ export default function WhatsAppButton() {
         src="/images/whatsapp.svg"
         alt="WhatsApp logo"
         className="w-12 h-12"
-      />
+         />
     </a>
   );
 }

@@ -3,6 +3,7 @@ export interface BlogPost {
   titleKey: string;
   category: string;
   textKey: string;
+  image: string;
 }
 
 export interface Project {
@@ -11,6 +12,7 @@ export interface Project {
   descriptionKey: string;
   image: string;
   category: string;
+  featured?: boolean;
 }
 
 export interface Review {
@@ -24,15 +26,21 @@ export interface Review {
 export interface Product {
   id: number;
   titleKey: string;
+  descriptionKey: string;
   image: string;
   category: string;
 }
 
+export interface CategoryList {
+  en: string[];
+  tr: string[];
+}
+
 export interface Categories {
-  blogs: string[];
-  projects: string[];
-  reviews: string[];
-  products: string[];
+  blogs: CategoryList;
+  projects: CategoryList;
+  reviews: CategoryList;
+  products: CategoryList;
 }
 
 export interface ContentData {
@@ -45,9 +53,27 @@ export interface ContentData {
 
 const defaultData: ContentData = {
   blogs: [
-    { id: 1, titleKey: 'blog1', category: 'news', textKey: 'article_lorem1' },
-    { id: 2, titleKey: 'blog2', category: 'tips', textKey: 'article_lorem2' },
-    { id: 3, titleKey: 'blog3', category: 'news', textKey: 'article_lorem3' }
+    {
+      id: 1,
+      titleKey: 'blog1',
+      category: 'news',
+      textKey: 'article_lorem1',
+      image: '/images/project1.jpg'
+    },
+    {
+      id: 2,
+      titleKey: 'blog2',
+      category: 'tips',
+      textKey: 'article_lorem2',
+      image: '/images/project2.jpg'
+    },
+    {
+      id: 3,
+      titleKey: 'blog3',
+      category: 'news',
+      textKey: 'article_lorem3',
+      image: '/images/project3.jpg'
+    }
   ],
   projects: [
     {
@@ -55,21 +81,24 @@ const defaultData: ContentData = {
       titleKey: 'project_modern_villa',
       descriptionKey: 'project_modern_villa_desc',
       image: '/images/project1.jpg',
-      category: 'glass'
+      category: 'glass',
+      featured: false
     },
     {
       id: 2,
       titleKey: 'project_office_center',
       descriptionKey: 'project_office_center_desc',
       image: '/images/project2.jpg',
-      category: 'pvc'
+      category: 'pvc',
+      featured: false
     },
     {
       id: 3,
       titleKey: 'project_shopping_mall',
       descriptionKey: 'project_shopping_mall_desc',
       image: '/images/project3.jpg',
-      category: 'balcony'
+      category: 'balcony',
+      featured: false
     }
   ],
   reviews: [
@@ -89,18 +118,57 @@ const defaultData: ContentData = {
     }
   ],
   products: [
-    { id: 1, titleKey: 'product_glass', image: '/images/cam.jpg', category: 'glass' },
-    { id: 2, titleKey: 'product_doors', image: '/images/project1.jpg', category: 'door' },
-    { id: 3, titleKey: 'product_balcony', image: '/images/project3.jpg', category: 'balcony' },
-    { id: 4, titleKey: 'product_garden', image: '/images/house3.jpg', category: 'garden' },
-    { id: 5, titleKey: 'product_office', image: '/images/project2.jpg', category: 'office' },
-    { id: 6, titleKey: 'product_facade', image: '/images/house2.jpg', category: 'facade' }
+    {
+      id: 1,
+      titleKey: 'product_glass',
+      descriptionKey: 'product_glass_desc',
+      image: '/images/cam.jpg',
+      category: 'glass'
+    },
+    {
+      id: 2,
+      titleKey: 'product_doors',
+      descriptionKey: 'product_doors_desc',
+      image: '/images/project1.jpg',
+      category: 'door'
+    },
+    {
+      id: 3,
+      titleKey: 'product_balcony',
+      descriptionKey: 'product_balcony_desc',
+      image: '/images/project3.jpg',
+      category: 'balcony'
+    },
+    {
+      id: 4,
+      titleKey: 'product_garden',
+      descriptionKey: 'product_garden_desc',
+      image: '/images/house3.jpg',
+      category: 'garden'
+    },
+    {
+      id: 5,
+      titleKey: 'product_office',
+      descriptionKey: 'product_office_desc',
+      image: '/images/project2.jpg',
+      category: 'office'
+    },
+    {
+      id: 6,
+      titleKey: 'product_facade',
+      descriptionKey: 'product_facade_desc',
+      image: '/images/house2.jpg',
+      category: 'facade'
+    }
   ],
   categories: {
-    blogs: ['news', 'tips'],
-    projects: ['glass', 'pvc', 'balcony'],
-    reviews: ['glass', 'pvc'],
-    products: ['glass', 'door', 'balcony', 'garden', 'office', 'facade']
+    blogs: { en: ['news', 'tips'], tr: ['news', 'tips'] },
+    projects: { en: ['glass', 'pvc', 'balcony'], tr: ['glass', 'pvc', 'balcony'] },
+    reviews: { en: ['glass', 'pvc'], tr: ['glass', 'pvc'] },
+    products: {
+      en: ['glass', 'door', 'balcony', 'garden', 'office', 'facade'],
+      tr: ['glass', 'door', 'balcony', 'garden', 'office', 'facade']
+    }
   }
 };
 
@@ -110,6 +178,41 @@ export function loadContent(): ContentData {
     try {
       const data = JSON.parse(stored);
       if (data && typeof data === 'object' && 'blogs' in data) {
+        const cat = (data as any).categories;
+        if (cat && Array.isArray(cat.blogs)) {
+          (data as any).categories = {
+            blogs: { en: cat.blogs, tr: cat.blogs },
+            projects: { en: cat.projects, tr: cat.projects },
+            reviews: { en: cat.reviews, tr: cat.reviews },
+            products: { en: cat.products, tr: cat.products }
+          };
+        }
+        const sanitize = (list: string[]) =>
+          list.map((c) => c.replace(/^filter_/, ''));
+        (data as ContentData).categories.blogs.en = sanitize(
+          (data as ContentData).categories.blogs.en
+        );
+        (data as ContentData).categories.blogs.tr = sanitize(
+          (data as ContentData).categories.blogs.tr
+        );
+        (data as ContentData).categories.projects.en = sanitize(
+          (data as ContentData).categories.projects.en
+        );
+        (data as ContentData).categories.projects.tr = sanitize(
+          (data as ContentData).categories.projects.tr
+        );
+        (data as ContentData).categories.reviews.en = sanitize(
+          (data as ContentData).categories.reviews.en
+        );
+        (data as ContentData).categories.reviews.tr = sanitize(
+          (data as ContentData).categories.reviews.tr
+        );
+        (data as ContentData).categories.products.en = sanitize(
+          (data as ContentData).categories.products.en
+        );
+        (data as ContentData).categories.products.tr = sanitize(
+          (data as ContentData).categories.products.tr
+        );
         return data as ContentData;
       }
     } catch {

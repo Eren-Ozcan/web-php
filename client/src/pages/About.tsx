@@ -6,7 +6,7 @@ import { Project, Review } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function About() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
   const [highlightProjects, setHighlightProjects] = useState<Project[]>([]);
   const [projectFilter, setProjectFilter] = useState('all');
@@ -27,6 +27,8 @@ export default function About() {
 
   const projectData: Project[] = content.projects;
   const reviewData: Review[] = content.reviews;
+  const projectCategories = content.categories.projects[i18n.language] || [];
+  const reviewCategories = content.categories.reviews[i18n.language] || [];
 
   return (
     <section className="p-6 max-w-6xl mx-auto">
@@ -69,13 +71,17 @@ export default function About() {
         {t('projects')}
       </h2>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', 'glass', 'pvc', 'balcony'].map((f) => (
+        {['all', ...projectCategories].map((f) => (
           <button
             key={f}
             onClick={() => setProjectFilter(f)}
             className={`px-3 py-1 rounded text-sm ${projectFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}`)}
+            {(() => {
+              const key = f.replace(/^filter_/, '');
+              const label = t(`filter_${key}` as any);
+              return label.startsWith('filter_') ? key : label;
+            })()}
           </button>
         ))}
       </div>
@@ -102,13 +108,17 @@ export default function About() {
         {t('reviews')}
       </h2>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', 'glass', 'pvc'].map((f) => (
+        {['all', ...reviewCategories].map((f) => (
           <button
             key={f}
             onClick={() => setReviewFilter(f)}
             className={`px-3 py-1 rounded text-sm ${reviewFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}`)}
+            {(() => {
+              const key = f.replace(/^filter_/, '');
+              const label = t(`filter_${key}` as any);
+              return label.startsWith('filter_') ? key : label;
+            })()}
           </button>
         ))}
       </div>

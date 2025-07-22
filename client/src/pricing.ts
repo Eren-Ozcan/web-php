@@ -1,9 +1,11 @@
 export interface PricingConfig {
   products: Record<string, { basePrice: number }>;
   features: Record<string, { label: string; multiplier: number; products: string[] }>;
+  productOrder: string[];
 }
 
 const defaultPricing: PricingConfig = {
+  productOrder: ['glass', 'pvc', 'balcony'],
   products: {
     glass: { basePrice: 100 },
     pvc: { basePrice: 150 },
@@ -22,6 +24,9 @@ export function loadPricing(): PricingConfig {
     try {
       const data = JSON.parse(stored);
       if (data && data.products && data.features) {
+        if (!data.productOrder) {
+          data.productOrder = Object.keys(data.products);
+        }
         return data as PricingConfig;
       }
     } catch {}

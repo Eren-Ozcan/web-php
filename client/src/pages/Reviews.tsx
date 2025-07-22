@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Review } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Reviews() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
-  const [filter, setFilter] = useState('all');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [filter, setFilter] = useState((location.state as any)?.filter ?? 'all');
+
+  useEffect(() => {
+    if ((location.state as any)?.filter !== filter) {
+      navigate('.', { replace: true, state: { filter } });
+    }
+  }, [filter]);
+
   const reviews: Review[] = content.reviews;
-  const reviewCategories = content.categories.reviews;
+  const reviewCategories = content.categories.reviews[i18n.language] || [];
 
   const filtered = filter === 'all' ? reviews : reviews.filter((r) => r.category === filter);
 
@@ -22,7 +32,11 @@ export default function Reviews() {
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}` as any)}
+            {(() => {
+              const key = f.replace(/^filter_/, '');
+              const label = t(`filter_${key}` as any);
+              return label.startsWith('filter_') ? key : label;
+            })()}
           </button>
         ))}
       </div>

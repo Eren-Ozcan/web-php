@@ -8,9 +8,20 @@ import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { pool } from './db.js';
+import nodemailer from 'nodemailer';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const mailTransporter = nodemailer.createTransport({
+  host: 'srvc192.trwww.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'info@mefaaluminyum.com',
+    pass: process.env.MAIL_PASS
+  }
+});
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const dataDir = join(__dirname, 'data');
@@ -77,6 +88,12 @@ async function loadData() {
         contentData = loadJson('content.json');
         await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
       }
+
+      if (Array.isArray(contentData.products)) {
+        contentData.products = contentData.products.map((p) =>
+          p.descriptionKey ? p : { ...p, descriptionKey: `${p.titleKey}_desc` }
+        );
+      }
     }
 
     const [tRows] = await pool.query('SELECT data FROM translations WHERE id = 1');
@@ -101,6 +118,9 @@ async function loadData() {
     const [pRows] = await pool.query('SELECT data FROM pricing WHERE id = 1');
     if (!pRows.length) {
       pricingData = loadJson('pricing.json');
+      if (!pricingData.productOrder) {
+        pricingData.productOrder = Object.keys(pricingData.products || {});
+      }
       await pool.query('INSERT INTO pricing (id, data) VALUES (1, ?)', [
         JSON.stringify(pricingData)
       ]);
@@ -108,9 +128,15 @@ async function loadData() {
       const rawP = pRows[0].data;
       const parsedP = typeof rawP === 'string' ? JSON.parse(rawP) : rawP;
       if (parsedP && Object.keys(parsedP).length) {
+        if (!parsedP.productOrder) {
+          parsedP.productOrder = Object.keys(parsedP.products || {});
+        }
         pricingData = parsedP;
       } else {
         pricingData = loadJson('pricing.json');
+        if (!pricingData.productOrder) {
+          pricingData.productOrder = Object.keys(pricingData.products || {});
+        }
         await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [
           JSON.stringify(pricingData)
         ]);
@@ -121,6 +147,9 @@ async function loadData() {
     contentData = loadJson('content.json');
     translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
     pricingData = loadJson('pricing.json');
+    if (!pricingData.productOrder) {
+      pricingData.productOrder = Object.keys(pricingData.products || {});
+    }
   }
 }
 
@@ -213,6 +242,33 @@ app.post('/api/pricing', async (req, res) => {
   } catch (err) {
     console.error('Failed to save pricing', err);
     res.status(500).json({ error: 'Could not save pricing' });
+  }
+});
+
+app.get('/api/projects', (req, res) => {
+  const highlight = req.query.highlight === 'true';
+  const data = highlight
+    ? (contentData.projects || []).filter((p) => p.featured)
+    : contentData.projects || [];
+  res.json(data);
+});
+
+app.post('/api/sendMail', async (req, res) => {
+  const { name, email, message } = req.body;
+  if (!name || !email || !message) {
+    return res.status(400).json({ ok: false, error: 'Missing fields' });
+  }
+  try {
+    await mailTransporter.sendMail({
+      from: 'info@mefaaluminyum.com',
+      to: 'info@mefaaluminyum.com',
+      subject: 'Yeni İletişim Mesajı',
+      text: `Gönderen: ${name} <${email}>\n\n${message}`
+    });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Send mail error:', err);
+    res.status(500).json({ ok: false, error: 'Failed to send email' });
   }
 });
 

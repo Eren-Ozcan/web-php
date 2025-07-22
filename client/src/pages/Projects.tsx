@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Project } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Projects() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
-  const [filter, setFilter] = useState('all');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [filter, setFilter] = useState((location.state as any)?.filter ?? 'all');
+
+  useEffect(() => {
+    if ((location.state as any)?.filter !== filter) {
+      navigate('.', { replace: true, state: { filter } });
+    }
+  }, [filter]);
+
   const projects: Project[] = content.projects;
-  const projectCategories = content.categories.projects;
+  const projectCategories = content.categories.projects[i18n.language] || [];
 
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter);
 
@@ -22,7 +32,11 @@ export default function Projects() {
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}` as any)}
+            {(() => {
+              const key = f.replace(/^filter_/, '');
+              const label = t(`filter_${key}` as any);
+              return label.startsWith('filter_') ? key : label;
+            })()}
           </button>
         ))}
       </div>

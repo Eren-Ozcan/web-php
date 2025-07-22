@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Product } from '../content';
 import { useContent } from '../ContentContext';
 
 export default function Products() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
   const params = useParams<{ category?: string }>();
-  const [filter, setFilter] = useState('all');
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const initialFilter =
+    params.category ?? (location.state as any)?.filter ?? 'all';
+  const [filter, setFilter] = useState(initialFilter);
 
   useEffect(() => {
     if (params.category) {
@@ -17,10 +21,16 @@ export default function Products() {
     }
   }, [params.category]);
 
+  useEffect(() => {
+    if ((location.state as any)?.filter !== filter) {
+      navigate('.', { replace: true, state: { filter } });
+    }
+  }, [filter]);
+
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   const products: Product[] = content.products;
-  const productCategories = content.categories.products;
+  const productCategories = content.categories.products[i18n.language] || [];
 
   const filtered = filter === 'all' ? products : products.filter((p) => p.category === filter);
 
@@ -34,7 +44,11 @@ export default function Products() {
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {t(`filter_${f}` as any)}
+            {(() => {
+              const key = f.replace(/^filter_/, '');
+              const label = t(`filter_${key}` as any);
+              return label.startsWith('filter_') ? key : label;
+            })()}
           </button>
         ))}
       </div>
@@ -42,12 +56,15 @@ export default function Products() {
         {filtered.map((p) => (
           <div
             key={p.id}
-            onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
+            onClick={() =>
+              navigate(`/article/${toSlug(t(p.titleKey))}`, { state: { filter } })
+            }
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
             <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-1">{t(p.titleKey)}</h3>
+              <p className="text-sm text-gray-600">{t(p.descriptionKey)}</p>
             </div>
           </div>
         ))}
