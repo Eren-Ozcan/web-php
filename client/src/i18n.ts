@@ -20,6 +20,8 @@ const resources = {
   tr: { translation: { ...tr, ...(overrides?.tr?.translation || {}) } }
 };
 
+export type Language = keyof typeof resources;
+
 const storedLang = localStorage.getItem('language');
 
 i18n.use(initReactI18next).init({

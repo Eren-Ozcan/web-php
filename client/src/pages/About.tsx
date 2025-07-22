@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Project, Review } from '../content';
 import { useContent } from '../ContentContext';
+import type { Language } from '../i18n';
 
 export default function About() {
   const { t, i18n } = useTranslation();
@@ -27,8 +28,9 @@ export default function About() {
 
   const projectData: Project[] = content.projects;
   const reviewData: Review[] = content.reviews;
-  const projectCategories = content.categories.projects[i18n.language] || [];
-  const reviewCategories = content.categories.reviews[i18n.language] || [];
+  const lang = i18n.language as Language;
+  const projectCategories = content.categories.projects[lang] || [];
+  const reviewCategories = content.categories.reviews[lang] || [];
 
   return (
     <section className="p-6 max-w-6xl mx-auto">

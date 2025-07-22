@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Review } from '../content';
 import { useContent } from '../ContentContext';
+import type { Language } from '../i18n';
 
 export default function Reviews() {
   const { t, i18n } = useTranslation();
@@ -18,7 +19,8 @@ export default function Reviews() {
   }, [filter]);
 
   const reviews: Review[] = content.reviews;
-  const reviewCategories = content.categories.reviews[i18n.language] || [];
+  const lang = i18n.language as Language;
+  const reviewCategories = content.categories.reviews[lang] || [];
 
   const filtered = filter === 'all' ? reviews : reviews.filter((r) => r.category === filter);
 
