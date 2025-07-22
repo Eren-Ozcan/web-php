@@ -53,6 +53,8 @@
   "contact_name_label": "Ad",
   "contact_name_placeholder": "Adınızı girin",
   "contact_submit": "Gönder",
+  "contact_success": "Mesaj başarıyla gönderildi!",
+  "contact_error": "Mesaj gönderilemedi.",
   "copyright": "Tüm hakları saklıdır",
   "door": "Kapı",
   "estimated_price": "Tahmini Fiyat",

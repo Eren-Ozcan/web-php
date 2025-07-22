@@ -59,6 +59,9 @@ DB_PASS=1234
 DB_NAME=mefaaluminyum_wp289
 ```
 
+For sending contact form emails you also need to define `MAIL_PASS` in a `.env`
+file. An `.env.example` template is included with all required variables.
+
 ### Create the admin database user
 
 Before running the initialization script you need a MySQL user with privileges on the `mefaaluminyum_wp289` database. As `root`, run:
@@ -117,4 +120,5 @@ pre-populated.
 - `POST /api/pricing` – saves updated pricing data.
 - `GET /api/projects` – lists projects; add `?highlight=true` to only return
   featured projects.
-- `POST /api/sendMail` – sends a contact form email via Nodemailer.
+- `POST /api/contact` – receives name, email and message from the contact form
+  and sends them via Nodemailer as an HTML email.

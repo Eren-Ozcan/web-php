@@ -53,6 +53,8 @@
   "contact_name_label": "Name",
   "contact_name_placeholder": "Enter your name",
   "contact_submit": "Send",
+  "contact_success": "Message sent successfully!",
+  "contact_error": "Failed to send message.",
   "copyright": "All rights reserved",
   "door": "Door",
   "estimated_price": "Estimated Price",
