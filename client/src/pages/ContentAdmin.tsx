@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n, { Language } from '../i18n';
-import { loadContent, ContentData } from '../content';
+import { loadContent, ContentData, CategoryEntry } from '../content';
 import api from '../api';
 import { useContent } from '../ContentContext';
 import { PricingConfig, loadPricing } from '../pricing';
 
 const ContentAdmin: React.FC = () => {
   const { t, i18n: i18next } = useTranslation();
-  const languages = Object.keys(i18next.options.resources || {});
-  const [lang, setLang] = useState<Language>(i18next.language as Language);
   const [content, setContent] = useState<ContentData>(loadContent());
   const [pricing, setPricing] = useState<PricingConfig>(loadPricing());
   const [productNameEdits, setProductNameEdits] = useState<Record<string, string>>({});
@@ -62,29 +60,10 @@ const ContentAdmin: React.FC = () => {
     'blogs'
   );
 
-  useEffect(() => {
-    i18next.changeLanguage(lang);
-    localStorage.setItem('language', lang);
-    setBasicTexts({
-      mission: i18next.t('mission'),
-      mission_text: i18next.t('mission_text'),
-      vision: i18next.t('vision'),
-      vision_text: i18next.t('vision_text'),
-      values: i18next.t('values'),
-      values_text: i18next.t('values_text')
-    });
-  }, [lang, i18next]);
+  // no language toggle; always show both languages
 
-  useEffect(() => {
-    const handler = (l: string) => setLang(l as Language);
-    i18next.on('languageChanged', handler);
-    return () => {
-      i18next.off('languageChanged', handler);
-    };
-  }, [i18next]);
-
-  const updateTranslation = (key: string, value: string) => {
-    i18next.addResource(lang, 'translation', key, value);
+  const updateTranslation = (lng: Language, key: string, value: string) => {
+    i18next.addResource(lng, 'translation', key, value);
   };
 
   const entries =
@@ -104,7 +83,8 @@ const ContentAdmin: React.FC = () => {
     setContent(newContent);
   };
 
-  const categoryOptions = ((content.categories as any)[section]?.[lang] as string[]) || [];
+  const categoryOptions: Record<string, CategoryEntry> =
+    (content.categories as any)[section] || {};
 
   const addEntry = () => {
     const id = Date.now();
@@ -122,8 +102,10 @@ const ContentAdmin: React.FC = () => {
     } else {
       newItem.textKey = textKey;
     }
-    updateTranslation(titleKey, '');
-    updateTranslation(textKey, '');
+    updateTranslation('tr', titleKey, '');
+    updateTranslation('en', titleKey, '');
+    updateTranslation('tr', textKey, '');
+    updateTranslation('en', textKey, '');
     setEntries([...entries, newItem]);
   };
 
@@ -131,14 +113,19 @@ const ContentAdmin: React.FC = () => {
     setEntries(entries.filter((e) => e.id !== id));
   };
 
-  const handleChange = (index: number, field: string, value: any) => {
+  const handleChange = (
+    index: number,
+    field: string,
+    value: any,
+    lng?: Language
+  ) => {
     const newEntries = [...entries];
     const item: any = { ...newEntries[index] };
     if (field === 'title') {
-      updateTranslation(item.titleKey, value);
+      if (lng) updateTranslation(lng, item.titleKey, value);
     } else if (field === 'text') {
       const key = item.textKey || item.descriptionKey;
-      if (key) updateTranslation(key, value);
+      if (key && lng) updateTranslation(lng, key, value);
     } else {
       item[field] = value;
     }
@@ -168,21 +155,7 @@ const ContentAdmin: React.FC = () => {
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">{t('admin_title')}</h1>
 
-      {/* Dil seçimi */}
-      <div className="space-x-2">
-        <label className="font-semibold">{t('admin_language')}:</label>
-        <select
-          value={lang}
-          onChange={(e) => setLang(e.target.value as Language)}
-          className="border p-1"
-        >
-          {languages.map((l) => (
-            <option key={l} value={l}>
-              {l.toUpperCase()}
-            </option>
-          ))}
-        </select>
-      </div>
+
 
       {/* Sekme seçimi */}
       <div className="space-x-2">
@@ -255,27 +228,42 @@ const ContentAdmin: React.FC = () => {
           <table className="w-full border mb-2">
             <thead>
               <tr className="text-left">
-                <th className="border p-2">{t('admin_category')}</th>
+                <th className="border p-2">TR</th>
+                <th className="border p-2">EN</th>
                 <th className="border p-2">{t('admin_actions')}</th>
               </tr>
             </thead>
             <tbody>
-              {content.categories[catSection][lang].map((c: string, idx: number) => (
-                <tr key={idx}>
+              {Object.entries(content.categories[catSection]).map(([key, val]) => (
+                <tr key={key}>
                   <td className="border p-2">
                     <input
                       className="border p-1 w-full"
-                      value={c}
+                      value={val.tr}
                       onChange={(e) => {
-                        const val = e.target.value.replace(/^filter_/, '');
-                        const list = [...content.categories[catSection][lang]];
-                        list[idx] = val;
+                        const updated = {
+                          ...content.categories[catSection],
+                          [key]: { ...val, tr: e.target.value }
+                        };
                         setContent({
                           ...content,
-                          categories: {
-                            ...content.categories,
-                            [catSection]: { ...content.categories[catSection], [lang]: list }
-                          }
+                          categories: { ...content.categories, [catSection]: updated }
+                        });
+                      }}
+                    />
+                  </td>
+                  <td className="border p-2">
+                    <input
+                      className="border p-1 w-full"
+                      value={val.en}
+                      onChange={(e) => {
+                        const updated = {
+                          ...content.categories[catSection],
+                          [key]: { ...val, en: e.target.value }
+                        };
+                        setContent({
+                          ...content,
+                          categories: { ...content.categories, [catSection]: updated }
                         });
                       }}
                     />
@@ -283,15 +271,11 @@ const ContentAdmin: React.FC = () => {
                   <td className="border p-2">
                     <button
                       onClick={() => {
-                        const list = content.categories[catSection][lang].filter(
-                          (_: string, i: number) => i !== idx
-                        );
+                        const updated = { ...content.categories[catSection] } as any;
+                        delete updated[key];
                         setContent({
                           ...content,
-                          categories: {
-                            ...content.categories,
-                            [catSection]: { ...content.categories[catSection], [lang]: list }
-                          }
+                          categories: { ...content.categories, [catSection]: updated }
                         });
                       }}
                       className="bg-red-500 text-white px-2 py-1 rounded"
@@ -305,12 +289,16 @@ const ContentAdmin: React.FC = () => {
           </table>
           <button
             onClick={() => {
-              const list = [...content.categories[catSection][lang], ''];
+              const key = prompt('category key');
+              if (!key || content.categories[catSection][key]) return;
               setContent({
                 ...content,
                 categories: {
                   ...content.categories,
-                  [catSection]: { ...content.categories[catSection], [lang]: list }
+                  [catSection]: {
+                    ...content.categories[catSection],
+                    [key]: { tr: '', en: '' }
+                  }
                 }
               });
             }}
@@ -535,24 +523,56 @@ const ContentAdmin: React.FC = () => {
             {entries.map((item: any, idx: number) => (
               <tr key={item.id}>
                 <td className="border p-2">
-                  <input
-                    className="border p-1 w-full"
-                    value={t(item.titleKey)}
-                    onChange={(e) => handleChange(idx, 'title', e.target.value)}
-                  />
+                  <div className="flex flex-col space-y-1">
+                    <input
+                      className="border p-1 w-full"
+                      value={i18next.t(item.titleKey, { lng: 'tr' })}
+                      onChange={(e) =>
+                        handleChange(idx, 'title', e.target.value, 'tr')
+                      }
+                      placeholder="TR"
+                    />
+                    <input
+                      className="border p-1 w-full"
+                      value={i18next.t(item.titleKey, { lng: 'en' })}
+                      onChange={(e) =>
+                        handleChange(idx, 'title', e.target.value, 'en')
+                      }
+                      placeholder="EN"
+                    />
+                  </div>
                 </td>
                 <td className="border p-2">
-                  <input
-                    className="border p-1 w-full"
-                    value={
-                      item.textKey
-                        ? t(item.textKey)
-                        : item.descriptionKey
-                          ? t(item.descriptionKey)
-                          : ''
-                    }
-                    onChange={(e) => handleChange(idx, 'text', e.target.value)}
-                  />
+                  <div className="flex flex-col space-y-1">
+                    <input
+                      className="border p-1 w-full"
+                      value={
+                        item.textKey
+                          ? i18next.t(item.textKey, { lng: 'tr' })
+                          : item.descriptionKey
+                            ? i18next.t(item.descriptionKey, { lng: 'tr' })
+                            : ''
+                      }
+                      onChange={(e) =>
+                        handleChange(idx, 'text', e.target.value, 'tr')
+                      }
+                      placeholder="TR"
+                    />
+                    <input
+                      className="border p-1 w-full"
+                      value={
+                        item.textKey
+                          ? i18next.t(item.textKey, { lng: 'en' })
+                          : item.descriptionKey
+                            ? i18next.t(item.descriptionKey, { lng: 'en' })
+                            : ''
+                      }
+                      onChange={(e) =>
+                        handleChange(idx, 'text', e.target.value, 'en')
+                      }
+                      placeholder="EN"
+                    />
+                  </div>
                 </td>
                 <td className="border p-2">
                   <label className="bg-blue-600 text-white px-3 py-1 rounded cursor-pointer inline-block">
@@ -582,21 +602,30 @@ const ContentAdmin: React.FC = () => {
                 </td>
 
                 <td className="border p-2">
-                  <select
-                    className="border p-1 w-full"
-                    value={item.category || ''}
-                    onChange={(e) => handleChange(idx, 'category', e.target.value)}
-                  >
-                    {categoryOptions.map((c: string) => {
-                      const key = c.replace(/^filter_/, '');
-                      const label = t(`filter_${key}` as any);
-                      return (
-                        <option key={c} value={c}>
-                          {label.startsWith('filter_') ? key : label}
+                  <div className="flex flex-col space-y-1">
+                    <select
+                      className="border p-1 w-full"
+                      value={item.category || ''}
+                      onChange={(e) => handleChange(idx, 'category', e.target.value)}
+                    >
+                      {Object.entries(categoryOptions).map(([key, val]) => (
+                        <option key={key} value={key}>
+                          {val.tr}
                         </option>
-                      );
-                    })}
-                  </select>
+                      ))}
+                    </select>
+                    <select
+                      className="border p-1 w-full"
+                      value={item.category || ''}
+                      onChange={(e) => handleChange(idx, 'category', e.target.value)}
+                    >
+                      {Object.entries(categoryOptions).map(([key, val]) => (
+                        <option key={key} value={key}>
+                          {val.en}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </td>
                 {section === 'projects' && (
                   <td className="border p-2 text-center">

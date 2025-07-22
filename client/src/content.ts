@@ -31,16 +31,18 @@ export interface Product {
   category: string;
 }
 
-export interface CategoryList {
-  en: string[];
-  tr: string[];
+export interface CategoryEntry {
+  tr: string;
+  en: string;
 }
 
+export type CategoryMap = Record<string, CategoryEntry>;
+
 export interface Categories {
-  blogs: CategoryList;
-  projects: CategoryList;
-  reviews: CategoryList;
-  products: CategoryList;
+  blogs: CategoryMap;
+  projects: CategoryMap;
+  reviews: CategoryMap;
+  products: CategoryMap;
 }
 
 export interface ContentData {
@@ -162,12 +164,26 @@ const defaultData: ContentData = {
     }
   ],
   categories: {
-    blogs: { en: ['news', 'tips'], tr: ['news', 'tips'] },
-    projects: { en: ['glass', 'pvc', 'balcony'], tr: ['glass', 'pvc', 'balcony'] },
-    reviews: { en: ['glass', 'pvc'], tr: ['glass', 'pvc'] },
+    blogs: {
+      news: { tr: 'Haber', en: 'News' },
+      tips: { tr: 'İpucu', en: 'Tips' }
+    },
+    projects: {
+      glass: { tr: 'Cam', en: 'Glass' },
+      pvc: { tr: 'Pimapen', en: 'PVC' },
+      balcony: { tr: 'Balkon', en: 'Balcony' }
+    },
+    reviews: {
+      glass: { tr: 'Cam', en: 'Glass' },
+      pvc: { tr: 'Pimapen', en: 'PVC' }
+    },
     products: {
-      en: ['glass', 'door', 'balcony', 'garden', 'office', 'facade'],
-      tr: ['glass', 'door', 'balcony', 'garden', 'office', 'facade']
+      glass: { tr: 'Cam', en: 'Glass' },
+      door: { tr: 'Kapı', en: 'Door' },
+      balcony: { tr: 'Balkon', en: 'Balcony' },
+      garden: { tr: 'Bahçe', en: 'Garden' },
+      office: { tr: 'Ofis', en: 'Office' },
+      facade: { tr: 'Dış cephe', en: 'Facade' }
     }
   }
 };
@@ -179,39 +195,34 @@ export function loadContent(): ContentData {
       const data = JSON.parse(stored);
       if (data && typeof data === 'object' && 'blogs' in data) {
         const cat = (data as any).categories;
-        if (cat && Array.isArray(cat.blogs)) {
+        const convertList = (enArr: any, trArr: any): CategoryMap => {
+          if (!Array.isArray(enArr) && !Array.isArray(trArr)) return enArr as any;
+          const map: CategoryMap = {};
+          const max = Math.max(enArr?.length || 0, trArr?.length || 0);
+          for (let i = 0; i < max; i++) {
+            const id = sanitize((enArr?.[i] ?? trArr?.[i]) ?? 'cat' + i);
+            map[id] = {
+              en: enArr?.[i] ?? id,
+              tr: trArr?.[i] ?? id
+            };
+          }
+          return map;
+        };
+        const sanitize = (s: string) => s.replace(/^filter_/, '');
+        if (cat) {
           (data as any).categories = {
-            blogs: { en: cat.blogs, tr: cat.blogs },
-            projects: { en: cat.projects, tr: cat.projects },
-            reviews: { en: cat.reviews, tr: cat.reviews },
-            products: { en: cat.products, tr: cat.products }
+            blogs: convertList(cat.blogs?.en ?? cat.blogs, cat.blogs?.tr ?? cat.blogs),
+            projects: convertList(
+              cat.projects?.en ?? cat.projects,
+              cat.projects?.tr ?? cat.projects
+            ),
+            reviews: convertList(cat.reviews?.en ?? cat.reviews, cat.reviews?.tr ?? cat.reviews),
+            products: convertList(
+              cat.products?.en ?? cat.products,
+              cat.products?.tr ?? cat.products
+            )
           };
         }
-        const sanitize = (list: string[]) => list.map((c) => c.replace(/^filter_/, ''));
-        (data as ContentData).categories.blogs.en = sanitize(
-          (data as ContentData).categories.blogs.en
-        );
-        (data as ContentData).categories.blogs.tr = sanitize(
-          (data as ContentData).categories.blogs.tr
-        );
-        (data as ContentData).categories.projects.en = sanitize(
-          (data as ContentData).categories.projects.en
-        );
-        (data as ContentData).categories.projects.tr = sanitize(
-          (data as ContentData).categories.projects.tr
-        );
-        (data as ContentData).categories.reviews.en = sanitize(
-          (data as ContentData).categories.reviews.en
-        );
-        (data as ContentData).categories.reviews.tr = sanitize(
-          (data as ContentData).categories.reviews.tr
-        );
-        (data as ContentData).categories.products.en = sanitize(
-          (data as ContentData).categories.products.en
-        );
-        (data as ContentData).categories.products.tr = sanitize(
-          (data as ContentData).categories.products.tr
-        );
         return data as ContentData;
       }
     } catch {

@@ -20,8 +20,7 @@ export default function Blogs() {
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
   const posts: BlogPost[] = content.blogs;
-  const lang = i18n.language as Language;
-  const blogCategories = content.categories.blogs[lang] || [];
+  const blogCategories = content.categories.blogs;
 
   const filtered = filter === 'all' ? posts : posts.filter((p) => p.category === filter);
 
@@ -29,17 +28,15 @@ export default function Blogs() {
     <section className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">{t('blogs')}</h1>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', ...blogCategories].map((f) => (
+        {['all', ...Object.keys(blogCategories)].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {(() => {
-              const key = f.replace(/^filter_/, '');
-              const label = t(`filter_${key}` as any);
-              return label.startsWith('filter_') ? key : label;
-            })()}
+            {f === 'all'
+              ? t('filter_all')
+              : blogCategories[f][i18n.language as Language] || f}
           </button>
         ))}
       </div>
