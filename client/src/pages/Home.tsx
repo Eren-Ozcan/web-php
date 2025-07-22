@@ -37,7 +37,6 @@ const Home: React.FC = () => {
     }
   ];
 
-  const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   return (
     <>
@@ -101,14 +100,14 @@ const Home: React.FC = () => {
       <div className="mt-20 px-4 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('blogs')}</h2>
         <div className="grid md:grid-cols-3 gap-6">
-          {[t('blog1'), t('blog2'), t('blog3')].map((title, idx) => (
+          {content.blogs.slice(0, 3).map((b) => (
             <div
-              key={idx}
-              onClick={() => navigate(`/article/${toSlug(title)}`)}
+              key={b.id}
+              onClick={() => navigate(`/article/${b.id}`)}
               className="bg-white rounded shadow-md p-4 hover:shadow-lg transition cursor-pointer"
             >
-              <h3 className="text-xl font-semibold mb-2 text-blue-600">{title}</h3>
-              <p className="text-gray-600 text-sm">{t('blog_sample_text')}</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-600">{t(b.titleKey)}</h3>
+              <p className="text-gray-600 text-sm">{t(b.textKey)}</p>
               <span className="mt-2 text-sm text-blue-500 hover:underline inline-block">
                 {t('readMore')}
               </span>
@@ -127,7 +126,7 @@ const Home: React.FC = () => {
             .map((p) => (
               <div
                 key={p.id}
-                onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
+                onClick={() => navigate(`/article/${p.id}`)}
                 className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
               >
                 <img src={p.image} alt={t(p.titleKey)} className="w-full h-48 object-cover" />
@@ -144,28 +143,21 @@ const Home: React.FC = () => {
       <div className="mt-20 px-4 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('reviews')}</h2>
         <div className="grid md:grid-cols-2 gap-6">
-          {[
-            { title: t('product_cam'), desc: t('product_cam_desc'), img: '/images/cam.jpg' },
-            {
-              title: t('product_pimapen'),
-              desc: t('product_pimapen_desc'),
-              img: '/images/pimapen.jpg'
-            }
-          ].map((item, idx) => (
+          {content.reviews.slice(0, 2).map((r) => (
             <div
-              key={idx}
-              onClick={() => navigate(`/article/${toSlug(item.title)}`)}
+              key={r.id}
+              onClick={() => navigate(`/article/${r.id}`)}
               className="bg-white shadow rounded-lg overflow-hidden flex flex-col md:flex-row cursor-pointer"
             >
-              <img src={item.img} alt={item.title} className="w-full md:w-1/3 h-48 object-cover" />
+              <img src={r.image} alt={t(r.titleKey)} className="w-full md:w-1/3 h-48 object-cover" />
               <div className="p-4">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">{t(r.titleKey)}</h3>
+                <p className="text-gray-600">{t(r.textKey)}</p>
               </div>
             </div>
           ))}
+          </div>
         </div>
-      </div>
     </>
   );
 };

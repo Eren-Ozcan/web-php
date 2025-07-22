@@ -27,7 +27,7 @@ export default function AppRoutes() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/about" element={<About />} />
-        <Route path="/article/:topic" element={<Article />} />
+        <Route path="/article/:id" element={<Article />} />
         <Route path="/admin" element={<Admin />} />
       </Route>
     </Routes>

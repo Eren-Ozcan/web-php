@@ -13,6 +13,8 @@
     "admin_language": "Language",
     "admin_save_all": "Save All",
     "admin_saved": "Saved",
+    "admin_duplicate_id": "Duplicate IDs",
+    "admin_duplicate_title": "Duplicate titles",
     "admin_text": "Text",
     "admin_title": "Content Admin",
     "admin_title_label": "Title",

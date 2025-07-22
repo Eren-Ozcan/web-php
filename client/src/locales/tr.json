@@ -12,6 +12,8 @@
   "admin_language": "Dil",
   "admin_save_all": "Tümünü Kaydet",
   "admin_saved": "Kaydedildi",
+  "admin_duplicate_id": "Aynı ID'ler",
+  "admin_duplicate_title": "Aynı başlıklar",
   "admin_text": "Metin",
   "admin_title": "İçerik Yönetimi",
   "admin_title_label": "Başlık",

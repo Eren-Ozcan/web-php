@@ -14,7 +14,6 @@ export default function About() {
   const [reviewFilter, setReviewFilter] = useState('all');
   const navigate = useNavigate();
 
-  const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   useEffect(() => {
     api
@@ -56,7 +55,7 @@ export default function About() {
         {highlightProjects.map((p) => (
           <div
             key={p.id}
-            onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
+            onClick={() => navigate(`/article/${p.id}`)}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
             <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />
@@ -89,7 +88,7 @@ export default function About() {
         ).map((p) => (
           <div
             key={p.id}
-            onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
+            onClick={() => navigate(`/article/${p.id}`)}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
             <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />
@@ -122,7 +121,7 @@ export default function About() {
         ).map((r) => (
           <div
             key={r.id}
-            onClick={() => navigate(`/article/${toSlug(t(r.titleKey))}`)}
+            onClick={() => navigate(`/article/${r.id}`)}
             className="bg-white shadow rounded overflow-hidden flex flex-col md:flex-row cursor-pointer"
           >
             <img src={r.image} alt={t(r.titleKey)} className="w-full md:w-1/3 h-48 object-cover" />
