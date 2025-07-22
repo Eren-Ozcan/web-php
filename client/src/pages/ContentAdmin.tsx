@@ -76,7 +76,7 @@ const ContentAdmin: React.FC = () => {
   }, [lang, i18next]);
 
   useEffect(() => {
-    const handler = (l: string) => setLang(l);
+    const handler = (l: string) => setLang(l as Language);
     i18next.on('languageChanged', handler);
     return () => {
       i18next.off('languageChanged', handler);
@@ -171,7 +171,11 @@ const ContentAdmin: React.FC = () => {
       {/* Dil seçimi */}
       <div className="space-x-2">
         <label className="font-semibold">{t('admin_language')}:</label>
-        <select value={lang} onChange={(e) => setLang(e.target.value)} className="border p-1">
+        <select
+          value={lang}
+          onChange={(e) => setLang(e.target.value as Language)}
+          className="border p-1"
+        >
           {languages.map((l) => (
             <option key={l} value={l}>
               {l.toUpperCase()}
