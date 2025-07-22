@@ -28,11 +28,7 @@ export default function Navbar() {
       <div className="hidden md:flex container mx-auto p-4 items-center justify-between h-16">
         <div className="flex items-center space-x-6 h-full">
           <Link to="/" className="h-full flex items-center">
-            <img
-              src="/images/logo.svg"
-              alt="Logo"
-              className="h-full w-auto mr-4 object-contain"
-            />
+            <img src="/images/logo.svg" alt="Logo" className="h-full w-auto mr-4 object-contain" />
           </Link>
           {menuItems.map((item) => (
             <Link
@@ -70,11 +66,7 @@ export default function Navbar() {
       <div className="md:hidden p-4 h-16">
         <div className="flex justify-between items-center h-full">
           <Link to="/" className="h-full flex items-center">
-            <img
-              src="/images/logo.svg"
-              alt="Logo"
-              className="h-full w-auto object-contain"
-            />
+            <img src="/images/logo.svg" alt="Logo" className="h-full w-auto object-contain" />
           </Link>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
