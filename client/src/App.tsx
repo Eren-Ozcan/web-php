@@ -4,6 +4,7 @@ import AppRoutes from './routes';
 import api from './api';
 import i18n from './i18n';
 import { useContent } from './ContentContext';
+import { normalizeCategories } from './content';
 
 export default function App() {
   const { setContent } = useContent();
@@ -15,9 +16,13 @@ export default function App() {
           api.get('/api/content'),
           api.get('/api/translations')
         ]);
-        localStorage.setItem('content', JSON.stringify(cRes.data));
+        const normalized = {
+          ...cRes.data,
+          categories: normalizeCategories(cRes.data.categories)
+        };
+        localStorage.setItem('content', JSON.stringify(normalized));
         localStorage.setItem('translations', JSON.stringify(tRes.data));
-        setContent(cRes.data);
+        setContent(normalized);
         Object.entries(tRes.data).forEach(([lng, vals]) => {
           Object.entries(vals as Record<string, string>).forEach(([k, v]) => {
             i18n.addResource(lng, 'translation', k, v);
