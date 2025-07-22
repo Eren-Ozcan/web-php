@@ -20,7 +20,7 @@ export default function Reviews() {
 
   const reviews: Review[] = content.reviews;
   const lang = i18n.language as Language;
-  const reviewCategories = content.categories.reviews[lang] || [];
+  const reviewCategories = content.categories.reviews;
 
   const filtered = filter === 'all' ? reviews : reviews.filter((r) => r.category === filter);
 
@@ -28,17 +28,15 @@ export default function Reviews() {
     <section className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">{t('reviews')}</h1>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', ...reviewCategories].map((f) => (
+        {['all', ...Object.keys(reviewCategories)].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {(() => {
-              const key = f.replace(/^filter_/, '');
-              const label = t(`filter_${key}` as any);
-              return label.startsWith('filter_') ? key : label;
-            })()}
+            {f === 'all'
+              ? t('filter_all')
+              : reviewCategories[f][lang] || f}
           </button>
         ))}
       </div>
