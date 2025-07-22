@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function WhatsAppButton() {
-  const phoneNumber = '905551234567';
+  const phoneNumber = '905353580985';
   return (
     <a
       href={`https://wa.me/${phoneNumber}`}
@@ -10,11 +10,7 @@ export default function WhatsAppButton() {
       aria-label="WhatsApp"
       className="fixed bottom-4 left-4 z-50"
     >
-      <img
-        src="/images/whatsapp.svg"
-        alt="WhatsApp logo"
-        className="w-12 h-12"
-         />
+      <img src="/images/whatsapp.webp" alt="WhatsApp logo" className="w-12 h-12" />
     </a>
   );
 }
