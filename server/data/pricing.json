@@ -3,16 +3,14 @@
     "double": {
       "label": "double_glazing_feature",
       "products": [
-        "pvc",
-        "balkon"
+        "pvc"
       ],
       "multiplier": 1.3
     },
     "colored": {
       "label": "colored_feature",
       "products": [
-        "cam",
-        "pvc"
+        "cam"
       ],
       "multiplier": 1.1
     },
