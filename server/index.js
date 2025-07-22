@@ -56,6 +56,42 @@ let contentData;
 let translationsData;
 let pricingData;
 
+function normalizeCategories(cat) {
+  const isNumericObj = (o) =>
+    o &&
+    typeof o === 'object' &&
+    !Array.isArray(o) &&
+    Object.keys(o).filter((k) => k !== 'en' && k !== 'tr').every((k) => /^\d+$/.test(k));
+  const sanitize = (s) => s.replace(/^filter_/, '');
+  const convertList = (enArr, trArr) => {
+    if (isNumericObj(enArr))
+      enArr = Object.keys(enArr)
+        .filter((k) => k !== 'en' && k !== 'tr')
+        .sort((a, b) => a - b)
+        .map((k) => enArr[k]);
+    if (isNumericObj(trArr))
+      trArr = Object.keys(trArr)
+        .filter((k) => k !== 'en' && k !== 'tr')
+        .sort((a, b) => a - b)
+        .map((k) => trArr[k]);
+    if (!Array.isArray(enArr) && !Array.isArray(trArr)) return enArr || {};
+    const map = {};
+    const max = Math.max(enArr?.length || 0, trArr?.length || 0);
+    for (let i = 0; i < max; i++) {
+      const id = sanitize(enArr?.[i] ?? trArr?.[i] ?? `cat${i}`);
+      map[id] = { en: enArr?.[i] ?? id, tr: trArr?.[i] ?? id };
+    }
+    return map;
+  };
+  if (!cat) return { blogs: {}, projects: {}, reviews: {}, products: {} };
+  return {
+    blogs: convertList(cat.blogs?.en ?? cat.blogs, cat.blogs?.tr ?? cat.blogs),
+    projects: convertList(cat.projects?.en ?? cat.projects, cat.projects?.tr ?? cat.projects),
+    reviews: convertList(cat.reviews?.en ?? cat.reviews, cat.reviews?.tr ?? cat.reviews),
+    products: convertList(cat.products?.en ?? cat.products, cat.products?.tr ?? cat.products)
+  };
+}
+
 async function ensureTables() {
   await pool.query(`CREATE TABLE IF NOT EXISTS content (
     id INT PRIMARY KEY,
@@ -76,6 +112,7 @@ async function loadData() {
     const [cRows] = await pool.query('SELECT data FROM content WHERE id = 1');
     if (!cRows.length) {
       contentData = loadJson('content.json');
+      contentData.categories = normalizeCategories(contentData.categories);
       await pool.query('INSERT INTO content (id, data) VALUES (1, ?)', [
         JSON.stringify(contentData)
       ]);
@@ -84,8 +121,10 @@ async function loadData() {
       const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
       if (parsed && Object.keys(parsed).length) {
         contentData = parsed;
+        contentData.categories = normalizeCategories(contentData.categories);
       } else {
         contentData = loadJson('content.json');
+        contentData.categories = normalizeCategories(contentData.categories);
         await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
       }
 
@@ -143,6 +182,7 @@ async function loadData() {
   } catch (err) {
     console.error('Failed to load from database, falling back to files', err);
     contentData = loadJson('content.json');
+    contentData.categories = normalizeCategories(contentData.categories);
     translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
     pricingData = loadJson('pricing.json');
     if (!pricingData.productOrder) {
@@ -190,7 +230,7 @@ app.get('/api/content', (req, res) => {
 app.post('/api/content', async (req, res) => {
   const data = req.body;
   try {
-    contentData = data;
+    contentData = { ...data, categories: normalizeCategories(data.categories) };
     await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
     saveJson('content.json', contentData);
     res.json({ success: true });

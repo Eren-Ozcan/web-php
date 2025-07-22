@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "blogs": [
     {
@@ -165,68 +166,95 @@
         "1": "tips",
         "2": "ad",
         "3": "anan",
+=======
+      "news": {
+        "en": "news",
+        "tr": "haberler"
+      },
+      "tips": {
+        "en": "tips",
+        "tr": "merhaba"
+      },
+      "ad": {
+        "en": "ad",
+        "tr": "reklam"
+      "anan": {
+        "en": "anan",
+        "tr": "anan"
+      },
+      "kampanya": {
+        "en": "kampanya",
+        "tr": "kampanya"
+      "glass": {
+        "en": "glass",
+        "tr": "cam"
+      },
+      "pvc": {
+        "en": "pvc",
+        "tr": "pvc"
+      },
+      "anan": {
+        "en": "anan",
+        "tr": "anan"
+      },
+      "ürün": {
+        "en": "ürün",
+        "tr": "ürün"
+      }
+      "glass": {
+        "en": "glass",
+        "tr": "cam"
+      },
+      "door": {
+>>>>>>> ee51babb2d6b0a43b7e3fae8a39d361b1467d978
         "en": "door",
         "tr": "kapı"
       },
-      "tr": {
-        "0": "haberler",
-        "1": "merhaba",
-        "2": "reklam",
-        "3": "anan",
-        "4": "kampanya",
-        "en": "car",
-        "tr": "araba"
+      "balcony": {
+        "en": "balcony",
+        "tr": "balcon"
+      },
+      "garden": {
+        "en": "garden",
+        "tr": "bahçe"
+      },
+      "office": {
+        "en": "office",
+        "tr": "ofis"
+      },
+      "facade": {
+        "en": "facade",
+        "tr": "dış cephe"
+      },
+      "veranda": {
+        "en": "veranda",
+        "tr": "veranda"
+      },
+      "roof": {
+        "en": "roof",
+        "tr": "anan"
+      },
+      "çatı": {
+        "en": "çatı",
+        "tr": "çatı"
       }
-    },
-    "reviews": {
-      "en": [
-        "glass",
-        "pvc",
-        "anan"
-      ],
-      "tr": [
-        "cam",
-        "pvc",
-        "anan",
-        "ürün"
-      ]
-    },
-    "products": {
-      "en": [
-        "glass",
-        "door",
-        "balcony",
-        "garden",
-        "office",
-        "facade",
-        "veranda",
-        "roof"
-      ],
-      "tr": [
-        "cam",
-        "kapı",
-        "balcon",
-        "bahçe",
-        "ofis",
-        "dış cephe",
-        "veranda",
-        "anan",
-        "çatı"
-      ]
-    },
-    "projects": {
-      "en": [
-        "glass",
-        "pvc",
-        "balcony"
-      ],
-      "tr": [
-        "cam",
-        "pvc",
-        "balcon",
-        "anan",
-        "son"
-      ]
-    }
-  }
-}
+      "glass": {
+        "en": "glass",
+        "tr": "cam"
+      },
+      "pvc": {
+        "en": "pvc",
+        "tr": "pvc"
+      },
+      "balcony": {
+        "en": "balcony",
+        "tr": "balcon"
+      },
+      "anan": {
+        "en": "anan",
+        "tr": "anan"
+      },
+      "son": {
+        "en": "son",
+        "tr": "son"
+      }
