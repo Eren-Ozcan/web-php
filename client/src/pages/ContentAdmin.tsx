@@ -200,14 +200,14 @@ const ContentAdmin: React.FC = () => {
         {[...SECTION_KEYS]
           .sort((a, b) => t(a).localeCompare(t(b)))
           .map((s) => (
-          <button
-            key={s}
-            onClick={() => setSection(s as any)}
-            className={`px-3 py-1 rounded ${section === s ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-          >
-            {t(s)}
-          </button>
-        ))}
+            <button
+              key={s}
+              onClick={() => setSection(s as any)}
+              className={`px-3 py-1 rounded ${section === s ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+            >
+              {t(s)}
+            </button>
+          ))}
       </div>
 
       {/* BASIC */}
@@ -304,14 +304,14 @@ const ContentAdmin: React.FC = () => {
             {[...CATEGORY_KEYS]
               .sort((a, b) => t(a).localeCompare(t(b)))
               .map((s) => (
-              <button
-                key={s}
-                onClick={() => setCatSection(s)}
-                className={`px-2 py-1 rounded ${catSection === s ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-              >
-                {t(s)}
-              </button>
-            ))}
+                <button
+                  key={s}
+                  onClick={() => setCatSection(s)}
+                  className={`px-2 py-1 rounded ${catSection === s ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+                >
+                  {t(s)}
+                </button>
+              ))}
           </div>
           <table className="w-full border mb-2">
             <thead>

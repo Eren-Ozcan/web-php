@@ -61,7 +61,9 @@ function normalizeCategories(cat) {
     o &&
     typeof o === 'object' &&
     !Array.isArray(o) &&
-    Object.keys(o).filter((k) => k !== 'en' && k !== 'tr').every((k) => /^\d+$/.test(k));
+    Object.keys(o)
+      .filter((k) => k !== 'en' && k !== 'tr')
+      .every((k) => /^\d+$/.test(k));
   const sanitize = (s) => s.replace(/^filter_/, '');
   const convertList = (enArr, trArr) => {
     if (isNumericObj(enArr))
@@ -182,7 +184,7 @@ async function loadData() {
       }
     }
 
-     const [pRows] = await pool.query('SELECT data FROM pricing WHERE id = 1');
+    const [pRows] = await pool.query('SELECT data FROM pricing WHERE id = 1');
     if (!pRows.length) {
       pricingData = normalizePricing(loadJson('pricing.json'));
       await pool.query('INSERT INTO pricing (id, data) VALUES (1, ?)', [
@@ -206,7 +208,7 @@ async function loadData() {
     contentData = loadJson('content.json');
     contentData.categories = normalizeCategories(contentData.categories);
     translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
- pricingData = normalizePricing(loadJson('pricing.json'));
+    pricingData = normalizePricing(loadJson('pricing.json'));
   }
 }
 
