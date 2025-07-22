@@ -47,11 +47,12 @@ const Admin: React.FC = () => {
       setError(null);
     } catch (err: any) {
       const msg = err?.response?.data?.error;
-      const key = msg === 'User not found'
-        ? 'user_not_found'
-        : msg === 'Password incorrect'
-        ? 'password_incorrect'
-        : 'login_error';
+      const key =
+        msg === 'User not found'
+          ? 'user_not_found'
+          : msg === 'Password incorrect'
+            ? 'password_incorrect'
+            : 'login_error';
       setError(t(key));
     }
   };

@@ -159,64 +159,20 @@
   ],
   "categories": {
     "blogs": {
-      "en": [
-        "news",
-        "tips",
-        "ad",
-        "anan"
-      ],
-      "tr": [
-        "haberler",
-        "taktikler",
-        "reklam",
-        "anan"
-      ]
+      "en": ["news", "tips", "ad", "anan"],
+      "tr": ["haberler", "taktikler", "reklam", "anan"]
     },
     "reviews": {
-      "en": [
-        "glass",
-        "pvc",
-        "anan"
-      ],
-      "tr": [
-        "cam",
-        "pvc",
-        "anan"
-      ]
+      "en": ["glass", "pvc", "anan"],
+      "tr": ["cam", "pvc", "anan"]
     },
     "products": {
-      "en": [
-        "glass",
-        "door",
-        "balcony",
-        "garden",
-        "office",
-        "facade",
-        "veranda"
-      ],
-      "tr": [
-        "cam",
-        "kapı",
-        "balcon",
-        "bahçe",
-        "ofis",
-        "dış cephe",
-        "veranda",
-        "anan"
-      ]
+      "en": ["glass", "door", "balcony", "garden", "office", "facade", "veranda"],
+      "tr": ["cam", "kapı", "balcon", "bahçe", "ofis", "dış cephe", "veranda", "anan"]
     },
     "projects": {
-      "en": [
-        "glass",
-        "pvc",
-        "balcony"
-      ],
-      "tr": [
-        "cam",
-        "pvc",
-        "balcon",
-        "anan"
-      ]
+      "en": ["glass", "pvc", "balcony"],
+      "tr": ["cam", "pvc", "balcon", "anan"]
     }
   }
 }

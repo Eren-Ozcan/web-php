@@ -11,8 +11,7 @@ export default function Products() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const initialFilter =
-    params.category ?? (location.state as any)?.filter ?? 'all';
+  const initialFilter = params.category ?? (location.state as any)?.filter ?? 'all';
   const [filter, setFilter] = useState(initialFilter);
 
   useEffect(() => {
@@ -56,9 +55,7 @@ export default function Products() {
         {filtered.map((p) => (
           <div
             key={p.id}
-            onClick={() =>
-              navigate(`/article/${toSlug(t(p.titleKey))}`, { state: { filter } })
-            }
+            onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`, { state: { filter } })}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
             <img src={p.image} alt={t(p.titleKey)} className="w-full h-40 object-cover" />

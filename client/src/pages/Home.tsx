@@ -125,18 +125,18 @@ const Home: React.FC = () => {
             .filter((p) => p.featured)
             .slice(0, 3)
             .map((p) => (
-            <div
-              key={p.id}
-              onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
-              className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
-            >
-              <img src={p.image} alt={t(p.titleKey)} className="w-full h-48 object-cover" />
-              <div className="p-4 bg-white">
-                <h3 className="font-semibold text-lg text-gray-800">{t(p.titleKey)}</h3>
-                <p className="text-gray-600 text-sm">{t(p.descriptionKey)}</p>
+              <div
+                key={p.id}
+                onClick={() => navigate(`/article/${toSlug(t(p.titleKey))}`)}
+                className="overflow-hidden rounded-lg shadow hover:shadow-lg transition cursor-pointer"
+              >
+                <img src={p.image} alt={t(p.titleKey)} className="w-full h-48 object-cover" />
+                <div className="p-4 bg-white">
+                  <h3 className="font-semibold text-lg text-gray-800">{t(p.titleKey)}</h3>
+                  <p className="text-gray-600 text-sm">{t(p.descriptionKey)}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
 
@@ -166,7 +166,6 @@ const Home: React.FC = () => {
           ))}
         </div>
       </div>
-
     </>
   );
 };

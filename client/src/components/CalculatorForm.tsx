@@ -21,9 +21,7 @@ export default function CalculatorForm() {
         if (res.data && res.data.products && res.data.features) {
           setConfig(res.data);
           const initialOpts: Record<string, boolean> = {};
-          Object.keys(res.data.features).forEach(
-            (key) => (initialOpts[key] = false)
-          );
+          Object.keys(res.data.features).forEach((key) => (initialOpts[key] = false));
           setOptions(initialOpts);
           setError(null);
         } else {
@@ -42,9 +40,7 @@ export default function CalculatorForm() {
 
   const visibleFeatures = useMemo(() => {
     if (!config) return [];
-    return Object.entries(config.features).filter(([_, v]) =>
-      v.products.includes(product)
-    );
+    return Object.entries(config.features).filter(([_, v]) => v.products.includes(product));
   }, [config, product]);
 
   const calculateTotal = () => {
@@ -132,9 +128,7 @@ export default function CalculatorForm() {
               <input
                 type="checkbox"
                 checked={options[key]}
-                onChange={(e) =>
-                  setOptions({ ...options, [key]: e.target.checked })
-                }
+                onChange={(e) => setOptions({ ...options, [key]: e.target.checked })}
               />
               <span>{t(val.label)}</span>
             </label>

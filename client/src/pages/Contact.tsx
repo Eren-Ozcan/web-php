@@ -5,7 +5,9 @@ export default function Contact() {
   return (
     <section className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-8">
-        <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">{t('contact_form_heading')}</h1>
+        <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">
+          {t('contact_form_heading')}
+        </h1>
 
         <form className="space-y-6">
           <div>

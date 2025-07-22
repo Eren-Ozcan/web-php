@@ -42,7 +42,10 @@ export default function Reviews() {
       </div>
       <div className="grid md:grid-cols-2 gap-6">
         {filtered.map((r) => (
-          <div key={r.id} className="bg-white shadow rounded overflow-hidden flex flex-col md:flex-row">
+          <div
+            key={r.id}
+            className="bg-white shadow rounded overflow-hidden flex flex-col md:flex-row"
+          >
             <img src={r.image} alt={t(r.titleKey)} className="w-full md:w-1/3 h-48 object-cover" />
             <div className="p-4">
               <h3 className="text-xl font-semibold mb-2">{t(r.titleKey)}</h3>

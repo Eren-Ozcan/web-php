@@ -45,17 +45,11 @@ export default function Blogs() {
         {filtered.map((post) => (
           <div
             key={post.id}
-            onClick={() =>
-              navigate(`/article/${toSlug(t(post.titleKey))}`, { state: { filter } })
-            }
+            onClick={() => navigate(`/article/${toSlug(t(post.titleKey))}`, { state: { filter } })}
             className="bg-white shadow rounded overflow-hidden cursor-pointer"
           >
             {post.image && (
-              <img
-                src={post.image}
-                alt={t(post.titleKey)}
-                className="w-full h-48 object-cover"
-              />
+              <img src={post.image} alt={t(post.titleKey)} className="w-full h-48 object-cover" />
             )}
             <div className="p-4">
               <h3 className="font-semibold text-lg mb-2">{t(post.titleKey)}</h3>

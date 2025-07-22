@@ -11,9 +11,7 @@ const ContentContext = createContext<Ctx | undefined>(undefined);
 export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [content, setContent] = useState<ContentData>(loadContent());
   return (
-    <ContentContext.Provider value={{ content, setContent }}>
-      {children}
-    </ContentContext.Provider>
+    <ContentContext.Provider value={{ content, setContent }}>{children}</ContentContext.Provider>
   );
 };
 

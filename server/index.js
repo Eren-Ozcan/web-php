@@ -137,9 +137,7 @@ async function loadData() {
         if (!pricingData.productOrder) {
           pricingData.productOrder = Object.keys(pricingData.products || {});
         }
-        await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [
-          JSON.stringify(pricingData)
-        ]);
+        await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [JSON.stringify(pricingData)]);
       }
     }
   } catch (err) {
@@ -193,9 +191,7 @@ app.post('/api/content', async (req, res) => {
   const data = req.body;
   try {
     contentData = data;
-    await pool.query('UPDATE content SET data = ? WHERE id = 1', [
-      JSON.stringify(contentData)
-    ]);
+    await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
     saveJson('content.json', contentData);
     res.json({ success: true });
   } catch (err) {
@@ -234,9 +230,7 @@ app.post('/api/pricing', async (req, res) => {
   const data = req.body;
   try {
     pricingData = data;
-    await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [
-      JSON.stringify(pricingData)
-    ]);
+    await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [JSON.stringify(pricingData)]);
     saveJson('pricing.json', pricingData);
     res.json({ success: true });
   } catch (err) {

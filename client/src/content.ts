@@ -187,8 +187,7 @@ export function loadContent(): ContentData {
             products: { en: cat.products, tr: cat.products }
           };
         }
-        const sanitize = (list: string[]) =>
-          list.map((c) => c.replace(/^filter_/, ''));
+        const sanitize = (list: string[]) => list.map((c) => c.replace(/^filter_/, ''));
         (data as ContentData).categories.blogs.en = sanitize(
           (data as ContentData).categories.blogs.en
         );
