@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Project } from '../content';
 import { useContent } from '../ContentContext';
+import type { Language } from '../i18n';
 
 export default function Projects() {
   const { t, i18n } = useTranslation();
@@ -18,7 +19,8 @@ export default function Projects() {
   }, [filter]);
 
   const projects: Project[] = content.projects;
-  const projectCategories = content.categories.projects[i18n.language] || [];
+  const lang = i18n.language as Language;
+  const projectCategories = content.categories.projects[lang] || [];
 
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter);
 

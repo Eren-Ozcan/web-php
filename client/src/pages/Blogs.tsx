@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BlogPost } from '../content';
 import { useContent } from '../ContentContext';
+import type { Language } from '../i18n';
 
 export default function Blogs() {
   const { t, i18n } = useTranslation();
@@ -19,7 +20,8 @@ export default function Blogs() {
 
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
   const posts: BlogPost[] = content.blogs;
-  const blogCategories = content.categories.blogs[i18n.language] || [];
+  const lang = i18n.language as Language;
+  const blogCategories = content.categories.blogs[lang] || [];
 
   const filtered = filter === 'all' ? posts : posts.filter((p) => p.category === filter);
 

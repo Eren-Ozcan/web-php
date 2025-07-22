@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import i18n from '../i18n';
+import i18n, { Language } from '../i18n';
 import { loadContent, ContentData } from '../content';
 import api from '../api';
 import { useContent } from '../ContentContext';
@@ -9,7 +9,7 @@ import { PricingConfig, loadPricing } from '../pricing';
 const ContentAdmin: React.FC = () => {
   const { t, i18n: i18next } = useTranslation();
   const languages = Object.keys(i18next.options.resources || {});
-  const [lang, setLang] = useState<string>(i18next.language);
+  const [lang, setLang] = useState<Language>(i18next.language as Language);
   const [content, setContent] = useState<ContentData>(loadContent());
   const [pricing, setPricing] = useState<PricingConfig>(loadPricing());
   const [productNameEdits, setProductNameEdits] = useState<Record<string, string>>({});
@@ -280,7 +280,7 @@ const ContentAdmin: React.FC = () => {
                     <button
                       onClick={() => {
                         const list = content.categories[catSection][lang].filter(
-                          (_, i) => i !== idx
+                          (_: string, i: number) => i !== idx
                         );
                         setContent({
                           ...content,

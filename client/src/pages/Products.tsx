@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Product } from '../content';
 import { useContent } from '../ContentContext';
+import type { Language } from '../i18n';
 
 export default function Products() {
   const { t, i18n } = useTranslation();
@@ -30,7 +31,8 @@ export default function Products() {
   const toSlug = (s: string) => encodeURIComponent(s.toLowerCase().replace(/\s+/g, '-'));
 
   const products: Product[] = content.products;
-  const productCategories = content.categories.products[i18n.language] || [];
+  const lang = i18n.language as Language;
+  const productCategories = content.categories.products[lang] || [];
 
   const filtered = filter === 'all' ? products : products.filter((p) => p.category === filter);
 
