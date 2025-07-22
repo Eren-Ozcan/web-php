@@ -78,9 +78,7 @@ export default function About() {
             onClick={() => setProjectFilter(f)}
             className={`px-3 py-1 rounded text-sm ${projectFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {f === 'all'
-              ? t('filter_all')
-              : projectCategories[f][i18n.language as Language] || f}
+            {f === 'all' ? t('filter_all') : projectCategories[f][i18n.language as Language] || f}
           </button>
         ))}
       </div>
@@ -113,9 +111,7 @@ export default function About() {
             onClick={() => setReviewFilter(f)}
             className={`px-3 py-1 rounded text-sm ${reviewFilter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {f === 'all'
-              ? t('filter_all')
-              : reviewCategories[f][i18n.language as Language] || f}
+            {f === 'all' ? t('filter_all') : reviewCategories[f][i18n.language as Language] || f}
           </button>
         ))}
       </div>
