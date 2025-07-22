@@ -14,8 +14,11 @@ const ContentAdmin: React.FC = () => {
   const [pricing, setPricing] = useState<PricingConfig>(loadPricing());
   const [productNameEdits, setProductNameEdits] = useState<Record<string, string>>({});
   const [basicTexts, setBasicTexts] = useState({
+    mission: t('mission'),
     mission_text: t('mission_text'),
+    vision: t('vision'),
     vision_text: t('vision_text'),
+    values: t('values'),
     values_text: t('values_text'),
   });
   const { setContent: setGlobalContent } = useContent();
@@ -39,8 +42,11 @@ const ContentAdmin: React.FC = () => {
           });
         });
         setBasicTexts({
+          mission: i18next.t('mission'),
           mission_text: i18next.t('mission_text'),
+          vision: i18next.t('vision'),
           vision_text: i18next.t('vision_text'),
+          values: i18next.t('values'),
           values_text: i18next.t('values_text'),
         });
       } catch (err) {
@@ -60,8 +66,11 @@ const ContentAdmin: React.FC = () => {
     i18next.changeLanguage(lang);
     localStorage.setItem('language', lang);
     setBasicTexts({
+      mission: i18next.t('mission'),
       mission_text: i18next.t('mission_text'),
+      vision: i18next.t('vision'),
       vision_text: i18next.t('vision_text'),
+      values: i18next.t('values'),
       values_text: i18next.t('values_text'),
     });
   }, [lang, i18next]);
@@ -187,7 +196,7 @@ const ContentAdmin: React.FC = () => {
       {/* BASIC */}
       {section === 'basic' ? (
         <div className="space-y-2">
-          {['mission_text', 'vision_text', 'values_text'].map((k) => (
+          {['mission', 'mission_text', 'vision', 'vision_text', 'values', 'values_text'].map((k) => (
             <div key={k} className="flex items-center space-x-2">
               <label className="w-32 font-semibold">{t(k)}</label>
               <input
