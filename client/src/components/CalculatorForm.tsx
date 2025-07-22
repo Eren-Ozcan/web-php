@@ -19,9 +19,6 @@ export default function CalculatorForm() {
       try {
         const res = await api.get<PricingConfig>('/api/pricing');
         if (res.data && res.data.products && res.data.features) {
-          if (res.data.productOrder && res.data.productOrder.length > 0) {
-            setProduct(res.data.productOrder[0]);
-          }
           setConfig(res.data);
           const initialOpts: Record<string, boolean> = {};
           Object.keys(res.data.features).forEach((key) => (initialOpts[key] = false));
