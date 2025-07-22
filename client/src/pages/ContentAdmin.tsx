@@ -19,7 +19,7 @@ const ContentAdmin: React.FC = () => {
     vision: t('vision'),
     vision_text: t('vision_text'),
     values: t('values'),
-    values_text: t('values_text'),
+    values_text: t('values_text')
   });
   const { setContent: setGlobalContent } = useContent();
 
@@ -47,7 +47,7 @@ const ContentAdmin: React.FC = () => {
           vision: i18next.t('vision'),
           vision_text: i18next.t('vision_text'),
           values: i18next.t('values'),
-          values_text: i18next.t('values_text'),
+          values_text: i18next.t('values_text')
         });
       } catch (err) {
         console.error('Failed to load admin data', err);
@@ -71,7 +71,7 @@ const ContentAdmin: React.FC = () => {
       vision: i18next.t('vision'),
       vision_text: i18next.t('vision_text'),
       values: i18next.t('values'),
-      values_text: i18next.t('values_text'),
+      values_text: i18next.t('values_text')
     });
   }, [lang, i18next]);
 
@@ -195,22 +195,46 @@ const ContentAdmin: React.FC = () => {
 
       {/* BASIC */}
       {section === 'basic' ? (
-        <div className="space-y-2">
-          {['mission', 'mission_text', 'vision', 'vision_text', 'values', 'values_text'].map((k) => (
-            <div key={k} className="flex items-center space-x-2">
-              <label className="w-32 font-semibold">{t(k.endsWith('_text') ? `${k}_label` : k)}</label>
-              <input
-                className="border p-1 flex-1"
-                value={(basicTexts as any)[k]}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  updateTranslation(k, val);
-                  setBasicTexts((prev) => ({ ...prev, [k]: val }));
-                }}
-              />
-            </div>
-          ))}
-        </div>
+        <table className="w-full border">
+          <thead>
+            <tr>
+              <th className="border p-2 w-1/2">{t('admin_title_label')}</th>
+              <th className="border p-2 w-1/2">{t('admin_text')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              { titleKey: 'mission', textKey: 'mission_text' },
+              { titleKey: 'vision', textKey: 'vision_text' },
+              { titleKey: 'values', textKey: 'values_text' }
+            ].map(({ titleKey, textKey }) => (
+              <tr key={titleKey}>
+                <td className="border p-2">
+                  <input
+                    className="border p-1 w-full"
+                    value={(basicTexts as any)[titleKey]}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      updateTranslation(titleKey, val);
+                      setBasicTexts((prev) => ({ ...prev, [titleKey]: val }));
+                    }}
+                  />
+                </td>
+                <td className="border p-2">
+                  <input
+                    className="border p-1 w-full"
+                    value={(basicTexts as any)[textKey]}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      updateTranslation(textKey, val);
+                      setBasicTexts((prev) => ({ ...prev, [textKey]: val }));
+                    }}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : section === 'categories' ? (
         <div className="space-y-2">
           <div className="space-x-2 mb-2">
@@ -302,7 +326,8 @@ const ContentAdmin: React.FC = () => {
                 <th className="border p-2">{t('admin_actions')}</th>
               </tr>
             </thead>
-            <tbody>{pricing.productOrder.map((key) => {
+            <tbody>
+              {pricing.productOrder.map((key) => {
                 const val = pricing.products[key];
                 return (
                   <tr key={key}>
@@ -310,21 +335,22 @@ const ContentAdmin: React.FC = () => {
                       <input
                         className="border p-1 w-full"
                         value={productNameEdits[key] ?? key}
-                      onChange={(e) =>
-                        setProductNameEdits({
-                          ...productNameEdits,
-                          [key]: e.target.value
-                        })
-                      }
-                      onBlur={() => {
-                        const newKey = (productNameEdits[key] ?? key).trim();
-                        if (!newKey || newKey === key || pricing.products[newKey]) {
-                          setProductNameEdits((prev) => {
-                            const { [key]: _omit, ...rest } = prev;
-                            return rest;
-                          });
-                          return;
-                        } const { [key]: oldVal, ...rest } = pricing.products as any;
+                        onChange={(e) =>
+                          setProductNameEdits({
+                            ...productNameEdits,
+                            [key]: e.target.value
+                          })
+                        }
+                        onBlur={() => {
+                          const newKey = (productNameEdits[key] ?? key).trim();
+                          if (!newKey || newKey === key || pricing.products[newKey]) {
+                            setProductNameEdits((prev) => {
+                              const { [key]: _omit, ...rest } = prev;
+                              return rest;
+                            });
+                            return;
+                          }
+                          const { [key]: oldVal, ...rest } = pricing.products as any;
                           const updatedProducts = { ...rest, [newKey]: oldVal };
                           const updatedFeatures = Object.fromEntries(
                             Object.entries(pricing.features).map(([fKey, fVal]) => [
@@ -348,25 +374,25 @@ const ContentAdmin: React.FC = () => {
                             const { [key]: _removed, ...rest } = prev;
                             return rest;
                           });
-                      }}
-                    />
-                  </td>
-                  <td className="border p-2">
-                    <input
-                      type="number"
-                      className="border p-1 w-full"
-                      value={val.basePrice}
-                      onChange={(e) => {
-                        const bp = parseFloat(e.target.value) || 0;
-                        setPricing({
-                          ...pricing,
-                          products: { ...pricing.products, [key]: { basePrice: bp } }
-                        });
-                      }}
-                    />
-                  </td>
-                  <td className="border p-2">
-                    <button
+                        }}
+                      />
+                    </td>
+                    <td className="border p-2">
+                      <input
+                        type="number"
+                        className="border p-1 w-full"
+                        value={val.basePrice}
+                        onChange={(e) => {
+                          const bp = parseFloat(e.target.value) || 0;
+                          setPricing({
+                            ...pricing,
+                            products: { ...pricing.products, [key]: { basePrice: bp } }
+                          });
+                        }}
+                      />
+                    </td>
+                    <td className="border p-2">
+                      <button
                         onClick={() => {
                           const prods = { ...pricing.products } as any;
                           delete prods[key];
@@ -376,26 +402,26 @@ const ContentAdmin: React.FC = () => {
                             productOrder: pricing.productOrder.filter((k) => k !== key)
                           });
                         }}
-                      className="bg-red-500 text-white px-2 py-1 rounded"
-                    >
-                      {t('admin_delete')}
-                    </button>
-                  </td>
-                </tr>
+                        className="bg-red-500 text-white px-2 py-1 rounded"
+                      >
+                        {t('admin_delete')}
+                      </button>
+                    </td>
+                  </tr>
                 );
               })}
             </tbody>
           </table>
           <button
-              onClick={() => {
-                const name = prompt('product key');
-                if (!name || pricing.products[name]) return;
-                setPricing({
-                  ...pricing,
-                  products: { ...pricing.products, [name]: { basePrice: 0 } },
-                  productOrder: [...pricing.productOrder, name]
-                });
-              }}
+            onClick={() => {
+              const name = prompt('product key');
+              if (!name || pricing.products[name]) return;
+              setPricing({
+                ...pricing,
+                products: { ...pricing.products, [name]: { basePrice: 0 } },
+                productOrder: [...pricing.productOrder, name]
+              });
+            }}
             className="bg-blue-500 text-white px-3 py-1 rounded"
           >
             {t('admin_add_product')}
@@ -497,9 +523,7 @@ const ContentAdmin: React.FC = () => {
               <th className="border p-2">{t('admin_text')}</th>
               <th className="border p-2">{t('admin_image')}</th>
               <th className="border p-2">{t('admin_category')}</th>
-              {section === 'projects' && (
-                <th className="border p-2">{t('admin_featured')}</th>
-              )}
+              {section === 'projects' && <th className="border p-2">{t('admin_featured')}</th>}
               <th className="border p-2">{t('admin_actions')}</th>
             </tr>
           </thead>
