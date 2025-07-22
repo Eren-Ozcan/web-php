@@ -11,6 +11,30 @@ export interface PricingConfig {
   productOrder: string[];
 }
 
+export function normalizePricing(p: any): PricingConfig {
+  if (!p.productOrder) {
+    p.productOrder = Object.keys(p.products || {});
+  }
+  Object.entries(p.features || {}).forEach(([k, f]: any) => {
+    if (typeof f.label === 'string') {
+      p.features[k].label = { tr: f.label, en: f.label };
+    } else {
+      f.label = { tr: f.label.tr || '', en: f.label.en || '' };
+    }
+
+    if (Array.isArray(f.products)) {
+      p.features[k].products = { tr: f.products, en: f.products };
+    } else {
+      p.features[k].products = {
+        tr: f.products?.tr || [],
+        en: f.products?.en || []
+      };
+    }
+    if ('description' in f) delete p.features[k].description;
+  });
+  return p as PricingConfig;
+}
+
 const defaultPricing: PricingConfig = {
   productOrder: ['cam', 'pvc', 'balkon'],
   products: {
@@ -43,14 +67,11 @@ export function loadPricing(): PricingConfig {
     try {
       const data = JSON.parse(stored);
       if (data && data.products && data.features) {
-        if (!data.productOrder) {
-          data.productOrder = Object.keys(data.products);
-        }
-        return data as PricingConfig;
+        return normalizePricing(data);
       }
     } catch {}
   }
-  return defaultPricing;
+  return normalizePricing({ ...defaultPricing });
 }
 
 export function savePricing(data: PricingConfig) {

@@ -42,9 +42,13 @@ export default function CalculatorForm() {
 
   const visibleFeatures = useMemo(() => {
     if (!config) return [];
-    return Object.entries(config.features).filter(([_, v]) => v.products.tr.includes(product));
+ return Object.entries(config.features).filter(([_, v]) => {
+      const list = Array.isArray((v as any).products)
+        ? (v as any).products
+        : v.products?.tr;
+      return Array.isArray(list) && list.includes(product);
+    });
   }, [config, product]);
-
   const calculateTotal = () => {
     if (!config) {
       setTotal(0);
@@ -133,7 +137,11 @@ export default function CalculatorForm() {
                 checked={selected === key}
                 onChange={() => setSelected(key)}
               />
-              <span className="flex-1 font-medium">{val.label[i18n.language as 'tr' | 'en']}</span>
+<span className="flex-1 font-medium">
+                {typeof (val as any).label === 'string'
+                  ? (val as any).label
+                  : (val as any).label[i18n.language as 'tr' | 'en']}
+              </span>
             </label>
           ))}
         </div>

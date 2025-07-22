@@ -4,7 +4,7 @@ import i18n, { Language } from '../i18n';
 import { loadContent, ContentData, CategoryEntry, normalizeCategories } from '../content';
 import api from '../api';
 import { useContent } from '../ContentContext';
-import { PricingConfig, loadPricing } from '../pricing';
+import { PricingConfig, loadPricing, normalizePricing } from '../pricing';
 
 const SECTION_KEYS = [
   'blogs',
@@ -54,7 +54,7 @@ const ContentAdmin: React.FC = () => {
           api.get<PricingConfig>('/api/pricing')
         ]);
         setContent(cRes.data);
-        setPricing(pRes.data);
+        setPricing(normalizePricing(pRes.data));
         localStorage.setItem('content', JSON.stringify(cRes.data));
         localStorage.setItem('translations', JSON.stringify(tRes.data));
         localStorage.setItem('pricing', JSON.stringify(pRes.data));
