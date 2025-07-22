@@ -182,7 +182,7 @@ async function loadData() {
       }
     }
 
-    const [pRows] = await pool.query('SELECT data FROM pricing WHERE id = 1');
+     const [pRows] = await pool.query('SELECT data FROM pricing WHERE id = 1');
     if (!pRows.length) {
       pricingData = normalizePricing(loadJson('pricing.json'));
       await pool.query('INSERT INTO pricing (id, data) VALUES (1, ?)', [
@@ -206,7 +206,7 @@ async function loadData() {
     contentData = loadJson('content.json');
     contentData.categories = normalizeCategories(contentData.categories);
     translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
-    pricingData = normalizePricing(loadJson('pricing.json'));
+ pricingData = normalizePricing(loadJson('pricing.json'));
   }
 }
 
