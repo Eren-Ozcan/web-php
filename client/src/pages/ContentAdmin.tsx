@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n, { Language } from '../i18n';
-import { loadContent, ContentData, CategoryEntry } from '../content';
+import { loadContent, ContentData, CategoryEntry, normalizeCategories } from '../content';
 import api from '../api';
 import { useContent } from '../ContentContext';
 import { PricingConfig, loadPricing } from '../pricing';
@@ -159,15 +159,19 @@ const ContentAdmin: React.FC = () => {
 
   const saveAll = async () => {
     try {
+      const normalized = {
+        ...content,
+        categories: normalizeCategories(content.categories)
+      };
       await Promise.all([
-        api.post('/api/content', content),
+        api.post('/api/content', normalized),
         api.post('/api/translations', i18n.store.data),
         api.post('/api/pricing', pricing)
       ]);
-      localStorage.setItem('content', JSON.stringify(content));
+      localStorage.setItem('content', JSON.stringify(normalized));
       localStorage.setItem('translations', JSON.stringify(i18n.store.data));
       localStorage.setItem('pricing', JSON.stringify(pricing));
-      setGlobalContent(content);
+      setGlobalContent(normalized);
       alert(t('admin_saved'));
     } catch (err) {
       console.error('Save failed', err);

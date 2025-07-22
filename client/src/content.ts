@@ -245,7 +245,8 @@ export function loadContent(): ContentData {
 }
 
 export function saveContent(data: ContentData) {
-  localStorage.setItem('content', JSON.stringify(data));
+  const normalized = { ...data, categories: normalizeCategories(data.categories) };
+  localStorage.setItem('content', JSON.stringify(normalized));
 }
 
 export default defaultData;
