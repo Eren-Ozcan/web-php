@@ -599,7 +599,7 @@ const ContentAdmin: React.FC = () => {
             {entries.map((item: any, idx: number) => (
               <tr key={item.id}>
                 <td className="border p-2">
-                  <div className="flex flex-col space-y-1">
+                  <div className="flex flex-col space-y-1"> 
                     <div className="flex items-center space-x-2">
                       <span className="w-12 text-sm font-semibold">TR</span>
                       <input
@@ -624,7 +624,7 @@ const ContentAdmin: React.FC = () => {
                 </td>
                 <td className="border p-2">
                   <div className="flex flex-col space-y-1">
-                    <div className="flex items-center space-x-2">
+<div className="flex items-center space-x-2">
                       <span className="w-12 text-sm font-semibold">TR</span>
                       <input
                         className="border p-1 flex-1"
@@ -684,10 +684,9 @@ const ContentAdmin: React.FC = () => {
                     />
                   )}
                 </td>
-
                 <td className="border p-2">
                   <div className="flex flex-col space-y-1">
-                    <div className="flex items-center space-x-2">
+ <div className="flex items-center space-x-2">
                       <span className="w-12 text-sm font-semibold">TR</span>
                       <select
                         className="border p-1 flex-1"
