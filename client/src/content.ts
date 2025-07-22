@@ -188,6 +188,43 @@ const defaultData: ContentData = {
   }
 };
 
+export function normalizeCategories(cat: any): Categories {
+  const isNumericObj = (o: any) =>
+    o &&
+    typeof o === 'object' &&
+    !Array.isArray(o) &&
+    Object.keys(o)
+      .filter((k) => k !== 'en' && k !== 'tr')
+      .every((k) => /^\d+$/.test(k));
+  const sanitize = (s: string) => s.replace(/^filter_/, '');
+  const convertList = (enArr: any, trArr: any): CategoryMap => {
+    if (isNumericObj(enArr))
+      enArr = Object.keys(enArr)
+        .filter((k) => k !== 'en' && k !== 'tr')
+        .sort((a, b) => Number(a) - Number(b))
+        .map((k) => enArr[k]);
+    if (isNumericObj(trArr))
+      trArr = Object.keys(trArr)
+        .filter((k) => k !== 'en' && k !== 'tr')
+        .sort((a, b) => Number(a) - Number(b))
+        .map((k) => trArr[k]);
+    if (!Array.isArray(enArr) && !Array.isArray(trArr)) return enArr as any;
+    const map: CategoryMap = {};
+    const max = Math.max(enArr?.length || 0, trArr?.length || 0);
+    for (let i = 0; i < max; i++) {
+      const id = sanitize(enArr?.[i] ?? trArr?.[i] ?? 'cat' + i);
+      map[id] = { en: enArr?.[i] ?? id, tr: trArr?.[i] ?? id };
+    }
+    return map;
+  };
+  return {
+    blogs: convertList(cat?.blogs?.en ?? cat?.blogs, cat?.blogs?.tr ?? cat?.blogs),
+    projects: convertList(cat?.projects?.en ?? cat?.projects, cat?.projects?.tr ?? cat?.projects),
+    reviews: convertList(cat?.reviews?.en ?? cat?.reviews, cat?.reviews?.tr ?? cat?.reviews),
+    products: convertList(cat?.products?.en ?? cat?.products, cat?.products?.tr ?? cat?.products)
+  };
+}
+
 export function loadContent(): ContentData {
   const stored = localStorage.getItem('content');
   if (stored) {
@@ -195,33 +232,8 @@ export function loadContent(): ContentData {
       const data = JSON.parse(stored);
       if (data && typeof data === 'object' && 'blogs' in data) {
         const cat = (data as any).categories;
-        const convertList = (enArr: any, trArr: any): CategoryMap => {
-          if (!Array.isArray(enArr) && !Array.isArray(trArr)) return enArr as any;
-          const map: CategoryMap = {};
-          const max = Math.max(enArr?.length || 0, trArr?.length || 0);
-          for (let i = 0; i < max; i++) {
-            const id = sanitize(enArr?.[i] ?? trArr?.[i] ?? 'cat' + i);
-            map[id] = {
-              en: enArr?.[i] ?? id,
-              tr: trArr?.[i] ?? id
-            };
-          }
-          return map;
-        };
-        const sanitize = (s: string) => s.replace(/^filter_/, '');
         if (cat) {
-          (data as any).categories = {
-            blogs: convertList(cat.blogs?.en ?? cat.blogs, cat.blogs?.tr ?? cat.blogs),
-            projects: convertList(
-              cat.projects?.en ?? cat.projects,
-              cat.projects?.tr ?? cat.projects
-            ),
-            reviews: convertList(cat.reviews?.en ?? cat.reviews, cat.reviews?.tr ?? cat.reviews),
-            products: convertList(
-              cat.products?.en ?? cat.products,
-              cat.products?.tr ?? cat.products
-            )
-          };
+          (data as any).categories = normalizeCategories(cat);
         }
         return data as ContentData;
       }
