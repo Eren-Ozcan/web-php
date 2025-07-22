@@ -20,7 +20,7 @@ export default function Projects() {
 
   const projects: Project[] = content.projects;
   const lang = i18n.language as Language;
-  const projectCategories = content.categories.projects[lang] || [];
+  const projectCategories = content.categories.projects;
 
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter);
 
@@ -28,17 +28,15 @@ export default function Projects() {
     <section className="p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">{t('projects')}</h1>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', ...projectCategories].map((f) => (
+        {['all', ...Object.keys(projectCategories)].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {(() => {
-              const key = f.replace(/^filter_/, '');
-              const label = t(`filter_${key}` as any);
-              return label.startsWith('filter_') ? key : label;
-            })()}
+            {f === 'all'
+              ? t('filter_all')
+              : projectCategories[f][lang] || f}
           </button>
         ))}
       </div>

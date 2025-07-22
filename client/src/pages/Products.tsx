@@ -31,7 +31,7 @@ export default function Products() {
 
   const products: Product[] = content.products;
   const lang = i18n.language as Language;
-  const productCategories = content.categories.products[lang] || [];
+  const productCategories = content.categories.products;
 
   const filtered = filter === 'all' ? products : products.filter((p) => p.category === filter);
 
@@ -39,17 +39,15 @@ export default function Products() {
     <section className="p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">{t('products')}</h1>
       <div className="flex justify-center space-x-2 mb-6">
-        {['all', ...productCategories].map((f) => (
+        {['all', ...Object.keys(productCategories)].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {(() => {
-              const key = f.replace(/^filter_/, '');
-              const label = t(`filter_${key}` as any);
-              return label.startsWith('filter_') ? key : label;
-            })()}
+            {f === 'all'
+              ? t('filter_all')
+              : productCategories[f][lang] || f}
           </button>
         ))}
       </div>
