@@ -34,9 +34,7 @@ export default function Reviews() {
             onClick={() => setFilter(f)}
             className={`px-3 py-1 rounded text-sm ${filter === f ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
-            {f === 'all'
-              ? t('filter_all')
-              : reviewCategories[f][lang] || f}
+            {f === 'all' ? t('filter_all') : reviewCategories[f][lang] || f}
           </button>
         ))}
       </div>
