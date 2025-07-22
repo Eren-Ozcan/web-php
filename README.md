@@ -75,11 +75,12 @@ Run the script with phpMyAdmin or the MySQL CLI:
 mysql -u admin -p < server/init_db.sql
 ```
 
-The script now also creates `content` and `translations` tables which store the
-website data edited from the admin panel. Any changes made in the admin
-missing. On first launch, if the tables are empty, the server seeds them using
-the JSON files under `server/data`. Running the script is still recommended to
-set up the initial admin user.
+The script also creates `content`, `translations` and `pricing` tables which
+store the website data edited from the admin panel. Any changes made in the
+admin panel are written back to these tables and to the JSON files. On first
+launch, if the tables are empty, the server seeds them from the files under
+`server/data`. Running the script is still recommended to set up the initial
+admin user.
 
 ## Login API
 
@@ -109,3 +110,11 @@ website data:
 Both `POST` endpoints update the MySQL tables and also write to the JSON files
 under `server/data` so that the data is available even if the database is not
 pre-populated.
+
+## Additional APIs
+
+- `GET /api/pricing` – returns the current pricing configuration.
+- `POST /api/pricing` – saves updated pricing data.
+- `GET /api/projects` – lists projects; add `?highlight=true` to only return
+  featured projects.
+- `POST /api/sendMail` – sends a contact form email via Nodemailer.
