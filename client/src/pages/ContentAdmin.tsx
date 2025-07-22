@@ -113,8 +113,7 @@ const ContentAdmin: React.FC = () => {
     setContent(newContent);
   };
 
-  const categoryOptions: Record<string, CategoryEntry> =
-    (content.categories as any)[section] || {};
+  const categoryOptions: Record<string, CategoryEntry> = (content.categories as any)[section] || {};
 
   const addEntry = () => {
     const id = Date.now();
@@ -143,12 +142,7 @@ const ContentAdmin: React.FC = () => {
     setEntries(entries.filter((e) => e.id !== id));
   };
 
-  const handleChange = (
-    index: number,
-    field: string,
-    value: any,
-    lng?: Language
-  ) => {
+  const handleChange = (index: number, field: string, value: any, lng?: Language) => {
     const newEntries = [...entries];
     const item: any = { ...newEntries[index] };
     if (field === 'title') {
@@ -184,8 +178,6 @@ const ContentAdmin: React.FC = () => {
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">{t('admin_title')}</h1>
-
-
 
       {/* Sekme seçimi */}
       <div className="space-x-2">
@@ -599,15 +591,13 @@ const ContentAdmin: React.FC = () => {
             {entries.map((item: any, idx: number) => (
               <tr key={item.id}>
                 <td className="border p-2">
-                  <div className="flex flex-col space-y-1"> 
+                  <div className="flex flex-col space-y-1">
                     <div className="flex items-center space-x-2">
                       <span className="w-12 text-sm font-semibold">TR</span>
                       <input
                         className="border p-1 flex-1"
                         value={i18next.t(item.titleKey, { lng: 'tr' })}
-                        onChange={(e) =>
-                          handleChange(idx, 'title', e.target.value, 'tr')
-                        }
+                        onChange={(e) => handleChange(idx, 'title', e.target.value, 'tr')}
                       />
                     </div>
                     <div className="flex items-center space-x-2">
@@ -615,16 +605,14 @@ const ContentAdmin: React.FC = () => {
                       <input
                         className="border p-1 flex-1"
                         value={i18next.t(item.titleKey, { lng: 'en' })}
-                        onChange={(e) =>
-                          handleChange(idx, 'title', e.target.value, 'en')
-                        }
+                        onChange={(e) => handleChange(idx, 'title', e.target.value, 'en')}
                       />
                     </div>
                   </div>
                 </td>
                 <td className="border p-2">
                   <div className="flex flex-col space-y-1">
-<div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2">
                       <span className="w-12 text-sm font-semibold">TR</span>
                       <input
                         className="border p-1 flex-1"
@@ -635,9 +623,7 @@ const ContentAdmin: React.FC = () => {
                               ? i18next.t(item.descriptionKey, { lng: 'tr' })
                               : ''
                         }
-                        onChange={(e) =>
-                          handleChange(idx, 'text', e.target.value, 'tr')
-                        }
+                        onChange={(e) => handleChange(idx, 'text', e.target.value, 'tr')}
                       />
                     </div>
                     <div className="flex items-center space-x-2">
@@ -651,9 +637,7 @@ const ContentAdmin: React.FC = () => {
                               ? i18next.t(item.descriptionKey, { lng: 'en' })
                               : ''
                         }
-                        onChange={(e) =>
-                          handleChange(idx, 'text', e.target.value, 'en')
-                        }
+                        onChange={(e) => handleChange(idx, 'text', e.target.value, 'en')}
                       />
                     </div>
                   </div>
@@ -686,7 +670,7 @@ const ContentAdmin: React.FC = () => {
                 </td>
                 <td className="border p-2">
                   <div className="flex flex-col space-y-1">
- <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2">
                       <span className="w-12 text-sm font-semibold">TR</span>
                       <select
                         className="border p-1 flex-1"

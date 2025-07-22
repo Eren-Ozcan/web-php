@@ -200,7 +200,7 @@ export function loadContent(): ContentData {
           const map: CategoryMap = {};
           const max = Math.max(enArr?.length || 0, trArr?.length || 0);
           for (let i = 0; i < max; i++) {
-            const id = sanitize((enArr?.[i] ?? trArr?.[i]) ?? 'cat' + i);
+            const id = sanitize(enArr?.[i] ?? trArr?.[i] ?? 'cat' + i);
             map[id] = {
               en: enArr?.[i] ?? id,
               tr: trArr?.[i] ?? id
