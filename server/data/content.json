@@ -66,10 +66,10 @@
     },
     {
       "id": 1753181649910,
-      "titleKey": "reviews_title_1753181649910",
       "image": "",
-      "category": "mom",
-      "textKey": "reviews_text_1753181649910"
+      "textKey": "reviews_text_1753181649910",
+      "category": "anan",
+      "titleKey": "reviews_title_1753181649910"
     }
   ],
   "products": [
