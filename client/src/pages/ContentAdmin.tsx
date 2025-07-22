@@ -198,7 +198,7 @@ const ContentAdmin: React.FC = () => {
         <div className="space-y-2">
           {['mission', 'mission_text', 'vision', 'vision_text', 'values', 'values_text'].map((k) => (
             <div key={k} className="flex items-center space-x-2">
-              <label className="w-32 font-semibold">{t(k)}</label>
+              <label className="w-32 font-semibold">{t(k.endsWith('_text') ? `${k}_label` : k)}</label>
               <input
                 className="border p-1 flex-1"
                 value={(basicTexts as any)[k]}
