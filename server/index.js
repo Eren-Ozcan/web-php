@@ -347,6 +347,14 @@ app.post('/api/contact', async (req, res) => {
       subject: 'Yeni İletişim Mesajı',
       html: `<p><strong>Gönderen:</strong> ${name} &lt;${email}&gt;</p><p>${message.replace(/\n/g, '<br/>')}</p>`
     });
+
+    await mailTransporter.sendMail({
+      from: 'info@mefaaluminyum.com',
+      to: email,
+      subject: 'Thank you for contacting us',
+      text: `Hello ${name},\n\nThank you for contacting us. We will get back to you as soon as possible.\n\nHave a nice day.\n\n(This email has been sent automatically.)`
+    });
+
     res.json({ ok: true });
   } catch (err) {
     console.error('Contact mail error:', err);

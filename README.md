@@ -121,4 +121,5 @@ pre-populated.
 - `GET /api/projects` – lists projects; add `?highlight=true` to only return
   featured projects.
 - `POST /api/contact` – receives name, email and message from the contact form
-  and sends them via Nodemailer as an HTML email.
+  and sends them via Nodemailer as an HTML email. The endpoint also sends a
+  personalized thank‑you email back to the user.
