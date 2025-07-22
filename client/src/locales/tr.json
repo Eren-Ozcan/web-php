@@ -34,6 +34,9 @@
   "tempered_feature": "Temperli Cam",
   "colored_feature": "Renkli",
   "double_glazing_feature": "Çift Cam",
+  "tempered_feature_desc": "Ekstra dayanıklık sağlar",
+  "colored_feature_desc": "Cama renkli bir ton kazandırır",
+  "double_glazing_feature_desc": "Daha iyi izalasyon için iki cam",
   "login": "Giriş",
   "login_error": "Şifre yanlış",
   "login_success": "Giriş başarılı",
@@ -123,6 +126,7 @@
   "admin_base_price": "Birim Fiyat",
   "admin_features": "Özellikler",
   "admin_label": "Etiket",
+  "admin_description": "Açıklama",
   "admin_multiplier": "Katsayı",
   "admin_add_product": "Ürün Ekle",
   "admin_add_feature": "Özellik Ekle"

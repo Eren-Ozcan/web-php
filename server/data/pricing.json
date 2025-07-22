@@ -2,6 +2,7 @@
   "features": {
     "double": {
       "label": "double_glazing_feature",
+      "description": "double_glazing_feature_desc",
       "products": [
         "pvc"
       ],
@@ -9,6 +10,7 @@
     },
     "colored": {
       "label": "colored_feature",
+      "description": "colored_feature_desc",
       "products": [
         "cam"
       ],
@@ -16,6 +18,7 @@
     },
     "tempered": {
       "label": "tempered_feature",
+      "description": "tempered_feature_desc",
       "products": [
         "cam"
       ],
