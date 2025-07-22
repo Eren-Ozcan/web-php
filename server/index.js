@@ -351,8 +351,8 @@ app.post('/api/contact', async (req, res) => {
     await mailTransporter.sendMail({
       from: 'info@mefaaluminyum.com',
       to: email,
-      subject: 'Thank you for contacting us',
-      text: `Hello ${name},\n\nThank you for contacting us. We will get back to you as soon as possible.\n\nHave a nice day.\n\n(This email has been sent automatically.)`
+      subject: 'Bizimle İletişime Geçtiğiniz İçin Teşekkürler',
+      text: `Merhaba ${name},\n\nİletişime geçtiğiniz için teşekkürler. En kısa sürede size dönüş yapacağız.\n\nİyi günler dileriz.\n\n(Bu e-posta otomatik olarak gönderilmiştir.)`
     });
 
     res.json({ ok: true });
