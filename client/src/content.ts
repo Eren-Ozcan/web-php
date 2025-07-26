@@ -188,7 +188,7 @@ const defaultData: ContentData = {
           label: '1',
           tooltip: 'Glass',
           color: '#3b82f6',
-          route: '/urunler/glass'
+          route: '/article/1'
         },
         {
           x: 30,
@@ -196,7 +196,7 @@ const defaultData: ContentData = {
           label: '2',
           tooltip: 'Door',
           color: '#3b82f6',
-          route: '/urunler/door'
+          route: '/article/2'
         },
         {
           x: 60,
@@ -204,7 +204,7 @@ const defaultData: ContentData = {
           label: '3',
           tooltip: 'Balcony',
           color: '#3b82f6',
-          route: '/urunler/balcony'
+          route: '/article/3'
         }
       ]
     },
@@ -217,7 +217,7 @@ const defaultData: ContentData = {
           label: '4',
           tooltip: 'Garden',
           color: '#3b82f6',
-          route: '/urunler/garden'
+          route: '/article/4'
         },
         {
           x: 45,
@@ -225,7 +225,7 @@ const defaultData: ContentData = {
           label: '5',
           tooltip: 'Office',
           color: '#3b82f6',
-          route: '/urunler/office'
+          route: '/article/5'
         },
         {
           x: 70,
@@ -233,7 +233,7 @@ const defaultData: ContentData = {
           label: '6',
           tooltip: 'Facade',
           color: '#3b82f6',
-          route: '/urunler/facade'
+          route: '/article/6'
         }
       ]
     }
