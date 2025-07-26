@@ -43,6 +43,14 @@ const ContentAdmin: React.FC = () => {
     values_text: {
       tr: t('values_text', { lng: 'tr' }),
       en: t('values_text', { lng: 'en' })
+    },
+    left_section_title: {
+      tr: t('left_section_title', { lng: 'tr' }),
+      en: t('left_section_title', { lng: 'en' })
+    },
+    left_section_text: {
+      tr: t('left_section_text', { lng: 'tr' }),
+      en: t('left_section_text', { lng: 'en' })
     }
   });
   const duplicateInfo = React.useMemo(() => {
@@ -111,6 +119,14 @@ const ContentAdmin: React.FC = () => {
           values_text: {
             tr: i18next.t('values_text', { lng: 'tr' }),
             en: i18next.t('values_text', { lng: 'en' })
+          },
+          left_section_title: {
+            tr: i18next.t('left_section_title', { lng: 'tr' }),
+            en: i18next.t('left_section_title', { lng: 'en' })
+          },
+          left_section_text: {
+            tr: i18next.t('left_section_text', { lng: 'tr' }),
+            en: i18next.t('left_section_text', { lng: 'en' })
           }
         });
       } catch (err) {
@@ -268,7 +284,8 @@ const ContentAdmin: React.FC = () => {
             {[
               { titleKey: 'mission', textKey: 'mission_text' },
               { titleKey: 'vision', textKey: 'vision_text' },
-              { titleKey: 'values', textKey: 'values_text' }
+              { titleKey: 'values', textKey: 'values_text' },
+              { titleKey: 'left_section_title', textKey: 'left_section_text' }
             ].map(({ titleKey, textKey }) => (
               <tr key={titleKey}>
                 <td className="border p-2">
