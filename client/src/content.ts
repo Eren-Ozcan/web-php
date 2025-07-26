@@ -35,7 +35,10 @@ export interface Hotspot {
   x: number;
   y: number;
   label: string;
-  tooltip: string;
+  tooltip: {
+    tr: string;
+    en: string;
+  };
   color: string;
   route: string;
 }
@@ -43,6 +46,29 @@ export interface Hotspot {
 export interface Slide {
   image: string;
   hotspots: Hotspot[];
+}
+
+function normalizeSliders(data: any): Slide[] {
+  if (!Array.isArray(data)) return [];
+  return data.map((s) => ({
+    image: s.image || '',
+    hotspots: Array.isArray(s.hotspots)
+      ? s.hotspots.map((h) => ({
+          x: typeof h.x === 'number' ? h.x : Number(h.x) || 0,
+          y: typeof h.y === 'number' ? h.y : Number(h.y) || 0,
+          label: h.label || '',
+          tooltip:
+            typeof h.tooltip === 'string'
+              ? { tr: h.tooltip, en: h.tooltip }
+              : {
+                  tr: h.tooltip?.tr ?? '',
+                  en: h.tooltip?.en ?? ''
+                },
+          color: h.color || '#3b82f6',
+          route: h.route || ''
+        }))
+      : []
+  }));
 }
 
 export interface CategoryEntry {
@@ -186,7 +212,7 @@ const defaultData: ContentData = {
           x: 15,
           y: 20,
           label: '1',
-          tooltip: 'Glass',
+          tooltip: { tr: 'Cam', en: 'Glass' },
           color: '#3b82f6',
           route: '/article/9'
         },
@@ -194,7 +220,7 @@ const defaultData: ContentData = {
           x: 30,
           y: 40,
           label: '2',
-          tooltip: 'Door',
+          tooltip: { tr: 'Kapı', en: 'Door' },
           color: '#3b82f6',
           route: '/article/10'
         },
@@ -202,7 +228,7 @@ const defaultData: ContentData = {
           x: 60,
           y: 45,
           label: '3',
-          tooltip: 'Balcony',
+          tooltip: { tr: 'Balkon', en: 'Balcony' },
           color: '#3b82f6',
           route: '/article/11'
         }
@@ -215,7 +241,7 @@ const defaultData: ContentData = {
           x: 20,
           y: 30,
           label: '4',
-          tooltip: 'Garden',
+          tooltip: { tr: 'Bahçe', en: 'Garden' },
           color: '#3b82f6',
           route: '/article/12'
         },
@@ -223,7 +249,7 @@ const defaultData: ContentData = {
           x: 45,
           y: 55,
           label: '5',
-          tooltip: 'Office',
+          tooltip: { tr: 'Ofis', en: 'Office' },
           color: '#3b82f6',
           route: '/article/13'
         },
@@ -231,7 +257,7 @@ const defaultData: ContentData = {
           x: 70,
           y: 65,
           label: '6',
-          tooltip: 'Facade',
+          tooltip: { tr: 'Dış cephe', en: 'Facade' },
           color: '#3b82f6',
           route: '/article/14'
         }
@@ -310,9 +336,7 @@ export function loadContent(): ContentData {
         if (cat) {
           (data as any).categories = normalizeCategories(cat);
         }
-        if (!(data as any).sliders) {
-          (data as any).sliders = [];
-        }
+        (data as any).sliders = normalizeSliders((data as any).sliders);
         return data as ContentData;
       }
     } catch {

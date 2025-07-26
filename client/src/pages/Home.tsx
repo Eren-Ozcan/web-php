@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useContent } from '../ContentContext';
 
 const Home: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content } = useContent();
   const navigate = useNavigate();
   const swiperRef = useRef<SwiperClass | null>(null);
@@ -59,6 +59,8 @@ const Home: React.FC = () => {
                     <div
                       key={hIdx}
                       onClick={() => navigate(hotspot.route)}
+                      onMouseEnter={handlePause}
+                      onMouseLeave={handleResume}
                       className="absolute flex items-center justify-center w-8 h-8 text-white rounded-full cursor-pointer transition group"
                       style={{
                         top: `${hotspot.y}%`,
@@ -69,7 +71,7 @@ const Home: React.FC = () => {
                     >
                       {hotspot.label}
                       <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded shadow-md z-10">
-                        {hotspot.tooltip}
+                        {hotspot.tooltip[i18n.language as 'tr' | 'en']}
                       </div>
                     </div>
                   ))}

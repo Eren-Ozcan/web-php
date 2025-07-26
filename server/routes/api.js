@@ -48,7 +48,10 @@ router.get('/content', (req, res) => {
 router.post('/content', async (req, res) => {
   const data = req.body;
   try {
-    contentData = { ...data, categories: normalizeCategories(data.categories) };
+    Object.assign(
+      contentData,
+      { ...data, categories: normalizeCategories(data.categories) }
+    );
     await pool.query('UPDATE content SET data = ? WHERE id = 1', [
       JSON.stringify(contentData)
     ]);
@@ -67,7 +70,7 @@ router.get('/translations', (req, res) => {
 router.post('/translations', async (req, res) => {
   const data = req.body;
   try {
-    translationsData = data;
+    Object.assign(translationsData, data);
     await pool.query('UPDATE translations SET data = ? WHERE id = 1', [
       JSON.stringify(translationsData)
     ]);
@@ -87,7 +90,7 @@ router.get('/pricing', (req, res) => {
 router.post('/pricing', async (req, res) => {
   const data = req.body;
   try {
-    pricingData = normalizePricing(data);
+    Object.assign(pricingData, normalizePricing(data));
     await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [
       JSON.stringify(pricingData)
     ]);
