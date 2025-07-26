@@ -9,8 +9,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Increase body size limit to handle slider images encoded as data URLs
+// A single image can exceed 10mb once base64 encoded, causing POST /api/content
+// to fail when saving new sliders. Allow a larger limit to avoid "Save Failed".
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use('/api', apiRouter);
 
