@@ -35,6 +35,18 @@ export let contentData;
 export let translationsData;
 export let pricingData;
 
+export function setContentData(data) {
+  contentData = data;
+}
+
+export function setTranslationsData(data) {
+  translationsData = data;
+}
+
+export function setPricingData(data) {
+  pricingData = data;
+}
+
 export function normalizeCategories(cat) {
   const isNumericObj = (o) =>
     o &&
