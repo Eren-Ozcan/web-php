@@ -94,7 +94,7 @@ const defaultData: ContentData = {
   ],
   projects: [
     {
-      id: 1,
+      id: 4,
       titleKey: 'project_modern_villa',
       descriptionKey: 'project_modern_villa_desc',
       image: '/images/project1.jpg',
@@ -102,7 +102,7 @@ const defaultData: ContentData = {
       featured: false
     },
     {
-      id: 2,
+      id: 5,
       titleKey: 'project_office_center',
       descriptionKey: 'project_office_center_desc',
       image: '/images/project2.jpg',
@@ -110,7 +110,7 @@ const defaultData: ContentData = {
       featured: false
     },
     {
-      id: 3,
+      id: 6,
       titleKey: 'project_shopping_mall',
       descriptionKey: 'project_shopping_mall_desc',
       image: '/images/project3.jpg',
@@ -120,14 +120,14 @@ const defaultData: ContentData = {
   ],
   reviews: [
     {
-      id: 1,
+      id: 7,
       titleKey: 'product_cam',
       textKey: 'product_cam_desc',
       image: '/images/cam.jpg',
       category: 'glass'
     },
     {
-      id: 2,
+      id: 8,
       titleKey: 'product_pimapen',
       textKey: 'product_pimapen_desc',
       image: '/images/pimapen.jpg',
@@ -136,42 +136,42 @@ const defaultData: ContentData = {
   ],
   products: [
     {
-      id: 1,
+      id: 9,
       titleKey: 'product_glass',
       descriptionKey: 'product_glass_desc',
       image: '/images/cam.jpg',
       category: 'glass'
     },
     {
-      id: 2,
+      id: 10,
       titleKey: 'product_doors',
       descriptionKey: 'product_doors_desc',
       image: '/images/project1.jpg',
       category: 'door'
     },
     {
-      id: 3,
+      id: 11,
       titleKey: 'product_balcony',
       descriptionKey: 'product_balcony_desc',
       image: '/images/project3.jpg',
       category: 'balcony'
     },
     {
-      id: 4,
+      id: 12,
       titleKey: 'product_garden',
       descriptionKey: 'product_garden_desc',
       image: '/images/house3.jpg',
       category: 'garden'
     },
     {
-      id: 5,
+      id: 13,
       titleKey: 'product_office',
       descriptionKey: 'product_office_desc',
       image: '/images/project2.jpg',
       category: 'office'
     },
     {
-      id: 6,
+      id: 14,
       titleKey: 'product_facade',
       descriptionKey: 'product_facade_desc',
       image: '/images/house2.jpg',
@@ -188,7 +188,7 @@ const defaultData: ContentData = {
           label: '1',
           tooltip: 'Glass',
           color: '#3b82f6',
-          route: '/article/1'
+          route: '/article/9'
         },
         {
           x: 30,
@@ -196,7 +196,7 @@ const defaultData: ContentData = {
           label: '2',
           tooltip: 'Door',
           color: '#3b82f6',
-          route: '/article/2'
+          route: '/article/10'
         },
         {
           x: 60,
@@ -204,7 +204,7 @@ const defaultData: ContentData = {
           label: '3',
           tooltip: 'Balcony',
           color: '#3b82f6',
-          route: '/article/3'
+          route: '/article/11'
         }
       ]
     },
@@ -217,7 +217,7 @@ const defaultData: ContentData = {
           label: '4',
           tooltip: 'Garden',
           color: '#3b82f6',
-          route: '/article/4'
+          route: '/article/12'
         },
         {
           x: 45,
@@ -225,7 +225,7 @@ const defaultData: ContentData = {
           label: '5',
           tooltip: 'Office',
           color: '#3b82f6',
-          route: '/article/5'
+          route: '/article/13'
         },
         {
           x: 70,
@@ -233,7 +233,7 @@ const defaultData: ContentData = {
           label: '6',
           tooltip: 'Facade',
           color: '#3b82f6',
-          route: '/article/6'
+          route: '/article/14'
         }
       ]
     }
