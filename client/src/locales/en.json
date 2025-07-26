@@ -133,5 +133,10 @@
   "admin_description": "Description",
   "admin_multiplier": "Multiplier",
   "admin_add_product": "Add Product",
-  "admin_add_feature": "Add Feature"
+  "admin_add_feature": "Add Feature",
+  "slider_admin": "Slider Admin",
+  "add_slide": "Add Slide",
+  "change_image": "Change Image",
+  "admin_add_hotspot": "Add Hotspot",
+  "admin_delete_hotspot": "Delete Hotspot"
 }

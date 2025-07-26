@@ -127,6 +127,7 @@ export async function loadData() {
     const [cRows] = await pool.query('SELECT data FROM content WHERE id = 1');
     if (!cRows.length) {
       contentData = loadJson('content.json');
+      if (!contentData.sliders) contentData.sliders = [];
       contentData.categories = normalizeCategories(contentData.categories);
       await pool.query('INSERT INTO content (id, data) VALUES (1, ?)', [
         JSON.stringify(contentData)
@@ -136,9 +137,11 @@ export async function loadData() {
       const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
       if (parsed && Object.keys(parsed).length) {
         contentData = parsed;
+        if (!contentData.sliders) contentData.sliders = [];
         contentData.categories = normalizeCategories(contentData.categories);
       } else {
         contentData = loadJson('content.json');
+        if (!contentData.sliders) contentData.sliders = [];
         contentData.categories = normalizeCategories(contentData.categories);
         await pool.query('UPDATE content SET data = ? WHERE id = 1', [
           JSON.stringify(contentData)
@@ -195,6 +198,7 @@ export async function loadData() {
   } catch (err) {
     console.error('Failed to load from database, falling back to files', err);
     contentData = loadJson('content.json');
+    if (!contentData.sliders) contentData.sliders = [];
     contentData.categories = normalizeCategories(contentData.categories);
     translationsData = { en: loadJson('en.json'), tr: loadJson('tr.json') };
     pricingData = normalizePricing(loadJson('pricing.json'));

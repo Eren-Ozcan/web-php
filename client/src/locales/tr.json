@@ -133,5 +133,10 @@
   "admin_description": "Açıklama",
   "admin_multiplier": "Katsayı",
   "admin_add_product": "Ürün Ekle",
-  "admin_add_feature": "Özellik Ekle"
+  "admin_add_feature": "Özellik Ekle",
+  "slider_admin": "Slider Yönetimi",
+  "add_slide": "Slayt Ekle",
+  "change_image": "Resmi Değiştir",
+  "admin_add_hotspot": "Hotspot Ekle",
+  "admin_delete_hotspot": "Hotspot Sil"
 }

@@ -18,24 +18,7 @@ const Home: React.FC = () => {
   const handlePause = () => swiperRef.current?.autoplay?.stop();
   const handleResume = () => swiperRef.current?.autoplay?.start();
 
-  const imageData = [
-    {
-      image: '/images/house1.jpg',
-      hotspots: [
-        { x: 15, y: 20, label: '1', route: '/urunler/glass', tooltip: t('glass') },
-        { x: 30, y: 40, label: '2', route: '/urunler/door', tooltip: t('door') },
-        { x: 60, y: 45, label: '3', route: '/urunler/balcony', tooltip: t('balcony') }
-      ]
-    },
-    {
-      image: '/images/house2.jpg',
-      hotspots: [
-        { x: 20, y: 30, label: '4', route: '/urunler/garden', tooltip: t('garden') },
-        { x: 45, y: 55, label: '5', route: '/urunler/office', tooltip: t('office') },
-        { x: 70, y: 65, label: '6', route: '/urunler/facade', tooltip: t('exterior') }
-      ]
-    }
-  ];
+  const sliderData = content.sliders || [];
 
 
   return (
@@ -64,7 +47,7 @@ const Home: React.FC = () => {
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             className="w-full h-full"
           >
-            {imageData.map((slide, idx) => (
+            {sliderData.map((slide, idx) => (
               <SwiperSlide key={idx}>
                 <div className="relative w-full h-full">
                   <img
@@ -76,11 +59,12 @@ const Home: React.FC = () => {
                     <div
                       key={hIdx}
                       onClick={() => navigate(hotspot.route)}
-                      className="absolute flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full cursor-pointer hover:bg-blue-700 transition group"
+                      className="absolute flex items-center justify-center w-8 h-8 text-white rounded-full cursor-pointer transition group"
                       style={{
                         top: `${hotspot.y}%`,
                         left: `${hotspot.x}%`,
-                        transform: 'translate(-50%, -50%)'
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: hotspot.color || '#3b82f6'
                       }}
                     >
                       {hotspot.label}
