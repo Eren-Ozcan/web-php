@@ -1,4 +1,113 @@
-  },
+{
+  "blogs": [
+    {
+      "id": 1,
+      "titleKey": "blog1",
+      "category": "news",
+      "textKey": "article_lorem1",
+      "image": "/images/project1.jpg"
+    },
+    {
+      "id": 2,
+      "titleKey": "blog2",
+      "category": "tips",
+      "textKey": "article_lorem2",
+      "image": "/images/project2.jpg"
+    },
+    {
+      "id": 3,
+      "titleKey": "blog3",
+      "category": "news",
+      "textKey": "article_lorem3",
+      "image": "/images/project3.jpg"
+    }
+  ],
+  "projects": [
+    {
+      "id": 4,
+      "titleKey": "project_modern_villa",
+      "descriptionKey": "project_modern_villa_desc",
+      "image": "/images/project1.jpg",
+      "category": "glass",
+      "featured": false
+    },
+    {
+      "id": 5,
+      "titleKey": "project_office_center",
+      "descriptionKey": "project_office_center_desc",
+      "image": "/images/project2.jpg",
+      "category": "pvc",
+      "featured": false
+    },
+    {
+      "id": 6,
+      "titleKey": "project_shopping_mall",
+      "descriptionKey": "project_shopping_mall_desc",
+      "image": "/images/project3.jpg",
+      "category": "balcony",
+      "featured": false
+    }
+  ],
+  "reviews": [
+    {
+      "id": 7,
+      "titleKey": "product_cam",
+      "textKey": "product_cam_desc",
+      "image": "/images/cam.jpg",
+      "category": "glass"
+    },
+    {
+      "id": 8,
+      "titleKey": "product_pimapen",
+      "textKey": "product_pimapen_desc",
+      "image": "/images/pimapen.jpg",
+      "category": "pvc"
+    }
+  ],
+  "products": [
+    {
+      "id": 9,
+      "titleKey": "product_glass",
+      "descriptionKey": "product_glass_desc",
+      "image": "/images/cam.jpg",
+      "category": "glass"
+    },
+    {
+      "id": 10,
+      "titleKey": "product_doors",
+      "descriptionKey": "product_doors_desc",
+      "image": "/images/project1.jpg",
+      "category": "door"
+    },
+    {
+      "id": 11,
+      "titleKey": "product_balcony",
+      "descriptionKey": "product_balcony_desc",
+      "image": "/images/project3.jpg",
+      "category": "balcony"
+    },
+    {
+      "id": 12,
+      "titleKey": "product_garden",
+      "descriptionKey": "product_garden_desc",
+      "image": "/images/house3.jpg",
+      "category": "garden"
+    },
+    {
+      "id": 13,
+      "titleKey": "product_office",
+      "descriptionKey": "product_office_desc",
+      "image": "/images/project2.jpg",
+      "category": "office"
+    },
+    {
+      "id": 14,
+      "titleKey": "product_facade",
+      "descriptionKey": "product_facade_desc",
+      "image": "/images/house2.jpg",
+      "category": "facade"
+    }
+  ],
   "sliders": [
     {
       "image": "/images/house1.jpg",
@@ -9,7 +118,7 @@
           "label": "1",
           "tooltip": "Glass",
           "color": "#3b82f6",
-          "route": "/article/1"
+          "route": "/article/9"
         },
         {
           "x": 30,
@@ -17,7 +126,7 @@
           "label": "2",
           "tooltip": "Door",
           "color": "#3b82f6",
-          "route": "/article/2"
+          "route": "/article/10"
         },
         {
           "x": 60,
@@ -25,7 +134,7 @@
           "label": "3",
           "tooltip": "Balcony",
           "color": "#3b82f6",
-          "route": "/article/3"
+          "route": "/article/11"
         }
       ]
     },
@@ -38,7 +147,7 @@
           "label": "4",
           "tooltip": "Garden",
           "color": "#3b82f6",
-          "route": "/article/4"
+          "route": "/article/12"
         },
         {
           "x": 45,
@@ -46,7 +155,7 @@
           "label": "5",
           "tooltip": "Office",
           "color": "#3b82f6",
-          "route": "/article/5"
+          "route": "/article/13"
         },
         {
           "x": 70,
@@ -54,8 +163,32 @@
           "label": "6",
           "tooltip": "Facade",
           "color": "#3b82f6",
-          "route": "/article/6"
+          "route": "/article/14"
         }
       ]
     }
-  ]
+  ],
+  "categories": {
+    "blogs": {
+      "news": { "tr": "Haber", "en": "News" },
+      "tips": { "tr": "İpucu", "en": "Tips" }
+    },
+    "projects": {
+      "glass": { "tr": "Cam", "en": "Glass" },
+      "pvc": { "tr": "Pimapen", "en": "PVC" },
+      "balcony": { "tr": "Balkon", "en": "Balcony" }
+    },
+    "reviews": {
+      "glass": { "tr": "Cam", "en": "Glass" },
+      "pvc": { "tr": "Pimapen", "en": "PVC" }
+    },
+    "products": {
+      "glass": { "tr": "Cam", "en": "Glass" },
+      "door": { "tr": "Kapı", "en": "Door" },
+      "balcony": { "tr": "Balkon", "en": "Balcony" },
+      "garden": { "tr": "Bahçe", "en": "Garden" },
+      "office": { "tr": "Ofis", "en": "Office" },
+      "facade": { "tr": "Dış cephe", "en": "Facade" }
+    }
+  }
+}
