@@ -5,6 +5,7 @@ import { loadContent, ContentData, CategoryEntry, normalizeCategories } from '..
 import api from '../api';
 import { useContent } from '../ContentContext';
 import { PricingConfig, loadPricing, normalizePricing } from '../pricing';
+import SliderEditor from '../components/SliderEditor';
 
 const SECTION_KEYS = [
   'blogs',
@@ -13,7 +14,8 @@ const SECTION_KEYS = [
   'products',
   'basic',
   'categories',
-  'pricing'
+  'pricing',
+  'slider_admin'
 ] as const;
 
 const CATEGORY_KEYS = ['blogs', 'projects', 'reviews', 'products'] as const;
@@ -118,7 +120,14 @@ const ContentAdmin: React.FC = () => {
     fetchData();
   }, []);
   const [section, setSection] = useState<
-    'blogs' | 'projects' | 'reviews' | 'products' | 'basic' | 'categories' | 'pricing'
+    | 'blogs'
+    | 'projects'
+    | 'reviews'
+    | 'products'
+    | 'basic'
+    | 'categories'
+    | 'pricing'
+    | 'slider_admin'
   >('blogs');
   const [catSection, setCatSection] = useState<'blogs' | 'projects' | 'reviews' | 'products'>(
     'blogs'
@@ -690,6 +699,8 @@ const ContentAdmin: React.FC = () => {
             {t('admin_add_feature')}
           </button>
         </div>
+      ) : section === 'slider_admin' ? (
+        <SliderEditor />
       ) : (
         <table className="w-full border">
           <thead>
@@ -839,14 +850,16 @@ const ContentAdmin: React.FC = () => {
       )}
 
       <div className="space-x-2">
-        {section !== 'basic' && section !== 'categories' && section !== 'pricing' && (
+        {section !== 'basic' && section !== 'categories' && section !== 'pricing' && section !== 'slider_admin' && (
           <button onClick={addEntry} className="bg-blue-500 text-white px-3 py-1 rounded">
             {t('admin_add')}
           </button>
         )}
-        <button onClick={saveAll} className="bg-green-600 text-white px-3 py-1 rounded">
-          {t('admin_save_all')}
-        </button>
+        {section !== 'slider_admin' && (
+          <button onClick={saveAll} className="bg-green-600 text-white px-3 py-1 rounded">
+            {t('admin_save_all')}
+          </button>
+        )}
       </div>
     </div>
   );
