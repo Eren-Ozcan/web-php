@@ -9,7 +9,10 @@ import {
   saveJson,
   verifyPassword,
   normalizeCategories,
-  normalizePricing
+  normalizePricing,
+  setContentData,
+  setTranslationsData,
+  setPricingData
 } from '../services/data.js';
 import { mailTransporter } from '../services/mail.js';
 
@@ -48,7 +51,7 @@ router.get('/content', (req, res) => {
 router.post('/content', async (req, res) => {
   const data = req.body;
   try {
-    Object.assign(
+   Object.assign(
       contentData,
       { ...data, categories: normalizeCategories(data.categories) }
     );
