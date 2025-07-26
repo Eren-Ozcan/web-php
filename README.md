@@ -123,3 +123,8 @@ pre-populated.
 - `POST /api/contact` – receives name, email and message from the contact form
   and sends them via Nodemailer as an HTML email. The endpoint also sends a
   personalized thank‑you email back to the user.
+
+## Slider Management
+
+The admin interface provides a dedicated page at `/slider-admin` for managing the home page slider. Administrators can add or remove slides and define interactive hotspots for each image. Hotspots support configurable position percentages, labels, tooltips, colors and product routes. All data is stored in the `content.sliders` array and loaded through the `ContentContext` so changes appear immediately on the front page.
+

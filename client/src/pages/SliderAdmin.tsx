@@ -72,10 +72,9 @@ const SliderAdmin: React.FC = () => {
 
   const slides = content.sliders || [];
   const current = slides[index];
-  const lang = i18n.language as 'tr' | 'en';
-  const routeOptions = Object.entries(content.categories.products).map(([key, val]) => ({
-    value: `/urunler/${key}`,
-    label: val[lang] || key
+  const routeOptions = content.products.map((p) => ({
+    value: `/article/${p.id}`,
+    label: t(p.titleKey)
   }));
 
   const updateSlides = (newSlides: typeof slides) => {
