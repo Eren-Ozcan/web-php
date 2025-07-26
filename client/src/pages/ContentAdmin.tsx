@@ -44,16 +44,23 @@ const ContentAdmin: React.FC = () => {
     }
   });
   const duplicateInfo = React.useMemo(() => {
-    const ids = new Set<number>();
-    const titles = new Set<string>();
     const idDup: number[] = [];
     const titleDup: string[] = [];
     ['blogs', 'projects', 'reviews', 'products'].forEach((key) => {
+      const ids = new Set<number>();
+      const titles = new Set<string>();
       (content as any)[key]?.forEach((item: any) => {
-        if (ids.has(item.id)) idDup.push(item.id);
-        ids.add(item.id);
-        if (titles.has(item.titleKey)) titleDup.push(item.titleKey);
-        titles.add(item.titleKey);
+        if (ids.has(item.id) && !idDup.includes(item.id)) {
+          idDup.push(item.id);
+        } else {
+          ids.add(item.id);
+        }
+
+        if (titles.has(item.titleKey) && !titleDup.includes(item.titleKey)) {
+          titleDup.push(item.titleKey);
+        } else {
+          titles.add(item.titleKey);
+        }
       });
     });
     return { idDup, titleDup };
