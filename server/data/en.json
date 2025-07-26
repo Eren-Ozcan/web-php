@@ -5684,6 +5684,11 @@
     "reviews_title_1753181649910": "aaa",
     "products_title_1753188809211": "roof",
     "products_title_1753200703805": "bbb",
-    "projects_title_1753188739238": "aaa"
+    "projects_title_1753188739238": "aaa",
+    "slider_admin": "Slider Admin",
+    "add_slide": "Add Slide",
+    "change_image": "Change Image",
+    "admin_add_hotspot": "Add Hotspot",
+    "admin_delete_hotspot": "Delete Hotspot"
   }
 }

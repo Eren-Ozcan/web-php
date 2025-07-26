@@ -11,6 +11,7 @@ import About from './pages/About';
 import Article from './pages/Article';
 import ContentAdmin from './pages/ContentAdmin';
 import Admin from './pages/Admin';
+import SliderAdmin from './pages/SliderAdmin';
 import Layout from './Layout';
 
 export default function AppRoutes() {
@@ -29,6 +30,7 @@ export default function AppRoutes() {
         <Route path="/about" element={<About />} />
         <Route path="/article/:id" element={<Article />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/slider-admin" element={<SliderAdmin />} />
       </Route>
     </Routes>
   );

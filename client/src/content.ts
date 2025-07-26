@@ -31,6 +31,20 @@ export interface Product {
   category: string;
 }
 
+export interface Hotspot {
+  x: number;
+  y: number;
+  label: string;
+  tooltip: string;
+  color: string;
+  route: string;
+}
+
+export interface Slide {
+  image: string;
+  hotspots: Hotspot[];
+}
+
 export interface CategoryEntry {
   tr: string;
   en: string;
@@ -50,6 +64,7 @@ export interface ContentData {
   projects: Project[];
   reviews: Review[];
   products: Product[];
+  sliders: Slide[];
   categories: Categories;
 }
 
@@ -163,6 +178,66 @@ const defaultData: ContentData = {
       category: 'facade'
     }
   ],
+  sliders: [
+    {
+      image: '/images/house1.jpg',
+      hotspots: [
+        {
+          x: 15,
+          y: 20,
+          label: '1',
+          tooltip: 'Glass',
+          color: '#3b82f6',
+          route: '/urunler/glass'
+        },
+        {
+          x: 30,
+          y: 40,
+          label: '2',
+          tooltip: 'Door',
+          color: '#3b82f6',
+          route: '/urunler/door'
+        },
+        {
+          x: 60,
+          y: 45,
+          label: '3',
+          tooltip: 'Balcony',
+          color: '#3b82f6',
+          route: '/urunler/balcony'
+        }
+      ]
+    },
+    {
+      image: '/images/house2.jpg',
+      hotspots: [
+        {
+          x: 20,
+          y: 30,
+          label: '4',
+          tooltip: 'Garden',
+          color: '#3b82f6',
+          route: '/urunler/garden'
+        },
+        {
+          x: 45,
+          y: 55,
+          label: '5',
+          tooltip: 'Office',
+          color: '#3b82f6',
+          route: '/urunler/office'
+        },
+        {
+          x: 70,
+          y: 65,
+          label: '6',
+          tooltip: 'Facade',
+          color: '#3b82f6',
+          route: '/urunler/facade'
+        }
+      ]
+    }
+  ],
   categories: {
     blogs: {
       news: { tr: 'Haber', en: 'News' },
@@ -234,6 +309,9 @@ export function loadContent(): ContentData {
         const cat = (data as any).categories;
         if (cat) {
           (data as any).categories = normalizeCategories(cat);
+        }
+        if (!(data as any).sliders) {
+          (data as any).sliders = [];
         }
         return data as ContentData;
       }
