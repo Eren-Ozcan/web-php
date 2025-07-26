@@ -16,30 +16,30 @@ const SliderEditor: React.FC = () => {
   }));
 
   const updateSlides = (newSlides: typeof slides) => {
-    setContent({ ...content, sliders: newSlides });
+    setContent((prev) => ({ ...prev, sliders: newSlides }));
   };
 
   const addSlide = () => {
-    const newSlides = [...slides, { image: '', hotspots: [] }];
+    const newSlides = [...(content.sliders || []), { image: '', hotspots: [] }];
     updateSlides(newSlides);
     setIndex(newSlides.length - 1);
   };
 
   const removeSlide = (i: number) => {
-    const newSlides = slides.filter((_, idx) => idx !== i);
+    const newSlides = (content.sliders || []).filter((_, idx) => idx !== i);
     updateSlides(newSlides);
     setIndex(Math.max(0, i - 1));
   };
 
   const updateHotspot = (hIdx: number, field: string, value: any) => {
-    const newSlides = [...slides];
+    const newSlides = [...(content.sliders || [])];
     const hs = { ...newSlides[index].hotspots[hIdx], [field]: value };
     newSlides[index].hotspots[hIdx] = hs;
     updateSlides(newSlides);
   };
 
   const addHotspot = () => {
-    const newSlides = [...slides];
+    const newSlides = [...(content.sliders || [])];
     newSlides[index].hotspots.push({
       x: 50,
       y: 50,
@@ -52,7 +52,7 @@ const SliderEditor: React.FC = () => {
   };
 
   const deleteHotspot = (hIdx: number) => {
-    const newSlides = [...slides];
+    const newSlides = [...(content.sliders || [])];
     newSlides[index].hotspots.splice(hIdx, 1);
     updateSlides(newSlides);
   };
@@ -62,7 +62,7 @@ const SliderEditor: React.FC = () => {
     if (!file) return;
     const reader = new FileReader();
     reader.onloadend = () => {
-      const newSlides = [...slides];
+      const newSlides = [...(content.sliders || [])];
       newSlides[index].image = reader.result as string;
       updateSlides(newSlides);
     };
@@ -71,7 +71,7 @@ const SliderEditor: React.FC = () => {
 
   const saveAll = async () => {
     try {
-      const updated = { ...content, sliders: slides };
+      const updated = { ...content, sliders: content.sliders || [] };
       await api.post('/api/content', updated);
       localStorage.setItem('content', JSON.stringify(updated));
       alert(t('admin_saved'));
