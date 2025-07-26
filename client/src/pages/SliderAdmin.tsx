@@ -4,7 +4,7 @@ import api from '../api';
 import { useContent } from '../ContentContext';
 
 const SliderAdmin: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { content, setContent } = useContent();
   const [password, setPassword] = useState('');
   const [auth, setAuth] = useState(localStorage.getItem('admin-auth') === 'true');
@@ -95,14 +95,27 @@ const SliderAdmin: React.FC = () => {
 
   const updateHotspot = (hIdx: number, field: string, value: any) => {
     const newSlides = [...slides];
-    const hs = { ...newSlides[index].hotspots[hIdx], [field]: value };
+    const hs = { ...newSlides[index].hotspots[hIdx] } as any;
+    if (field.startsWith('tooltip.')) {
+      const lang = field.split('.')[1];
+      hs.tooltip = { ...hs.tooltip, [lang]: value };
+    } else {
+      hs[field] = value;
+    }
     newSlides[index].hotspots[hIdx] = hs;
     updateSlides(newSlides);
   };
 
   const addHotspot = () => {
     const newSlides = [...slides];
-    newSlides[index].hotspots.push({ x: 50, y: 50, label: '', tooltip: '', color: '#3b82f6', route: routeOptions[0]?.value || '' });
+    newSlides[index].hotspots.push({
+      x: 50,
+      y: 50,
+      label: '',
+      tooltip: { tr: '', en: '' },
+      color: '#3b82f6',
+      route: routeOptions[0]?.value || ''
+    });
     updateSlides(newSlides);
   };
 
@@ -161,7 +174,28 @@ const SliderAdmin: React.FC = () => {
       {current && (
         <div className="flex space-x-4">
           <div className="w-1/2 space-y-2">
-            {current.image && <img src={current.image} alt="slide" className="w-full rounded" />}
+            <div className="relative w-full">
+              {current.image && (
+                <img src={current.image} alt="slide" className="w-full rounded" />
+              )}
+              {current.hotspots.map((h, hIdx) => (
+                <div
+                  key={hIdx}
+                  className="absolute flex items-center justify-center w-8 h-8 text-white rounded-full cursor-pointer group"
+                  style={{
+                    top: `${h.y}%`,
+                    left: `${h.x}%`,
+                    transform: 'translate(-50%, -50%)',
+                    backgroundColor: h.color || '#3b82f6'
+                  }}
+                >
+                  {h.label}
+                  <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded shadow-md z-10">
+                    {h.tooltip[i18n.language as 'tr' | 'en']}
+                  </div>
+                </div>
+              ))}
+            </div>
             <label className="bg-blue-600 text-white px-3 py-1 rounded cursor-pointer inline-block">
               {t('change_image')}
               <input type="file" accept="image/*" className="hidden" onChange={changeImage} />
@@ -189,11 +223,20 @@ const SliderAdmin: React.FC = () => {
                     onChange={(e) => updateHotspot(hIdx, 'label', e.target.value)}
                   />
                 </div>
-                <input
-                  className="border p-1 w-full"
-                  value={h.tooltip}
-                  onChange={(e) => updateHotspot(hIdx, 'tooltip', e.target.value)}
-                />
+                  <div className="flex space-x-2">
+                    <input
+                      className="border p-1 flex-1"
+                      value={h.tooltip.tr}
+                      onChange={(e) => updateHotspot(hIdx, 'tooltip.tr', e.target.value)}
+                      placeholder="TR"
+                    />
+                    <input
+                      className="border p-1 flex-1"
+                      value={h.tooltip.en}
+                      onChange={(e) => updateHotspot(hIdx, 'tooltip.en', e.target.value)}
+                      placeholder="EN"
+                    />
+                  </div>
                 <input
                   type="color"
                   className="border p-1 w-full"
