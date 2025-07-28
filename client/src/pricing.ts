@@ -61,7 +61,7 @@ const defaultPricing: PricingConfig = {
   }
 };
 
-import { safeSetItem, safeGetItem } from './storage';
+import { safeSetItem, safeGetItem } from './safeLocalStorage';
 
 export function loadPricing(): PricingConfig {
   const stored = safeGetItem('pricing');

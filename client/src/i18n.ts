@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import tr from './locales/tr.json';
-import { safeGetItem } from './storage';
+import { safeGetItem } from './safeLocalStorage';
 
 // Allow overriding translations via localStorage so the admin page can persist
 // updates across reloads. If no overrides exist, fall back to the bundled JSON

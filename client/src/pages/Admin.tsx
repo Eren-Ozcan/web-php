@@ -3,7 +3,7 @@ import ContentAdmin from './ContentAdmin';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
 import i18n from '../i18n';
-import { safeSetItem, safeGetItem } from '../storage';
+import { safeSetItem, safeGetItem } from '../safeLocalStorage';
 
 const Admin: React.FC = () => {
   const { t } = useTranslation();

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { safeSetItem } from '../../storage';
+import { safeSetItem } from '../../safeLocalStorage';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
