@@ -79,14 +79,8 @@ export function normalizeCategories(cat) {
   if (!cat) return { blogs: {}, projects: {}, reviews: {}, products: {} };
   return {
     blogs: convertList(cat.blogs?.en ?? cat.blogs, cat.blogs?.tr ?? cat.blogs),
-    projects: convertList(
-      cat.projects?.en ?? cat.projects,
-      cat.projects?.tr ?? cat.projects
-    ),
-    reviews: convertList(
-      cat.reviews?.en ?? cat.reviews,
-      cat.reviews?.tr ?? cat.reviews
-    ),
+    projects: convertList(cat.projects?.en ?? cat.projects, cat.projects?.tr ?? cat.projects),
+    reviews: convertList(cat.reviews?.en ?? cat.reviews, cat.reviews?.tr ?? cat.reviews),
     products: convertList(cat.products?.en ?? cat.products, cat.products?.tr ?? cat.products)
   };
 }
@@ -155,9 +149,7 @@ export async function loadData() {
         contentData = loadJson('content.json');
         if (!contentData.sliders) contentData.sliders = [];
         contentData.categories = normalizeCategories(contentData.categories);
-        await pool.query('UPDATE content SET data = ? WHERE id = 1', [
-          JSON.stringify(contentData)
-        ]);
+        await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
       }
 
       if (Array.isArray(contentData.products)) {
@@ -202,9 +194,7 @@ export async function loadData() {
         pricingData = normalizePricing(parsedP);
       } else {
         pricingData = normalizePricing(loadJson('pricing.json'));
-        await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [
-          JSON.stringify(pricingData)
-        ]);
+        await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [JSON.stringify(pricingData)]);
       }
     }
   } catch (err) {

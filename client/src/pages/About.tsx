@@ -14,7 +14,6 @@ export default function About() {
   const [reviewFilter, setReviewFilter] = useState('all');
   const navigate = useNavigate();
 
-
   useEffect(() => {
     api
       .get<Project[]>('/api/projects?highlight=true')

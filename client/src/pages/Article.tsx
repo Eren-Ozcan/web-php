@@ -30,11 +30,7 @@ export default function Article() {
     <section className="p-6 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-4 capitalize">{title}</h1>
       {item.image && (
-        <img
-          src={(item as any).image}
-          alt={title}
-          className="w-full h-64 object-cover mb-4"
-        />
+        <img src={(item as any).image} alt={title} className="w-full h-64 object-cover mb-4" />
       )}
       <p className="text-gray-700 leading-relaxed">{text}</p>
     </section>

@@ -138,7 +138,6 @@ pre-populated.
 
 The admin interface includes a section for managing the home page slider. Administrators can add or remove slides and define interactive hotspots for each image. Hotspots support configurable position percentages, labels, two-language tooltips, colors and product routes. All data is stored in the `content.sliders` array and loaded through the `ContentContext` so changes appear immediately on the front page.
 
-
 ## Build & Continuous Integration
 
 Both workspaces contain a `build` script. Run the builds locally before deployment:

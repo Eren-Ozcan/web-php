@@ -113,7 +113,10 @@ const SliderEditor: React.FC = () => {
           {t('add_slide')}
         </button>
         {slides.length > 0 && (
-          <button onClick={() => removeSlide(index)} className="bg-red-500 text-white px-2 py-1 rounded">
+          <button
+            onClick={() => removeSlide(index)}
+            className="bg-red-500 text-white px-2 py-1 rounded"
+          >
             {t('admin_delete')}
           </button>
         )}
@@ -122,9 +125,7 @@ const SliderEditor: React.FC = () => {
         <div className="flex space-x-4">
           <div className="w-1/2 space-y-2">
             <div className="relative w-full">
-              {current.image && (
-                <img src={current.image} alt="slide" className="w-full rounded" />
-              )}
+              {current.image && <img src={current.image} alt="slide" className="w-full rounded" />}
               {current.hotspots.map((h, hIdx) => (
                 <div
                   key={hIdx}
@@ -208,7 +209,10 @@ const SliderEditor: React.FC = () => {
                     </option>
                   ))}
                 </select>
-                <button onClick={() => deleteHotspot(hIdx)} className="bg-red-500 text-white px-2 py-1 rounded">
+                <button
+                  onClick={() => deleteHotspot(hIdx)}
+                  className="bg-red-500 text-white px-2 py-1 rounded"
+                >
                   {t('admin_delete_hotspot', { defaultValue: t('admin_delete') })}
                 </button>
               </div>
@@ -227,4 +231,3 @@ const SliderEditor: React.FC = () => {
 };
 
 export default SliderEditor;
-

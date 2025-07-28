@@ -20,7 +20,6 @@ const Home: React.FC = () => {
 
   const sliderData = content.sliders || [];
 
-
   return (
     <>
       {/* Başlık */}
@@ -136,15 +135,19 @@ const Home: React.FC = () => {
               onClick={() => navigate(`/article/${r.id}`)}
               className="bg-white shadow rounded-lg overflow-hidden flex flex-col md:flex-row cursor-pointer"
             >
-              <img src={r.image} alt={t(r.titleKey)} className="w-full md:w-1/3 h-48 object-cover" />
+              <img
+                src={r.image}
+                alt={t(r.titleKey)}
+                className="w-full md:w-1/3 h-48 object-cover"
+              />
               <div className="p-4">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">{t(r.titleKey)}</h3>
                 <p className="text-gray-600">{t(r.textKey)}</p>
               </div>
             </div>
           ))}
-          </div>
         </div>
+      </div>
     </>
   );
 };

@@ -76,13 +76,8 @@ router.get('/content', (req, res) => {
 router.post('/content', authenticateToken, async (req, res) => {
   const data = req.body;
   try {
-   Object.assign(
-      contentData,
-      { ...data, categories: normalizeCategories(data.categories) }
-    );
-    await pool.query('UPDATE content SET data = ? WHERE id = 1', [
-      JSON.stringify(contentData)
-    ]);
+    Object.assign(contentData, { ...data, categories: normalizeCategories(data.categories) });
+    await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
     saveJson('content.json', contentData);
     res.json({ success: true });
   } catch (err) {
@@ -119,9 +114,7 @@ router.post('/pricing', authenticateToken, async (req, res) => {
   const data = req.body;
   try {
     Object.assign(pricingData, normalizePricing(data));
-    await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [
-      JSON.stringify(pricingData)
-    ]);
+    await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [JSON.stringify(pricingData)]);
     saveJson('pricing.json', pricingData);
     res.json({ success: true });
   } catch (err) {

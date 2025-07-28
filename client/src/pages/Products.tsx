@@ -27,7 +27,6 @@ export default function Products() {
     }
   }, [filter]);
 
-
   const products: Product[] = content.products;
   const lang = i18n.language as Language;
   const productCategories = content.categories.products;

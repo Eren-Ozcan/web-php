@@ -6,12 +6,8 @@
         "en": "aaa"
       },
       "products": {
-        "tr": [
-          "cam"
-        ],
-        "en": [
-          "cam"
-        ]
+        "tr": ["cam"],
+        "en": ["cam"]
       },
       "multiplier": 4
     },
@@ -21,12 +17,8 @@
         "en": "bbbbbb"
       },
       "products": {
-        "tr": [
-          "cam"
-        ],
-        "en": [
-          "cam"
-        ]
+        "tr": ["cam"],
+        "en": ["cam"]
       },
       "multiplier": 1.1
     }
@@ -42,9 +34,5 @@
       "basePrice": 200
     }
   },
-  "productOrder": [
-    "pvc",
-    "cam",
-    "balkon"
-  ]
+  "productOrder": ["pvc", "cam", "balkon"]
 }

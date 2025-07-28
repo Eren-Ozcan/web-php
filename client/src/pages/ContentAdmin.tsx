@@ -223,14 +223,14 @@ const ContentAdmin: React.FC = () => {
         ...content,
         categories: normalizeCategories(content.categories)
       };
-        await Promise.all([
-          api.post('/api/content', normalized),
-          api.post('/api/translations', i18n.store.data),
-          api.post('/api/pricing', pricing)
-        ]);
-        safeSetItem('content', JSON.stringify(normalized));
-        safeSetItem('translations', JSON.stringify(i18n.store.data));
-        safeSetItem('pricing', JSON.stringify(pricing));
+      await Promise.all([
+        api.post('/api/content', normalized),
+        api.post('/api/translations', i18n.store.data),
+        api.post('/api/pricing', pricing)
+      ]);
+      safeSetItem('content', JSON.stringify(normalized));
+      safeSetItem('translations', JSON.stringify(i18n.store.data));
+      safeSetItem('pricing', JSON.stringify(pricing));
       setGlobalContent(normalized);
       alert(t('admin_saved'));
     } catch (err) {
@@ -868,11 +868,14 @@ const ContentAdmin: React.FC = () => {
       )}
 
       <div className="space-x-2">
-        {section !== 'basic' && section !== 'categories' && section !== 'pricing' && section !== 'slider_admin' && (
-          <button onClick={addEntry} className="bg-blue-500 text-white px-3 py-1 rounded">
-            {t('admin_add')}
-          </button>
-        )}
+        {section !== 'basic' &&
+          section !== 'categories' &&
+          section !== 'pricing' &&
+          section !== 'slider_admin' && (
+            <button onClick={addEntry} className="bg-blue-500 text-white px-3 py-1 rounded">
+              {t('admin_add')}
+            </button>
+          )}
         {section !== 'slider_admin' && (
           <button onClick={saveAll} className="bg-green-600 text-white px-3 py-1 rounded">
             {t('admin_save_all')}

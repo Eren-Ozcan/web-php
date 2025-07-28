@@ -78,7 +78,7 @@ const SliderAdmin: React.FC = () => {
 
   const slides = content.sliders || [];
   const current = slides[index];
-// Do not automatically cycle through slides in the admin. The preview
+  // Do not automatically cycle through slides in the admin. The preview
   // should stay on the slide selected via the buttons above so edits are not
   // interrupted.
   const routeOptions = content.products.map((p) => ({
@@ -176,7 +176,10 @@ const SliderAdmin: React.FC = () => {
           {t('add_slide')}
         </button>
         {slides.length > 0 && (
-          <button onClick={() => removeSlide(index)} className="bg-red-500 text-white px-2 py-1 rounded">
+          <button
+            onClick={() => removeSlide(index)}
+            className="bg-red-500 text-white px-2 py-1 rounded"
+          >
             {t('admin_delete')}
           </button>
         )}
@@ -185,9 +188,7 @@ const SliderAdmin: React.FC = () => {
         <div className="flex space-x-4">
           <div className="w-1/2 space-y-2">
             <div className="relative w-full">
-              {current.image && (
-                <img src={current.image} alt="slide" className="w-full rounded" />
-              )}
+              {current.image && <img src={current.image} alt="slide" className="w-full rounded" />}
               {current.hotspots.map((h, hIdx) => (
                 <div
                   key={hIdx}
@@ -234,20 +235,20 @@ const SliderAdmin: React.FC = () => {
                     onChange={(e) => updateHotspot(hIdx, 'label', e.target.value)}
                   />
                 </div>
-                  <div className="flex space-x-2">
-                    <input
-                      className="border p-1 flex-1"
-                      value={h.tooltip.tr}
-                      onChange={(e) => updateHotspot(hIdx, 'tooltip.tr', e.target.value)}
-                      placeholder="TR"
-                    />
-                    <input
-                      className="border p-1 flex-1"
-                      value={h.tooltip.en}
-                      onChange={(e) => updateHotspot(hIdx, 'tooltip.en', e.target.value)}
-                      placeholder="EN"
-                    />
-                  </div>
+                <div className="flex space-x-2">
+                  <input
+                    className="border p-1 flex-1"
+                    value={h.tooltip.tr}
+                    onChange={(e) => updateHotspot(hIdx, 'tooltip.tr', e.target.value)}
+                    placeholder="TR"
+                  />
+                  <input
+                    className="border p-1 flex-1"
+                    value={h.tooltip.en}
+                    onChange={(e) => updateHotspot(hIdx, 'tooltip.en', e.target.value)}
+                    placeholder="EN"
+                  />
+                </div>
                 <input
                   type="color"
                   className="border p-1 w-full"
@@ -271,7 +272,10 @@ const SliderAdmin: React.FC = () => {
                     </option>
                   ))}
                 </select>
-                <button onClick={() => deleteHotspot(hIdx)} className="bg-red-500 text-white px-2 py-1 rounded">
+                <button
+                  onClick={() => deleteHotspot(hIdx)}
+                  className="bg-red-500 text-white px-2 py-1 rounded"
+                >
                   {t('admin_delete_hotspot', { defaultValue: t('admin_delete') })}
                 </button>
               </div>
@@ -290,4 +294,3 @@ const SliderAdmin: React.FC = () => {
 };
 
 export default SliderAdmin;
-
