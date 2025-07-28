@@ -3,12 +3,12 @@ import ContentAdmin from './ContentAdmin';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
 import i18n from '../i18n';
-import { safeSetItem } from '../storage';
+import { safeSetItem, safeGetItem } from '../storage';
 
 const Admin: React.FC = () => {
   const { t } = useTranslation();
   const [password, setPassword] = useState('');
-  const [auth, setAuth] = useState(localStorage.getItem('admin-auth') === 'true');
+  const [auth, setAuth] = useState(safeGetItem('admin-auth') === 'true');
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

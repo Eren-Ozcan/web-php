@@ -6,12 +6,15 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"No tests specified\""
+    "test": "echo \"No tests specified\"",
+    "build": "echo 'build complete'"
   },
   "dependencies": {
     "cors": "2.8.5",
     "dotenv": "16.3.1",
     "express": "4.21.2",
+    "helmet": "6.3.1",
+    "morgan": "1.10.0",
     "express-rate-limit": "6.7.0",
     "jsonwebtoken": "9.0.2",
     "mysql2": "^3.9.7",

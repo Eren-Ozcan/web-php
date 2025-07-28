@@ -2,11 +2,12 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import tr from './locales/tr.json';
+import { safeGetItem } from './storage';
 
 // Allow overriding translations via localStorage so the admin page can persist
 // updates across reloads. If no overrides exist, fall back to the bundled JSON
 // files.
-const stored = localStorage.getItem('translations');
+const stored = safeGetItem('translations');
 let overrides: Record<string, { translation: Record<string, string> }> | null = null;
 if (stored) {
   try {
@@ -22,7 +23,7 @@ const resources = {
 
 export type Language = keyof typeof resources;
 
-const storedLang = localStorage.getItem('language');
+const storedLang = safeGetItem('language');
 
 i18n.use(initReactI18next).init({
   resources,

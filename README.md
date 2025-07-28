@@ -59,8 +59,10 @@ DB_PASS=1234
 DB_NAME=mefaaluminyum_wp289
 ```
 
-For sending contact form emails you also need to define `MAIL_PASS` in a `.env`
-file. An `.env.example` template is included with all required variables.
+For sending contact form emails you also need to define SMTP credentials. Copy
+`.env.example` to `.env` and fill in the values for your environment. It lists
+the database settings, `JWT_SECRET` and mail server configuration required by
+the server.
 
 ### Create the admin database user
 
@@ -136,3 +138,14 @@ pre-populated.
 
 The admin interface includes a section for managing the home page slider. Administrators can add or remove slides and define interactive hotspots for each image. Hotspots support configurable position percentages, labels, two-language tooltips, colors and product routes. All data is stored in the `content.sliders` array and loaded through the `ContentContext` so changes appear immediately on the front page.
 
+
+## Build & Continuous Integration
+
+Both workspaces contain a `build` script. Run the builds locally before deployment:
+
+```bash
+npm run build --workspace=server
+npm run build --workspace=client
+```
+
+A sample GitHub Actions workflow under `.github/workflows/ci.yml` installs dependencies and runs these commands automatically on pushes and pull requests.
