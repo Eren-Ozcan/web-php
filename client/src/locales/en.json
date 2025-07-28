@@ -139,5 +139,7 @@
   "change_image": "Change Image",
   "admin_add_hotspot": "Add Hotspot",
   "admin_delete_hotspot": "Delete Hotspot",
-  "too_many_attempts": "Too many login attempts. Please try again later."
+  "too_many_attempts": "Too many login attempts. Please try again later.",
+  "page_not_found": "Page not found",
+  "back_home": "Go back home"
 }

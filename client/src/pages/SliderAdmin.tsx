@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
 import { useContent } from '../ContentContext';
-import { safeSetItem } from '../storage';
+import { safeSetItem, safeGetItem } from '../storage';
 
 const SliderAdmin: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { content, setContent } = useContent();
   const [password, setPassword] = useState('');
-  const [auth, setAuth] = useState(localStorage.getItem('admin-auth') === 'true');
+  const [auth, setAuth] = useState(safeGetItem('admin-auth') === 'true');
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [index, setIndex] = useState(0);

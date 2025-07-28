@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
 import apiRouter from './routes/api.js';
 import { ensureTables, loadData } from './services/data.js';
 
@@ -9,6 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
+app.use(helmet());
+app.use(morgan('combined'));
 // Increase body size limit to handle slider images encoded as data URLs
 // A single image can exceed 10mb once base64 encoded, causing POST /api/content
 // to fail when saving new sliders. Allow a larger limit to avoid "Save Failed".
@@ -22,6 +26,10 @@ app.use('/api', apiRouter);
 
 app.get('/', (req, res) => {
   res.send('Sunucu çalışıyor ✅');
+});
+
+app.all('*', (req, res) => {
+  res.status(404).json({ error: 'Not Found' });
 });
 
 await ensureTables();
