@@ -1,4 +1,3 @@
-import { safeSetItem } from "./storage";
 export interface PricingConfig {
   products: Record<string, { basePrice: number }>;
   features: Record<
@@ -62,8 +61,10 @@ const defaultPricing: PricingConfig = {
   }
 };
 
+import { safeSetItem, safeGetItem } from './storage';
+
 export function loadPricing(): PricingConfig {
-  const stored = localStorage.getItem('pricing');
+  const stored = safeGetItem('pricing');
   if (stored) {
     try {
       const data = JSON.parse(stored);

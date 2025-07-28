@@ -334,8 +334,10 @@ export function normalizeCategories(cat: any): Categories {
   };
 }
 
+import { safeSetItem, safeGetItem } from './storage';
+
 export function loadContent(): ContentData {
-  const stored = localStorage.getItem('content');
+  const stored = safeGetItem('content');
   if (stored) {
     try {
       const data = JSON.parse(stored);
@@ -360,4 +362,3 @@ export function saveContent(data: ContentData) {
 }
 
 export default defaultData;
-import { safeSetItem } from './storage';
