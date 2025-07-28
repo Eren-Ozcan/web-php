@@ -76,6 +76,9 @@ const SliderAdmin: React.FC = () => {
 
   const slides = content.sliders || [];
   const current = slides[index];
+  // Do not automatically cycle through slides in the admin. The preview
+  // should stay on the slide selected via the buttons above so edits are not
+  // interrupted.
   const routeOptions = content.products.map((p) => ({
     value: `/article/${p.id}`,
     label: t(p.titleKey)
@@ -118,6 +121,7 @@ const SliderAdmin: React.FC = () => {
       label: '',
       tooltip: { tr: '', en: '' },
       color: '#3b82f6',
+      labelColor: '#ffffff',
       route: routeOptions[0]?.value || ''
     });
     updateSlides(newSlides);
@@ -185,12 +189,13 @@ const SliderAdmin: React.FC = () => {
               {current.hotspots.map((h, hIdx) => (
                 <div
                   key={hIdx}
-                  className="absolute flex items-center justify-center w-8 h-8 text-white rounded-full cursor-pointer group"
+                  className="absolute flex items-center justify-center w-8 h-8 rounded-full cursor-pointer group"
                   style={{
                     top: `${h.y}%`,
                     left: `${h.x}%`,
                     transform: 'translate(-50%, -50%)',
-                    backgroundColor: h.color || '#3b82f6'
+                    backgroundColor: h.color || '#3b82f6',
+                    color: h.labelColor || '#ffffff'
                   }}
                 >
                   {h.label}
@@ -246,6 +251,12 @@ const SliderAdmin: React.FC = () => {
                   className="border p-1 w-full"
                   value={h.color}
                   onChange={(e) => updateHotspot(hIdx, 'color', e.target.value)}
+                />
+                <input
+                  type="color"
+                  className="border p-1 w-full"
+                  value={h.labelColor}
+                  onChange={(e) => updateHotspot(hIdx, 'labelColor', e.target.value)}
                 />
                 <select
                   className="border p-1 w-full"
