@@ -76,7 +76,7 @@ const SliderAdmin: React.FC = () => {
 
   const slides = content.sliders || [];
   const current = slides[index];
-  // Do not automatically cycle through slides in the admin. The preview
+// Do not automatically cycle through slides in the admin. The preview
   // should stay on the slide selected via the buttons above so edits are not
   // interrupted.
   const routeOptions = content.products.map((p) => ({

@@ -79,22 +79,7 @@ const SliderEditor: React.FC = () => {
 
   const saveAll = async () => {
     try {
-      const updated = { ...content, sliders: content.sliders || [] };
-      await api.post('/api/content', updated);
-      localStorage.setItem('content', JSON.stringify(updated));
-      alert(t('admin_saved'));
-    } catch (err) {
-      console.error('Save failed', err);
-      alert(t('admin_save_error'));
-    }
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="flex space-x-2 mb-2">
-        {slides.map((_, i) => (
-          <button
-            key={i}
+@@ -96,56 +98,57 @@ const SliderEditor: React.FC = () => {
             onClick={() => setIndex(i)}
             className={`px-2 py-1 rounded ${index === i ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
           >
@@ -152,12 +137,7 @@ const SliderEditor: React.FC = () => {
                     onChange={(e) => updateHotspot(hIdx, 'x', parseFloat(e.target.value) || 0)}
                   />
                   <input
-                    type="number"
-                    className="border p-1 w-20"
-                    value={h.y}
-                    onChange={(e) => updateHotspot(hIdx, 'y', parseFloat(e.target.value) || 0)}
-                  />
-                  <input
+@@ -158,50 +161,56 @@ const SliderEditor: React.FC = () => {
                     className="border p-1 flex-1"
                     value={h.label}
                     onChange={(e) => updateHotspot(hIdx, 'label', e.target.value)}
@@ -214,8 +194,3 @@ const SliderEditor: React.FC = () => {
       <button onClick={saveAll} className="bg-green-600 text-white px-3 py-1 rounded">
         {t('admin_save_all')}
       </button>
-    </div>
-  );
-};
-
-export default SliderEditor;
