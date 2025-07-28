@@ -138,5 +138,6 @@
   "add_slide": "Slayt Ekle",
   "change_image": "Resmi Değiştir",
   "admin_add_hotspot": "Hotspot Ekle",
-  "admin_delete_hotspot": "Hotspot Sil"
+  "admin_delete_hotspot": "Hotspot Sil",
+  "too_many_attempts": "Çok fazla hatalı giriş denemesi. Lütfen daha sonra tekrar deneyin."
 }
