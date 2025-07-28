@@ -61,12 +61,13 @@ const Home: React.FC = () => {
                       onClick={() => navigate(hotspot.route)}
                       onMouseEnter={handlePause}
                       onMouseLeave={handleResume}
-                      className="absolute flex items-center justify-center w-8 h-8 text-white rounded-full cursor-pointer transition group"
+                      className="absolute flex items-center justify-center w-8 h-8 rounded-full cursor-pointer transition group"
                       style={{
                         top: `${hotspot.y}%`,
                         left: `${hotspot.x}%`,
                         transform: 'translate(-50%, -50%)',
-                        backgroundColor: hotspot.color || '#3b82f6'
+                        backgroundColor: hotspot.color || '#3b82f6',
+                        color: hotspot.labelColor || '#ffffff'
                       }}
                     >
                       {hotspot.label}
