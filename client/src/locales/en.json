@@ -138,5 +138,6 @@
   "add_slide": "Add Slide",
   "change_image": "Change Image",
   "admin_add_hotspot": "Add Hotspot",
-  "admin_delete_hotspot": "Delete Hotspot"
+  "admin_delete_hotspot": "Delete Hotspot",
+  "too_many_attempts": "Too many login attempts. Please try again later."
 }

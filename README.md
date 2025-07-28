@@ -99,6 +99,11 @@ curl -X POST http://localhost:5000/api/login \
   -d '{"username":"admin","password":"1234"}'
 ```
 
+If the password is entered incorrectly more than **5** times from the same IP
+address, further login attempts are blocked for **10 minutes**.
+On successful login the endpoint returns a JWT token which must be included in
+the `Authorization` header as `Bearer <token>` when calling protected endpoints.
+
 ## Content & Translations APIs
 
 The admin panel communicates with the following endpoints to load and save
@@ -113,6 +118,9 @@ website data:
 Both `POST` endpoints update the MySQL tables and also write to the JSON files
 under `server/data` so that the data is available even if the database is not
 pre-populated.
+
+> **Note:** `POST /api/content`, `POST /api/translations` and `POST /api/pricing`
+> require the JWT token in the `Authorization` header.
 
 ## Additional APIs
 

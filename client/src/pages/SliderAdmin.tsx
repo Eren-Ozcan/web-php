@@ -37,6 +37,10 @@ const SliderAdmin: React.FC = () => {
       alert(t('login_success'));
       setError(null);
     } catch (err: any) {
+      if (err?.response?.status === 429) {
+        setError(t('too_many_attempts'));
+        return;
+      }
       const msg = err?.response?.data?.error;
       const key =
         msg === 'User not found'

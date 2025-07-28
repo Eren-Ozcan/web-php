@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import rateLimit from 'express-rate-limit';
 import { pool } from '../db.js';
 import {
   contentData,
@@ -20,7 +21,31 @@ const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
-router.post('/login', async (req, res) => {
+// Limit failed login attempts
+const loginLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 5,
+  message: { error: 'Too many login attempts. Please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true
+});
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  try {
+    req.user = jwt.verify(token, JWT_SECRET);
+    next();
+  } catch {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+}
+
+router.post('/login', loginLimiter, async (req, res) => {
   const { username, password } = req.body;
   try {
     const [rows] = await pool.query(
@@ -48,7 +73,7 @@ router.get('/content', (req, res) => {
   res.json(contentData);
 });
 
-router.post('/content', async (req, res) => {
+router.post('/content', authenticateToken, async (req, res) => {
   const data = req.body;
   try {
    Object.assign(
@@ -70,7 +95,7 @@ router.get('/translations', (req, res) => {
   res.json(translationsData);
 });
 
-router.post('/translations', async (req, res) => {
+router.post('/translations', authenticateToken, async (req, res) => {
   const data = req.body;
   try {
     Object.assign(translationsData, data);
@@ -90,7 +115,7 @@ router.get('/pricing', (req, res) => {
   res.json(pricingData);
 });
 
-router.post('/pricing', async (req, res) => {
+router.post('/pricing', authenticateToken, async (req, res) => {
   const data = req.body;
   try {
     Object.assign(pricingData, normalizePricing(data));
