@@ -54,7 +54,7 @@ function normalizeSliders(data: any): Slide[] {
   return data.map((s) => ({
     image: s.image || '',
     hotspots: Array.isArray(s.hotspots)
-      ? s.hotspots.map((h) => ({
+      ? s.hotspots.map((h: any) => ({
           x: typeof h.x === 'number' ? h.x : Number(h.x) || 0,
           y: typeof h.y === 'number' ? h.y : Number(h.y) || 0,
           label: h.label || '',
