@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
 import { useContent } from '../ContentContext';
+import { safeSetItem } from '../storage';
 
 const SliderEditor: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -11,12 +12,12 @@ const SliderEditor: React.FC = () => {
   const slides = content.sliders || [];
   const current = slides[index];
 
+  // Do not automatically rotate through slides while editing. Cycling
+  // images makes it difficult to adjust hotspots or change an image
+  // because the preview keeps switching. The admin should stay on the
+  // slide selected via the buttons above.
   useEffect(() => {
-    if (!slides.length) return;
-    const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % slides.length);
-    }, 3000);
-    return () => clearInterval(timer);
+    setIndex((i) => Math.min(i, slides.length - 1));
   }, [slides.length]);
   const routeOptions = content.products.map((p) => ({
     value: `/article/${p.id}`,
@@ -88,7 +89,7 @@ const SliderEditor: React.FC = () => {
     try {
       const updated = { ...content, sliders: content.sliders || [] };
       await api.post('/api/content', updated);
-      localStorage.setItem('content', JSON.stringify(updated));
+      safeSetItem('content', JSON.stringify(updated));
       alert(t('admin_saved'));
     } catch (err) {
       console.error('Save failed', err);
@@ -226,3 +227,4 @@ const SliderEditor: React.FC = () => {
 };
 
 export default SliderEditor;
+

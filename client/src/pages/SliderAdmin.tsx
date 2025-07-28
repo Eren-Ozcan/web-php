@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
 import { useContent } from '../ContentContext';
+import { safeSetItem } from '../storage';
 
 const SliderAdmin: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -17,7 +18,7 @@ const SliderAdmin: React.FC = () => {
       const load = async () => {
         try {
           const res = await api.get('/api/content');
-          localStorage.setItem('content', JSON.stringify(res.data));
+          safeSetItem('content', JSON.stringify(res.data));
           setContent(res.data);
         } catch (err) {
           console.error(err);
@@ -31,8 +32,9 @@ const SliderAdmin: React.FC = () => {
   const handleLogin = async () => {
     try {
       const res = await api.post('/api/login', { username: 'admin', password });
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('admin-auth', 'true');
+      safeSetItem('token', res.data.token);
+      safeSetItem('admin-auth', 'true');
+      api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       setAuth(true);
       alert(t('login_success'));
       setError(null);
@@ -149,7 +151,7 @@ const SliderAdmin: React.FC = () => {
     try {
       const updated = { ...content, sliders: slides };
       await api.post('/api/content', updated);
-      localStorage.setItem('content', JSON.stringify(updated));
+      safeSetItem('content', JSON.stringify(updated));
       alert(t('admin_saved'));
     } catch (err) {
       console.error('Save failed', err);
@@ -288,3 +290,4 @@ const SliderAdmin: React.FC = () => {
 };
 
 export default SliderAdmin;
+

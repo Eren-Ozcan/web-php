@@ -3,6 +3,7 @@ import ContentAdmin from './ContentAdmin';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
 import i18n from '../i18n';
+import { safeSetItem } from '../storage';
 
 const Admin: React.FC = () => {
   const { t } = useTranslation();
@@ -20,9 +21,9 @@ const Admin: React.FC = () => {
             api.get('/api/translations'),
             api.get('/api/pricing')
           ]);
-          localStorage.setItem('content', JSON.stringify(cRes.data));
-          localStorage.setItem('translations', JSON.stringify(tRes.data));
-          localStorage.setItem('pricing', JSON.stringify(pRes.data));
+          safeSetItem('content', JSON.stringify(cRes.data));
+          safeSetItem('translations', JSON.stringify(tRes.data));
+          safeSetItem('pricing', JSON.stringify(pRes.data));
           Object.entries(tRes.data).forEach(([lng, vals]) => {
             Object.entries(vals as Record<string, string>).forEach(([k, v]) => {
               i18n.addResource(lng, 'translation', k, v);
@@ -40,8 +41,9 @@ const Admin: React.FC = () => {
   const handleLogin = async () => {
     try {
       const res = await api.post('/api/login', { username: 'admin', password });
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('admin-auth', 'true');
+      safeSetItem('token', res.data.token);
+      safeSetItem('admin-auth', 'true');
+      api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       setAuth(true);
       alert(t('login_success'));
       setError(null);

@@ -5,6 +5,7 @@ import api from './api';
 import i18n from './i18n';
 import { useContent } from './ContentContext';
 import { normalizeCategories } from './content';
+import { safeSetItem } from './storage';
 
 export default function App() {
   const { setContent } = useContent();
@@ -20,8 +21,8 @@ export default function App() {
           ...cRes.data,
           categories: normalizeCategories(cRes.data.categories)
         };
-        localStorage.setItem('content', JSON.stringify(normalized));
-        localStorage.setItem('translations', JSON.stringify(tRes.data));
+        safeSetItem('content', JSON.stringify(normalized));
+        safeSetItem('translations', JSON.stringify(tRes.data));
         setContent(normalized);
         Object.entries(tRes.data).forEach(([lng, vals]) => {
           Object.entries(vals as Record<string, string>).forEach(([k, v]) => {
