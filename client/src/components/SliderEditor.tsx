@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
 import { useContent } from '../ContentContext';
+import { safeSetItem } from '../storage';
 
 const SliderEditor: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -88,11 +89,7 @@ const SliderEditor: React.FC = () => {
     try {
       const updated = { ...content, sliders: content.sliders || [] };
       await api.post('/api/content', updated);
-      try {
-        localStorage.setItem('content', JSON.stringify(updated));
-      } catch {
-        // ignore storage errors (e.g. quota exceeded)
-      }
+      safeSetItem('content', JSON.stringify(updated));
       alert(t('admin_saved'));
     } catch (err) {
       console.error('Save failed', err);

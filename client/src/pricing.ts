@@ -1,3 +1,4 @@
+import { safeSetItem } from "./storage";
 export interface PricingConfig {
   products: Record<string, { basePrice: number }>;
   features: Record<
@@ -75,7 +76,7 @@ export function loadPricing(): PricingConfig {
 }
 
 export function savePricing(data: PricingConfig) {
-  localStorage.setItem('pricing', JSON.stringify(data));
+  safeSetItem('pricing', JSON.stringify(data));
 }
 
 export default defaultPricing;

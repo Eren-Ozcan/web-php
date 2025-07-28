@@ -6,6 +6,7 @@ import api from '../api';
 import { useContent } from '../ContentContext';
 import { PricingConfig, loadPricing, normalizePricing } from '../pricing';
 import SliderEditor from '../components/SliderEditor';
+import { safeSetItem } from '../storage';
 
 const SECTION_KEYS = [
   'blogs',
@@ -87,9 +88,9 @@ const ContentAdmin: React.FC = () => {
         ]);
         setContent(cRes.data);
         setPricing(normalizePricing(pRes.data));
-        localStorage.setItem('content', JSON.stringify(cRes.data));
-        localStorage.setItem('translations', JSON.stringify(tRes.data));
-        localStorage.setItem('pricing', JSON.stringify(pRes.data));
+        safeSetItem('content', JSON.stringify(cRes.data));
+        safeSetItem('translations', JSON.stringify(tRes.data));
+        safeSetItem('pricing', JSON.stringify(pRes.data));
         Object.entries(tRes.data).forEach(([lng, vals]) => {
           Object.entries(vals).forEach(([k, v]) => {
             i18next.addResource(lng, 'translation', k, v);
@@ -222,14 +223,14 @@ const ContentAdmin: React.FC = () => {
         ...content,
         categories: normalizeCategories(content.categories)
       };
-      await Promise.all([
-        api.post('/api/content', normalized),
-        api.post('/api/translations', i18n.store.data),
-        api.post('/api/pricing', pricing)
-      ]);
-      localStorage.setItem('content', JSON.stringify(normalized));
-      localStorage.setItem('translations', JSON.stringify(i18n.store.data));
-      localStorage.setItem('pricing', JSON.stringify(pricing));
+        await Promise.all([
+          api.post('/api/content', normalized),
+          api.post('/api/translations', i18n.store.data),
+          api.post('/api/pricing', pricing)
+        ]);
+        safeSetItem('content', JSON.stringify(normalized));
+        safeSetItem('translations', JSON.stringify(i18n.store.data));
+        safeSetItem('pricing', JSON.stringify(pricing));
       setGlobalContent(normalized);
       alert(t('admin_saved'));
     } catch (err) {

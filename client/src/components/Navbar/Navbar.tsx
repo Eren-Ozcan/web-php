@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { safeSetItem } from '../../storage';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
@@ -19,7 +20,7 @@ export default function Navbar() {
 
   const changeLanguage = (lng: 'tr' | 'en') => {
     i18n.changeLanguage(lng);
-    localStorage.setItem('language', lng);
+    safeSetItem('language', lng);
   };
 
   return (
