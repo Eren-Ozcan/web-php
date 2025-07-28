@@ -9,5 +9,8 @@
   "devDependencies": {
     "eslint": "^9.0.0",
     "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "express-rate-limit": "^8.0.1"
   }
 }
