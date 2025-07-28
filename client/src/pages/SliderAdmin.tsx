@@ -76,13 +76,9 @@ const SliderAdmin: React.FC = () => {
 
   const slides = content.sliders || [];
   const current = slides[index];
-  useEffect(() => {
-    if (!slides.length) return;
-    const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % slides.length);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
+// Do not automatically cycle through slides in the admin. The preview
+  // should stay on the slide selected via the buttons above so edits are not
+  // interrupted.
   const routeOptions = content.products.map((p) => ({
     value: `/article/${p.id}`,
     label: t(p.titleKey)
