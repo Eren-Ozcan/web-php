@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
 import { useContent } from '../ContentContext';
-import { safeSetItem } from '../storage';
+import { safeSetItem } from '../safeLocalStorage';
 
 const SliderEditor: React.FC = () => {
   const { t, i18n } = useTranslation();

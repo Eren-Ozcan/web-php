@@ -5,7 +5,7 @@ import api from './api';
 import i18n from './i18n';
 import { useContent } from './ContentContext';
 import { normalizeCategories } from './content';
-import { safeSetItem } from './storage';
+import { safeSetItem } from './safeLocalStorage';
 
 export default function App() {
   const { setContent } = useContent();

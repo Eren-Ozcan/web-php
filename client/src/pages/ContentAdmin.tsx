@@ -6,7 +6,7 @@ import api from '../api';
 import { useContent } from '../ContentContext';
 import { PricingConfig, loadPricing, normalizePricing } from '../pricing';
 import SliderEditor from '../components/SliderEditor';
-import { safeSetItem } from '../storage';
+import { safeSetItem } from '../safeLocalStorage';
 
 const SECTION_KEYS = [
   'blogs',

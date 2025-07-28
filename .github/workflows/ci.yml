@@ -19,6 +19,10 @@ jobs:
           npm ci
           cd server && npm ci
           cd ../client && npm ci
+      - name: Run client tests
+        run: npm test --workspace=client
+      - name: Run server tests
+        run: npm test --workspace=server
       - name: Build server
         run: |
           cd server

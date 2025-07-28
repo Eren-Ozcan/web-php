@@ -334,7 +334,7 @@ export function normalizeCategories(cat: any): Categories {
   };
 }
 
-import { safeSetItem, safeGetItem } from './storage';
+import { safeSetItem, safeGetItem } from './safeLocalStorage';
 
 export function loadContent(): ContentData {
   const stored = safeGetItem('content');
