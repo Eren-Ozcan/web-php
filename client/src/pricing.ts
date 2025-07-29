@@ -71,7 +71,9 @@ export function loadPricing(): PricingConfig {
       if (data && data.products && data.features) {
         return normalizePricing(data);
       }
-    } catch {}
+    } catch {
+      // Ignore invalid stored data
+    }
   }
   return normalizePricing({ ...defaultPricing });
 }

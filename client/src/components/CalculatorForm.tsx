@@ -42,7 +42,7 @@ export default function CalculatorForm() {
 
   const visibleFeatures = useMemo(() => {
     if (!config) return [];
-    return Object.entries(config.features).filter(([_, v]) => {
+    return Object.entries(config.features).filter(([, v]) => {
       const list = Array.isArray((v as any).products) ? (v as any).products : v.products?.tr;
       return Array.isArray(list) && list.includes(product);
     });
