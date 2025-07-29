@@ -489,6 +489,7 @@ const ContentAdmin: React.FC = () => {
                           if (!newKey || newKey === key || pricing.products[newKey]) {
                             setProductNameEdits((prev) => {
                               const { [key]: _omit, ...rest } = prev;
+                              void _omit;
                               return rest;
                             });
                             return;
@@ -518,6 +519,7 @@ const ContentAdmin: React.FC = () => {
                           });
                           setProductNameEdits((prev) => {
                             const { [key]: _removed, ...rest } = prev;
+                            void _removed;
                             return rest;
                           });
                         }}

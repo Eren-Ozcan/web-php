@@ -9,7 +9,6 @@ import Projects from './pages/Projects';
 import Reviews from './pages/Reviews';
 import About from './pages/About';
 import Article from './pages/Article';
-import ContentAdmin from './pages/ContentAdmin';
 import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 import Layout from './Layout';
