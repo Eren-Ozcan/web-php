@@ -12,28 +12,26 @@ const app = express();
 const FRONT_PORT = 5173;
 const BACKEND_URL = 'http://localhost:5000';
 
-// ---- Basit istek logu (teşhis için)
+// Basit istek logu
 app.use((req, _res, next) => {
   console.log(`[REQ] ${req.method} ${req.url}`);
   next();
 });
 
-// ---- /api için PROXY (kök + alt yollar) + DEBUG
+// ✅ /api için proxy (Express 5'te bu tüm alt yolları kapsar)
 app.use(
-  ['/api', '/api/*'],
+  '/api',
   createProxyMiddleware({
     target: BACKEND_URL,
     changeOrigin: true,
-    logLevel: 'debug' // konsola "proxying request to ..." yazar
-    // pathRewrite: { }   // GEREK YOK: backend /api altında; rewrite ETME!
+    logLevel: 'debug'
   })
 );
 
-// ---- Statik içerik
+// Statik içerik
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// ---- SPA fallback (SON MIDDLEWARE)
-// /api ile başlayanları asla yakalama
+// SPA fallback (SON middleware) — /api isteklerini asla yakalama
 app.use((req, res, next) => {
   if (req.method !== 'GET') return next();
   if (req.path.startsWith('/api')) return next();
