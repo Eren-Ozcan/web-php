@@ -1,0 +1,10 @@
+# Bu dosyayı public_html/.htaccess olarak yükle
+RewriteEngine On
+
+# /api/* isteklerini api/router.php'ye yönlendir
+RewriteRule ^api/(.*)$ api/router.php [QSA,L]
+
+# Gerçek dosya/klasör değilse → index.html (React SPA)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
