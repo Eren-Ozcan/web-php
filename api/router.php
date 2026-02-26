@@ -114,15 +114,33 @@ match (true) {
         echo json_encode($projects);
     })(),
 
-    in_array($uri, ['contact','sendMail']) && $method === 'POST' => (function() {
+    in_array($uri, ['contact','sendMail']) && $method === 'POST' => (function() use ($uri) {
         $b = body();
         $name    = htmlspecialchars($b['name'] ?? '');
         $email   = filter_var($b['email'] ?? '', FILTER_VALIDATE_EMAIL);
         $message = htmlspecialchars($b['message'] ?? '');
         if (!$name || !$email || !$message) { http_response_code(400); echo json_encode(['ok'=>false,'error'=>'Eksik alan']); return; }
-        $headers = "From: noreply@sundizayn.com.tr\r\nReply-To: $email";
-        $ok = mail('keremcolak262@gmail.com', 'Yeni İletişim Mesajı', "Gönderen: $name <$email>\n\n$message", $headers);
-        echo json_encode($ok ? ['ok'=>true] : ['ok'=>false,'error'=>'Mail gönderilemedi']);
+
+        // Şirkete bildirim
+        $toCompany = mail(
+            'keremcolak262@gmail.com',
+            'Yeni İletişim Mesajı',
+            "Gönderen: $name <$email>\n\n$message",
+            "From: noreply@sundizayn.com.tr\r\nReply-To: $email\r\nContent-Type: text/plain; charset=utf-8"
+        );
+
+        // Gönderene otomatik yanıt (sadece /contact rotasında)
+        if ($uri === 'contact') {
+            $autoReply = "Merhaba $name,\n\nİletişime geçtiğiniz için teşekkürler. En kısa sürede size dönüş yapacağız.\n\nİyi günler dileriz.";
+            mail(
+                $email,
+                'Bizimle İletişime Geçtiğiniz İçin Teşekkürler',
+                $autoReply,
+                "From: noreply@sundizayn.com.tr\r\nContent-Type: text/plain; charset=utf-8"
+            );
+        }
+
+        echo json_encode($toCompany ? ['ok'=>true] : ['ok'=>false,'error'=>'Mail gönderilemedi']);
     })(),
 
     default => (function() { http_response_code(404); echo json_encode(['error'=>'Not found']); })(),
