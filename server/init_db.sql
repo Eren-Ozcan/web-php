@@ -1,16 +1,13 @@
-CREATE DATABASE IF NOT EXISTS mefaaluminyum_wp289;
-USE mefaaluminyum_wp289;
-
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(255) NOT NULL UNIQUE,
+  username VARCHAR(191) NOT NULL UNIQUE,
   passwordHash VARCHAR(255) NOT NULL
 );
 
 INSERT INTO users (username, passwordHash)
   VALUES (
-    'admin',
-    '44e2f1a7e1e15a93b799e29b2e4f5e41:1e8cde9e59e81e1f84c5c054ab3c89e1b2793db013a875207e2ef8ce9a1380daea9e682bb5db06cfc85a2c95b285de31f94b537c3e94249a7c4e6d29446e054f'
+    'kaleythankful',
+    'f7c70124e81e1c65721d15b2eada74a4:4b1771cdc9c238b7096cbf9f9ea5397d5b0a084f3c542dbf3d42dbc8251e82abc7f5ea2c6592a4a535e53fb57e54ee23b45a24741712468294b930ca21f121a6'
   )
   ON DUPLICATE KEY UPDATE username=VALUES(username);
 

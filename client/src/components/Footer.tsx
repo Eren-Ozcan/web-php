@@ -41,8 +41,8 @@ export default function Footer() {
         </div>
         <div>
           <h4 className="text-lg font-bold mb-2">{t('footer_contact')}</h4>
-          <p className="text-sm text-gray-300">Email: info@sirket.com</p>
-          <p className="text-sm text-gray-300">Tel: +90 555 123 45 67</p>
+          <p className="text-sm text-gray-300">Email: keremcolak262@gmail.com</p>
+          <p className="text-sm text-gray-300">Tel: +90 530 788 56 76</p>
         </div>
       </div>
       <div className="text-center text-sm text-gray-500 mt-6">

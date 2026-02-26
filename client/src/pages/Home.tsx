@@ -30,8 +30,7 @@ const Home: React.FC = () => {
       {/* İçerik: Yazı + Slider */}
       <div className="w-full mt-6 flex justify-center gap-6 px-4">
         <div className="w-[30vw] max-w-sm p-4 text-left rounded bg-white shadow">
-          <h2 className="text-2xl font-semibold mb-2">{t('left_section_title')}</h2>
-          <p className="text-gray-700 text-sm leading-relaxed">{t('left_section_text')}</p>
+          <p className="text-gray-700 text-base leading-relaxed whitespace-pre-line">{t('left_section_text')}</p>
         </div>
 
         <div className="relative w-[60vw] max-w-[1280px] aspect-video">
@@ -125,7 +124,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Ürün İncelemeleri */}
+      {/* Ürün İncelemeleri — şimdilik gizli
       <div className="mt-20 px-4 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">{t('reviews')}</h2>
         <div className="grid md:grid-cols-2 gap-6">
@@ -148,6 +147,7 @@ const Home: React.FC = () => {
           ))}
         </div>
       </div>
+      */}
     </>
   );
 };

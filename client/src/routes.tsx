@@ -28,7 +28,7 @@ export default function AppRoutes() {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/about" element={<About />} />
         <Route path="/article/:id" element={<Article />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/kaleythankful" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

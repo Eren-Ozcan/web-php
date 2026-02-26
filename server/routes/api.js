@@ -7,7 +7,6 @@ import {
   translationsData,
   pricingData,
   loadJson,
-  saveJson,
   verifyPassword,
   normalizeCategories,
   normalizePricing,
@@ -19,7 +18,8 @@ import { mailTransporter } from '../services/mail.js';
 
 const router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is not set. Server cannot start.');
 
 // Limit failed login attempts
 const loginLimiter = rateLimit({
@@ -78,7 +78,6 @@ router.post('/content', authenticateToken, async (req, res) => {
   try {
     Object.assign(contentData, { ...data, categories: normalizeCategories(data.categories) });
     await pool.query('UPDATE content SET data = ? WHERE id = 1', [JSON.stringify(contentData)]);
-    saveJson('content.json', contentData);
     res.json({ success: true });
   } catch (err) {
     console.error('Failed to save content', err);
@@ -97,8 +96,6 @@ router.post('/translations', authenticateToken, async (req, res) => {
     await pool.query('UPDATE translations SET data = ? WHERE id = 1', [
       JSON.stringify(translationsData)
     ]);
-    saveJson('en.json', translationsData.en);
-    saveJson('tr.json', translationsData.tr);
     res.json({ success: true });
   } catch (err) {
     console.error('Failed to save translations', err);
@@ -115,7 +112,6 @@ router.post('/pricing', authenticateToken, async (req, res) => {
   try {
     Object.assign(pricingData, normalizePricing(data));
     await pool.query('UPDATE pricing SET data = ? WHERE id = 1', [JSON.stringify(pricingData)]);
-    saveJson('pricing.json', pricingData);
     res.json({ success: true });
   } catch (err) {
     console.error('Failed to save pricing', err);

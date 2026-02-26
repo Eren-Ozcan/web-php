@@ -30,7 +30,7 @@ export default function Navbar() {
         <div className="flex items-center space-x-6 h-full">
           <Link to="/" className="h-full flex items-center">
             <img
-              src="/images/logo.svg"
+              src="/images/logo.png"
               alt="Logo"
               className="h-[80x] md:h-[90px] max-h-[90px] w-auto mr-4 object-contain transition-all duration-200"
             />
@@ -72,7 +72,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-full">
           <Link to="/" className="h-full flex items-center px-4">
             <img
-              src="/images/logo.svg"
+              src="/images/logo.png"
               alt="Logo"
               className="h-full w-auto object-contain"
               style={{ minWidth: 48 }} // İsteğe bağlı, minimum genişlik için

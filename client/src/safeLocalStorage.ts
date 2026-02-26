@@ -15,3 +15,13 @@ export function safeGetItem(key: string): string | null {
     return null;
   }
 }
+
+export function safeRemoveItem(key: string) {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(key);
+    }
+  } catch {
+    // ignore
+  }
+}

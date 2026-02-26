@@ -7,6 +7,7 @@ import { safeSetItem, safeGetItem } from '../safeLocalStorage';
 
 const Admin: React.FC = () => {
   const { t } = useTranslation();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [auth, setAuth] = useState(safeGetItem('admin-auth') === 'true');
   const [loaded, setLoaded] = useState(false);
@@ -40,7 +41,7 @@ const Admin: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await api.post('/api/login', { username: 'admin', password });
+      const res = await api.post('/api/login', { username, password });
       safeSetItem('token', res.data.token);
       safeSetItem('admin-auth', 'true');
       api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
@@ -68,10 +69,18 @@ const Admin: React.FC = () => {
       <div className="p-4 space-y-2">
         <h1 className="text-2xl font-bold">Admin</h1>
         <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="border p-2"
+          autoComplete="username"
+        />
+        <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="border p-2"
+          autoComplete="current-password"
         />
         {error && <div className="text-red-500">{error}</div>}
         <button onClick={handleLogin} className="bg-blue-600 text-white px-3 py-1 rounded">

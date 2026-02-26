@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
@@ -11,9 +11,6 @@ export function loadJson(file) {
   return JSON.parse(readFileSync(join(dataDir, file), 'utf8'));
 }
 
-export function saveJson(file, data) {
-  writeFileSync(join(dataDir, file), JSON.stringify(data, null, 2));
-}
 
 export function verifyPassword(password, stored) {
   const [salt, hash] = stored.split(':');
