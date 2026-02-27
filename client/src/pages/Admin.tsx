@@ -3,15 +3,22 @@ import ContentAdmin from './ContentAdmin';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
 import i18n from '../i18n';
-import { safeSetItem, safeGetItem } from '../safeLocalStorage';
+import { safeSetItem, safeRemoveItem } from '../safeLocalStorage';
 
 const Admin: React.FC = () => {
   const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [auth, setAuth] = useState(safeGetItem('admin-auth') === 'true');
+  const [auth, setAuth] = useState(false); // Her zaman false — login formu her zaman göster
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Sayfa açılınca eski oturumu temizle
+  useEffect(() => {
+    safeRemoveItem('token');
+    safeRemoveItem('admin-auth');
+    delete api.defaults.headers.common['Authorization'];
+  }, []);
 
   useEffect(() => {
     if (auth) {
@@ -46,7 +53,6 @@ const Admin: React.FC = () => {
       safeSetItem('admin-auth', 'true');
       api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       setAuth(true);
-      alert(t('login_success'));
       setError(null);
     } catch (err: any) {
       if (err?.response?.status === 429) {
@@ -64,28 +70,46 @@ const Admin: React.FC = () => {
     }
   };
 
+  const handleLogout = () => {
+    safeRemoveItem('token');
+    safeRemoveItem('admin-auth');
+    delete api.defaults.headers.common['Authorization'];
+    setAuth(false);
+    setLoaded(false);
+    setUsername('');
+    setPassword('');
+  };
+
   if (!auth) {
     return (
-      <div className="p-4 space-y-2">
-        <h1 className="text-2xl font-bold">Admin</h1>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="border p-2"
-          autoComplete="username"
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2"
-          autoComplete="current-password"
-        />
-        {error && <div className="text-red-500">{error}</div>}
-        <button onClick={handleLogin} className="bg-blue-600 text-white px-3 py-1 rounded">
-          {t('login')}
-        </button>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-8 rounded shadow w-80 space-y-4">
+          <h1 className="text-2xl font-bold text-center">Admin Girişi</h1>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="border p-2 w-full rounded"
+            placeholder="Kullanıcı adı"
+            autoComplete="username"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-2 w-full rounded"
+            placeholder="Şifre"
+            autoComplete="current-password"
+            onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+          />
+          {error && <div className="text-red-500 text-sm">{error}</div>}
+          <button
+            onClick={handleLogin}
+            className="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700"
+          >
+            {t('login')}
+          </button>
+        </div>
       </div>
     );
   }
@@ -94,7 +118,7 @@ const Admin: React.FC = () => {
     return <div className="p-4">{t('loading')}</div>;
   }
 
-  return <ContentAdmin />;
+  return <ContentAdmin onLogout={handleLogout} />;
 };
 
 export default Admin;

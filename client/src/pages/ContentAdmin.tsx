@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n, { Language } from '../i18n';
 import { loadContent, ContentData, CategoryEntry, normalizeCategories } from '../content';
@@ -6,7 +6,7 @@ import api from '../api';
 import { useContent } from '../ContentContext';
 import { PricingConfig, loadPricing, normalizePricing } from '../pricing';
 import SliderEditor from '../components/SliderEditor';
-import { safeSetItem } from '../safeLocalStorage';
+import { safeGetItem, safeSetItem } from '../safeLocalStorage';
 
 const SECTION_KEYS = [
   'blogs',
@@ -21,7 +21,7 @@ const SECTION_KEYS = [
 
 const CATEGORY_KEYS = ['blogs', 'projects', 'reviews', 'products'] as const;
 
-const ContentAdmin: React.FC = () => {
+const ContentAdmin: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   const { t, i18n: i18next } = useTranslation();
   const [content, setContent] = useState<ContentData>(loadContent());
   const [pricing, setPricing] = useState<PricingConfig>(loadPricing());
@@ -77,6 +77,12 @@ const ContentAdmin: React.FC = () => {
     return { idDup, titleDup };
   }, [content]);
   const { setContent: setGlobalContent } = useContent();
+
+  const [timeLeft, setTimeLeft] = useState(0);
+  const saveRef = useRef<(silent?: boolean) => Promise<void>>();
+  const onLogoutRef = useRef(onLogout);
+  onLogoutRef.current = onLogout;
+  const autoSavedRef = useRef(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -217,7 +223,7 @@ const ContentAdmin: React.FC = () => {
     setEntries(newEntries);
   };
 
-  const saveAll = async () => {
+  const saveAll = async (silent = false) => {
     try {
       const normalized = {
         ...content,
@@ -232,16 +238,70 @@ const ContentAdmin: React.FC = () => {
       safeSetItem('translations', JSON.stringify(i18n.store.data));
       safeSetItem('pricing', JSON.stringify(pricing));
       setGlobalContent(normalized);
-      alert(t('admin_saved'));
+      if (!silent) alert(t('admin_saved'));
     } catch (err) {
       console.error('Save failed', err);
-      alert(t('admin_save_error'));
+      if (!silent) alert(t('admin_save_error'));
     }
   };
+  saveRef.current = saveAll;
+
+  // Session timer — JWT exp'den kalan süreyi say, 30 saniye kala otomatik kaydet
+  useEffect(() => {
+    const getRemaining = () => {
+      try {
+        const token = safeGetItem('token');
+        if (!token) return 0;
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return Math.max(0, (payload.exp || 0) - Math.floor(Date.now() / 1000));
+      } catch { return 0; }
+    };
+
+    setTimeLeft(getRemaining());
+
+    const interval = setInterval(async () => {
+      const rem = getRemaining();
+      setTimeLeft(rem);
+
+      if (rem <= 30 && rem > 0 && !autoSavedRef.current) {
+        autoSavedRef.current = true;
+        await saveRef.current?.(true);
+      }
+
+      if (rem === 0) {
+        clearInterval(interval);
+        onLogoutRef.current();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const timerMinutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+  const timerSeconds = (timeLeft % 60).toString().padStart(2, '0');
+  const timerColor =
+    timeLeft < 60
+      ? 'bg-red-100 text-red-700'
+      : timeLeft < 300
+        ? 'bg-yellow-100 text-yellow-700'
+        : 'bg-green-100 text-green-700';
 
   return (
     <div className="p-4 space-y-4">
-      <h1 className="text-2xl font-bold">{t('admin_title')}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">{t('admin_title')}</h1>
+        <div className="flex items-center gap-3">
+          <span className={`font-mono text-sm px-3 py-1 rounded ${timerColor}`}>
+            ⏱ {timerMinutes}:{timerSeconds}
+          </span>
+          <button
+            onClick={onLogout}
+            className="bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300"
+          >
+            Çıkış
+          </button>
+        </div>
+      </div>
       {(duplicateInfo.idDup.length > 0 || duplicateInfo.titleDup.length > 0) && (
         <div className="bg-yellow-100 text-yellow-800 p-2 rounded">
           {duplicateInfo.idDup.length > 0 && (
@@ -879,7 +939,7 @@ const ContentAdmin: React.FC = () => {
             </button>
           )}
         {section !== 'slider_admin' && (
-          <button onClick={saveAll} className="bg-green-600 text-white px-3 py-1 rounded">
+          <button onClick={() => saveAll()} className="bg-green-600 text-white px-3 py-1 rounded">
             {t('admin_save_all')}
           </button>
         )}
