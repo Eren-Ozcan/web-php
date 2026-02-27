@@ -40,7 +40,7 @@ function requireAuth(): void {
 // Password (PBKDF2-SHA512 — Node.js ile uyumlu)
 function verifyPassword(string $pw, string $stored): bool {
     [$saltHex, $hash] = explode(':', $stored, 2);
-    return hash_equals($hash, hash_pbkdf2('sha512', $pw, hex2bin($saltHex), 10000, 64, false));
+    return hash_equals($hash, hash_pbkdf2('sha512', $pw, hex2bin($saltHex), 10000, 0, false));
 }
 
 // Helpers
