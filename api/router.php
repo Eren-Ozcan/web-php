@@ -32,7 +32,10 @@ function jwtVerify(string $token): ?array {
     return $data;
 }
 function requireAuth(): void {
-    $auth  = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    // Apache bazı konfigürasyonlarda Authorization'ı striplar — birden fazla yerde ara
+    $auth = $_SERVER['HTTP_AUTHORIZATION']
+         ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+         ?? (function_exists('getallheaders') ? (getallheaders()['Authorization'] ?? '') : '');
     $token = preg_replace('/^Bearer\s+/i', '', $auth);
     if (!jwtVerify($token)) { http_response_code(401); echo json_encode(['error'=>'Unauthorized']); exit; }
 }

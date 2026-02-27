@@ -1,3 +1,5 @@
 RewriteEngine On
+# Authorization başlığını Apache'den PHP'ye ilet
+RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ router.php [QSA,L]
